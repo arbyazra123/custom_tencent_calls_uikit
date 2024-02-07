@@ -2,6 +2,7 @@ import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
 import 'package:tencent_calls_uikit/src/extensions/calling_bell_feature.dart';
+import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.dart';
 import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/utils/permission_request.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
@@ -28,6 +29,7 @@ class TUICallKit {
 
   CallPage get getCallCurrentPage => TUICallKitNavigatorObserver.currentPage;
   CallState get callState => CallState.instance;
+  TUICallKitPlatform get tuiCallPlatform => TUICallKitPlatform.instance;
 
   Future<void> stopRing() async => await CallingBellFeature.stopRing();
 

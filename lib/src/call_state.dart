@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/extensions/calling_bell_feature.dart';
@@ -59,7 +60,8 @@ class CallState {
         CallingBellFeature.startRing();
         if (!await TUICallKitPlatform.instance.isAppInForeground()) {
           if (Platform.isAndroid) {
-            await TUICallKitPlatform.instance.moveAppToFront("event_handle_receive_call");
+            var result = await TUICallKitPlatform.instance.moveAppToFront("event_handle_receive_call");
+            debugPrint("TUICallKitPlatform.instance.moveAppToFront.failed: $result");
           }
         } else {
           CallManager.instance.launchCallingPage();

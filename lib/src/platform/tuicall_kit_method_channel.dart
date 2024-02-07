@@ -92,7 +92,8 @@ class MethodChannelTUICallKit extends TUICallKitPlatform {
   @override
   Future<bool> initResources(Map resources) async {
     try {
-      await methodChannel.invokeMethod('initResources', {"resources": resources});
+      await methodChannel
+          .invokeMethod('initResources', {"resources": resources});
     } on PlatformException catch (_) {
       return false;
     } on Exception catch (_) {
@@ -113,7 +114,8 @@ class MethodChannelTUICallKit extends TUICallKitPlatform {
 
   @override
   Future<void> apiLog(TRTCLoggerLevel level, String logString) async {
-    await methodChannel.invokeMethod('apiLog', {'level': level.index, 'logString': logString});
+    await methodChannel
+        .invokeMethod('apiLog', {'level': level.index, 'logString': logString});
   }
 
   void _handleNativeCall(MethodCall call) {

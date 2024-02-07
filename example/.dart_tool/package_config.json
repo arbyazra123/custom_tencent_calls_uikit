@@ -194,6 +194,36 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "permission_handler",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/permission_handler-10.4.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_android",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/permission_handler_android-10.3.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_apple",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/permission_handler_apple-9.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_platform_interface",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/permission_handler_platform_interface-3.12.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "permission_handler_windows",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/permission_handler_windows-0.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "petitparser",
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/petitparser-6.0.2",
       "packageUri": "lib/",
@@ -428,7 +458,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2024-02-07T06:36:25.938409Z",
+  "generated": "2024-02-07T11:56:54.307612Z",
   "generator": "pub",
   "generatorVersion": "3.2.2"
 }
