@@ -78,15 +78,16 @@ class MethodChannelTUICallKit extends TUICallKitPlatform {
   }
 
   @override
-  Future<bool> moveAppToFront(String event) async {
+  Future<String> moveAppToFront(String event) async {
     try {
-      await methodChannel.invokeMethod('moveAppToFront', {"event": event});
-    } on PlatformException catch (_) {
-      return false;
-    } on Exception catch (_) {
-      return false;
+      var result =
+          await methodChannel.invokeMethod('moveAppToFront', {"event": event});
+      return result.toString();
+    } on PlatformException catch (e) {
+      return "failed_${e.toString()}";
+    } on Exception catch (e) {
+      return "failed_${e.toString()}";
     }
-    return true;
   }
 
   @override

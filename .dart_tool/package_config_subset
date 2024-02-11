@@ -182,10 +182,6 @@ string_scanner
 2.18
 file:///Users/def/.pub-cache/hosted/pub.dev/string_scanner-1.2.0/
 file:///Users/def/.pub-cache/hosted/pub.dev/string_scanner-1.2.0/lib/
-tencent_calls_engine
-2.12
-file:///Users/def/.pub-cache/hosted/pub.dev/tencent_calls_engine-2.2.0/
-file:///Users/def/.pub-cache/hosted/pub.dev/tencent_calls_engine-2.2.0/lib/
 tencent_cloud_chat_sdk
 2.12
 file:///Users/def/.pub-cache/hosted/pub.dev/tencent_cloud_chat_sdk-6.1.32/
@@ -254,6 +250,10 @@ flutter_web_plugins
 3.2
 file:///Users/def/Development/flutter/packages/flutter_web_plugins/
 file:///Users/def/Development/flutter/packages/flutter_web_plugins/lib/
+tencent_calls_engine
+2.12
+file:///Users/def/Development/flutterProjects/telkomsel/plugins/tencent_calls_engine-2.2.0/
+file:///Users/def/Development/flutterProjects/telkomsel/plugins/tencent_calls_engine-2.2.0/lib/
 tencent_calls_uikit
 2.12
 file:///Users/def/Development/flutterProjects/telkomsel/plugins/tencent_calls_uikit-2.2.1/

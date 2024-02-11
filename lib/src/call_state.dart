@@ -43,25 +43,49 @@ class CallState {
   TUIAudioPlaybackDevice audioDevice = TUIAudioPlaybackDevice.earpiece;
   bool enableMuteMode = false;
   bool enableFloatWindow = false;
-
   bool isChangedBigSmallVideo = false;
   bool isOpenFloatWindow = false;
 
+  String moveAppToFrontStatus = '';
+
   TUICallObserver observer = TUICallObserver(
       onError: (int code, String message) {
-        TRTCLogger.info('TUICallObserver onError(code:$code, message:$message)');
+        TRTCLogger.info(
+            'TUICallObserver onError(code:$code, message:$message)');
         CallManager.instance.showToast('Error: $code, $message');
       },
       onCallReceived: (String callerId, List<String> calleeIdList,
           String groupId, TUICallMediaType callMediaType) async {
-        TRTCLogger.info('TUICallObserver onCallReceived(callerId:$callerId, calleeIdList:$calleeIdList, groupId:$groupId, callMediaType:$callMediaType), version:${Constants.pluginVersion}');
-        await CallState.instance.handleCallReceivedData(callerId, calleeIdList, groupId, callMediaType);
+        TRTCLogger.info(
+            'TUICallObserver onCallReceived(callerId:$callerId, calleeIdList:$calleeIdList, groupId:$groupId, callMediaType:$callMediaType), version:${Constants.pluginVersion}');
+        await CallState.instance.handleCallReceivedData(
+            callerId, calleeIdList, groupId, callMediaType);
         await TUICallKitPlatform.instance.updateCallStateToNative();
         CallingBellFeature.startRing();
         if (!await TUICallKitPlatform.instance.isAppInForeground()) {
           if (Platform.isAndroid) {
-            var result = await TUICallKitPlatform.instance.moveAppToFront("event_handle_receive_call");
-            debugPrint("TUICallKitPlatform.instance.moveAppToFront.failed: $result");
+            var result = await TUICallKitPlatform.instance
+                .moveAppToFront("event_handle_receive_call");
+            debugPrint(
+                "TUICallKitPlatform.instance.moveAppToFront.result: $result");
+            switch (result) {
+              case 'success_start_call':
+                break;
+              case 'success_launching_intent':
+                break;
+              case 'success_float_window':
+                break;
+              case 'success_showing_notification':
+                break;
+              case 'failed_no_permissions':
+                break;
+              case 'failed_caller_null':
+                break;
+              case 'failed_event_not_match':
+                break;
+              default:
+            }
+            CallState.instance.moveAppToFrontStatus = result;
           }
         } else {
           CallManager.instance.launchCallingPage();
@@ -76,7 +100,8 @@ class CallState {
       },
       onCallBegin: (TUIRoomId roomId, TUICallMediaType callMediaType,
           TUICallRole callRole) {
-        TRTCLogger.info('TUICallObserver onCallBegin(roomId:$roomId, callMediaType:$callMediaType, callRole:$callRole)');
+        TRTCLogger.info(
+            'TUICallObserver onCallBegin(roomId:$roomId, callMediaType:$callMediaType, callRole:$callRole)');
         TUICallKitPlatform.instance.startForegroundService();
         CallState.instance.startTime =
             DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -100,7 +125,8 @@ class CallState {
       },
       onCallEnd: (TUIRoomId roomId, TUICallMediaType callMediaType,
           TUICallRole callRole, double totalTime) {
-        TRTCLogger.info('TUICallObserver onCallEnd(roomId:$roomId, callMediaType:$callMediaType, callRole:$callRole, totalTime:$totalTime)');
+        TRTCLogger.info(
+            'TUICallObserver onCallEnd(roomId:$roomId, callMediaType:$callMediaType, callRole:$callRole, totalTime:$totalTime)');
         CallState.instance.stopTimer();
         CallState.instance.cleanState();
         eventBus.notify(setStateEventOnCallEnd);
@@ -206,11 +232,13 @@ class CallState {
         final imInfo = await TencentImSDKPlugin.v2TIMManager
             .getFriendshipManager()
             .getFriendsInfo(userIDList: [userId]);
-        user.nickname =
-            StringStream.makeNull(imInfo.data?[0].friendInfo?.userProfile?.nickName, '');
-        user.remark = StringStream.makeNull(imInfo.data?[0].friendInfo?.friendRemark, '');
+        user.nickname = StringStream.makeNull(
+            imInfo.data?[0].friendInfo?.userProfile?.nickName, '');
+        user.remark =
+            StringStream.makeNull(imInfo.data?[0].friendInfo?.friendRemark, '');
         user.avatar = StringStream.makeNull(
-            imInfo.data?[0].friendInfo?.userProfile?.faceUrl, Constants.defaultAvatar);
+            imInfo.data?[0].friendInfo?.userProfile?.faceUrl,
+            Constants.defaultAvatar);
         eventBus.notify(setStateEvent);
 
         TUICallKitPlatform.instance.updateCallStateToNative();
@@ -239,7 +267,8 @@ class CallState {
         }
       },
       onUserVideoAvailable: (String userId, bool isVideoAvailable) {
-        TRTCLogger.info('TUICallObserver onUserVideoAvailable(userId:$userId, isVideoAvailable:$isVideoAvailable)');
+        TRTCLogger.info(
+            'TUICallObserver onUserVideoAvailable(userId:$userId, isVideoAvailable:$isVideoAvailable)');
         for (var remoteUser in CallState.instance.remoteUserList) {
           if (remoteUser.id == userId) {
             remoteUser.videoAvailable = isVideoAvailable;
@@ -251,7 +280,8 @@ class CallState {
         }
       },
       onUserAudioAvailable: (String userId, bool isAudioAvailable) {
-        TRTCLogger.info('TUICallObserver onUserAudioAvailable(userId:$userId, isVideoAvailable:$isAudioAvailable)');
+        TRTCLogger.info(
+            'TUICallObserver onUserAudioAvailable(userId:$userId, isVideoAvailable:$isAudioAvailable)');
         for (var remoteUser in CallState.instance.remoteUserList) {
           if (remoteUser.id == userId) {
             remoteUser.audioAvailable = isAudioAvailable;
@@ -266,7 +296,8 @@ class CallState {
         for (var remoteUser in CallState.instance.remoteUserList) {
           remoteUser.playOutVolume = volumeMap[remoteUser.id] ?? 0;
         }
-        CallState.instance.selfUser.playOutVolume = volumeMap[CallState.instance.selfUser.id] ?? 0;
+        CallState.instance.selfUser.playOutVolume =
+            volumeMap[CallState.instance.selfUser.id] ?? 0;
         TUICallKitPlatform.instance.updateCallStateToNative();
         eventBus.notify(setStateEvent);
       },
@@ -301,8 +332,11 @@ class CallState {
     TUICallEngine.instance.removeObserver(observer);
   }
 
-  Future<void> handleCallReceivedData(String callerId, List<String> calleeIdList,
-      String groupId, TUICallMediaType callMediaType) async {
+  Future<void> handleCallReceivedData(
+      String callerId,
+      List<String> calleeIdList,
+      String groupId,
+      TUICallMediaType callMediaType) async {
     CallState.instance.caller.id = callerId;
     CallState.instance.calleeIdList.clear();
     CallState.instance.calleeIdList.addAll(calleeIdList);
@@ -357,28 +391,31 @@ class CallState {
         .getFriendshipManager()
         .getFriendsInfo(userIDList: allUserId);
     for (var imFriendUserInfo in imFriendsUserInfos.data!) {
-      if (imFriendUserInfo.friendInfo?.userID == CallState.instance.selfUser.id) {
+      if (imFriendUserInfo.friendInfo?.userID ==
+          CallState.instance.selfUser.id) {
         continue;
       }
 
       if (imFriendUserInfo.friendInfo?.userID == callerId) {
-        CallState.instance.caller.nickname =
-            StringStream.makeNull(imFriendUserInfo.friendInfo?.userProfile?.nickName, "");
-        CallState.instance.caller.remark =
-            StringStream.makeNull(imFriendUserInfo.friendInfo?.friendRemark, "");
+        CallState.instance.caller.nickname = StringStream.makeNull(
+            imFriendUserInfo.friendInfo?.userProfile?.nickName, "");
+        CallState.instance.caller.remark = StringStream.makeNull(
+            imFriendUserInfo.friendInfo?.friendRemark, "");
         CallState.instance.caller.avatar = StringStream.makeNull(
-            imFriendUserInfo.friendInfo?.userProfile?.faceUrl, Constants.defaultAvatar);
+            imFriendUserInfo.friendInfo?.userProfile?.faceUrl,
+            Constants.defaultAvatar);
         CallState.instance.caller.callStatus = TUICallStatus.waiting;
         CallState.instance.caller.callRole = TUICallRole.caller;
       } else {
         for (var calleeUser in CallState.instance.calleeList) {
           if (calleeUser.id == imFriendUserInfo.friendInfo?.userID) {
-            calleeUser.nickname =
-                StringStream.makeNull(imFriendUserInfo.friendInfo?.userProfile?.nickName, "");
-            calleeUser.remark =
-                StringStream.makeNull(imFriendUserInfo.friendInfo?.friendRemark, "");
+            calleeUser.nickname = StringStream.makeNull(
+                imFriendUserInfo.friendInfo?.userProfile?.nickName, "");
+            calleeUser.remark = StringStream.makeNull(
+                imFriendUserInfo.friendInfo?.friendRemark, "");
             calleeUser.avatar = StringStream.makeNull(
-                imFriendUserInfo.friendInfo?.userProfile?.faceUrl, Constants.defaultAvatar);
+                imFriendUserInfo.friendInfo?.userProfile?.faceUrl,
+                Constants.defaultAvatar);
             calleeUser.callStatus = TUICallStatus.waiting;
             calleeUser.callRole = TUICallRole.called;
           }

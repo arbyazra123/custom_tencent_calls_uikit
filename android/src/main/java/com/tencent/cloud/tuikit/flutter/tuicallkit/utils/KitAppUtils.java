@@ -47,7 +47,7 @@ public class KitAppUtils {
         return false;
     }
 
-    public static void moveAppToForeground(Context context, String event) {
+    public static String moveAppToForeground(Context context, String event) {
         if (KitAppUtils.EVENT_START_CALL_PAGE.equals(event)) {
             if (KitPermissionUtils.hasPermission(PermissionRequester.BG_START_PERMISSION)) {
                 Intent intent = new Intent(context, FloatActivity.class);
@@ -57,10 +57,11 @@ public class KitAppUtils {
             } else {
                 TUICore.notifyEvent(Constants.KEY_CALLKIT_PLUGIN, Constants.SUB_KEY_GOTO_CALLING_PAGE, null);
             }
+            return "success_start_call";
         } else if (KitAppUtils.EVENT_HANDLER_RECEIVE_CALL_REQUEST.equals(event)) {
             User caller = TUICallState.getInstance().mRemoteUserList.get(0);
             if (caller == null) {
-                return;
+                return "failed_caller_null";
             }
             if (KitPermissionUtils.hasPermission(PermissionRequester.BG_START_PERMISSION)) {
                 Logger.info(TUICallKitPlugin.TAG, "App in background, try to launch intent");
@@ -74,23 +75,21 @@ public class KitAppUtils {
                 } else {
                     Logger.error(TUICallKitPlugin.TAG, "Failed to get launch intent for package: " + context.getPackageName());
                 }
-                return;
+                return "success_launching_intent";
             } else if (KitPermissionUtils.hasPermission(PermissionRequester.FLOAT_PERMISSION)) {
                 Logger.info(TUICallKitPlugin.TAG, "App in background, will open IncomingFloatView");
 
                 IncomingFloatView floatView = new IncomingFloatView(context);
                 TUICallState.getInstance().mIncomingFloatView = floatView;
                 floatView.showIncomingView(caller, TUICallState.getInstance().mMediaType);
-                return;
-            } else if (isNotificationEnabled()) {
-                Logger.info(TUICallKitPlugin.TAG, "App in background, will open IncomingNotificationView");
-
-                IncomingNotificationView.getInstance(context).showNotification(caller, TUICallState.getInstance().mMediaType);
-                return;
+                return "success_float_window";
             } else {
                 Logger.info(TUICallKitPlugin.TAG, "App in background, no permissions");
                 TUICore.notifyEvent(Constants.KEY_CALLKIT_PLUGIN, Constants.SUB_KEY_HANDLE_CALL_RECEIVED, null);
+                return "failed_no_permissions";
             }
+        } else {
+            return "failed_event_not_match";
         }
     }
 

@@ -42,11 +42,18 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.plugin.common.BinaryMessenger;
+import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.embedding.engine.FlutterJNI;
 
 /**
  * TUICallKitPlugin
  */
-public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUINotification {
+public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUINotification, ActivityAware {
+    private FlutterActivity activity = null;
+    private BinaryMessenger binaryMessenger = null;
     public static final String TAG = "TUICallKitPlugin";
 
     private MethodChannel      mChannel;
@@ -54,15 +61,40 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
     private CallingBellService mCallingBellService;
 
     @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        mApplicationContext = binding.getActivity().getApplicationContext();
+        mCallingBellService = new CallingBellService(mApplicationContext);
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        mApplicationContext = binding.getActivity().getApplicationContext();
+        mCallingBellService = new CallingBellService(mApplicationContext);
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+
+    }
+
+    @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         Logger.info(TAG, "TUICallKitPlugin onAttachedToEngine");
-        mChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "tuicall_kit");
+        binaryMessenger = flutterPluginBinding.getBinaryMessenger();
+        mChannel = new MethodChannel(binaryMessenger, "tuicall_kit");
         mChannel.setMethodCallHandler(this);
 
         mApplicationContext = flutterPluginBinding.getApplicationContext();
         mCallingBellService = new CallingBellService(mApplicationContext);
 
         registerObserver();
+
+
     }
 
     @Override
@@ -205,10 +237,11 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
         }
     }
 
-    public void moveAppToFront(MethodCall call, MethodChannel.Result result) {
+    public String moveAppToFront(MethodCall call, MethodChannel.Result result) {
         String event = MethodCallUtils.getMethodParams(call, KitAppUtils.EVENT_KEY);
-        KitAppUtils.moveAppToForeground(mApplicationContext, event);
-        result.success(0);
+        String resultMove = KitAppUtils.moveAppToForeground(mApplicationContext, event);
+        result.success(resultMove);
+        return resultMove;
     }
 
     public void initResources(MethodCall call, MethodChannel.Result result) {
