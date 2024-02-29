@@ -1,5 +1,4 @@
 # This is a generated file; do not edit or check into version control.
-package_info_plus=/Users/def/.pub-cache/hosted/pub.dev/package_info_plus-5.0.1/
 path_provider=/Users/def/.pub-cache/hosted/pub.dev/path_provider-2.1.2/
 path_provider_android=/Users/def/.pub-cache/hosted/pub.dev/path_provider_android-2.2.2/
 path_provider_foundation=/Users/def/.pub-cache/hosted/pub.dev/path_provider_foundation-2.3.2/
@@ -26,4 +25,4 @@ url_launcher_linux=/Users/def/.pub-cache/hosted/pub.dev/url_launcher_linux-3.1.1
 url_launcher_macos=/Users/def/.pub-cache/hosted/pub.dev/url_launcher_macos-3.1.0/
 url_launcher_web=/Users/def/.pub-cache/hosted/pub.dev/url_launcher_web-2.2.3/
 url_launcher_windows=/Users/def/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.1/
-wakelock_plus=/Users/def/.pub-cache/hosted/pub.dev/wakelock_plus-1.1.4/
+wakelock_for_us=/Users/def/.pub-cache/hosted/pub.dev/wakelock_for_us-0.6.3+1/

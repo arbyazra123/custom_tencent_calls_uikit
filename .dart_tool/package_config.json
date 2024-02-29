@@ -2,12 +2,6 @@
   "configVersion": 2,
   "packages": [
     {
-      "name": "args",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/args-2.4.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
-    },
-    {
       "name": "async",
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/async-2.11.0",
       "packageUri": "lib/",
@@ -36,12 +30,6 @@
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/collection-1.18.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
-    },
-    {
-      "name": "dbus",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/dbus-0.7.10",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
     },
     {
       "name": "fake_async",
@@ -86,24 +74,6 @@
       "languageVersion": "3.2"
     },
     {
-      "name": "http",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/http-1.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.2"
-    },
-    {
-      "name": "http_parser",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/http_parser-4.0.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "js",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/js-0.6.7",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
-    },
-    {
       "name": "lints",
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/lints-2.1.1",
       "packageUri": "lib/",
@@ -124,18 +94,6 @@
     {
       "name": "meta",
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/meta-1.10.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "package_info_plus",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/package_info_plus-5.0.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.2"
-    },
-    {
-      "name": "package_info_plus_platform_interface",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/package_info_plus_platform_interface-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -210,12 +168,6 @@
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/permission_handler_windows-0.1.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
-    },
-    {
-      "name": "petitparser",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/petitparser-6.0.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.2"
     },
     {
       "name": "platform",
@@ -338,28 +290,22 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "typed_data",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/typed_data-1.3.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
-    },
-    {
       "name": "vector_math",
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
-      "name": "wakelock_plus",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/wakelock_plus-1.1.4",
+      "name": "wakelock_for_us",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/wakelock_for_us-0.6.3+1",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "2.13"
     },
     {
-      "name": "wakelock_plus_platform_interface",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/wakelock_plus_platform_interface-1.1.0",
+      "name": "wakelock_platform_interface",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/wakelock_platform_interface-0.3.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "2.12"
     },
     {
       "name": "web",
@@ -380,19 +326,13 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "xml",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/xml-6.5.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.2"
-    },
-    {
       "name": "tencent_calls_uikit",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2024-02-11T14:21:27.443810Z",
+  "generated": "2024-02-29T12:06:14.826439Z",
   "generator": "pub",
   "generatorVersion": "3.2.2"
 }

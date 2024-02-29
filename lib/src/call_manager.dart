@@ -42,8 +42,8 @@ class CallManager {
         if (TUIPermissionResult.granted == permissionResult) {
           TUICallKitNavigatorObserver.getInstance().enterCallingPage();
         } else {
-          CallManager.instance.reject();
-          CallingBellFeature.stopRing();
+          // CallManager.instance.reject();
+          // CallingBellFeature.stopRing();
         }
       } else {
         TUICallKitNavigatorObserver.getInstance().enterCallingPage();

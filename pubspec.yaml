@@ -15,7 +15,7 @@ dependencies:
   path_provider: ^2.0.12
   plugin_platform_interface: ^2.0.2
   shared_preferences: ^2.2.0
-  wakelock_plus: ^1.1.4
+  wakelock_for_us:
 
   tencent_calls_engine: ">=2.2.0 <2.3.0"
   tencent_cloud_uikit_core: ">=1.5.1 <1.6.0"
