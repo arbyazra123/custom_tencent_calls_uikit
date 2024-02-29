@@ -6,7 +6,7 @@ import 'package:tencent_calls_uikit/src/extensions/trtc_logger.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/groupcall/group_call_widget.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/singlecall/single_call_widget.dart';
 import 'package:tencent_calls_uikit/src/utils/event_bus.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:wakelock_for_us/wakelock_for_us.dart';
 
 class TUICallKitWidget extends StatefulWidget {
   final Function close;
@@ -35,7 +35,7 @@ class _TUICallKitWidgetState extends State<TUICallKitWidget> {
       }
     };
     eventBus.register(setStateEventOnCallEnd, onCallEndCallBack);
-    WakelockPlus.enable();
+    Wakelock.enable();
   }
 
   @override
@@ -66,6 +66,6 @@ class _TUICallKitWidgetState extends State<TUICallKitWidget> {
     super.dispose();
     TRTCLogger.info('TUICallKitWidget dispose');
     eventBus.unregister(setStateEventOnCallEnd, onCallEndCallBack);
-    WakelockPlus.disable();
+    Wakelock.disable();
   }
 }
