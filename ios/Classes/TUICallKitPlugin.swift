@@ -41,6 +41,7 @@ public class TUICallKitPlugin: NSObject, BackToFlutterWidgetDelegate, TUICallKit
         case openMicrophone
         case closeMicrophone
         case isAppInForeground
+        case turnAppToBackground
         case apiLog
     }
     
@@ -128,6 +129,9 @@ extension TUICallKitPlugin: FlutterPlugin {
             break
         case .openMicrophone:
             TUICallKitManager.shared.openMicrophone(call: call, result: result)
+            break
+        case .turnAppToBackground:
+            isAppInForeground = false;
             break
         case .closeMicrophone:
             TUICallKitManager.shared.closeMicrophone(call: call, result: result)
