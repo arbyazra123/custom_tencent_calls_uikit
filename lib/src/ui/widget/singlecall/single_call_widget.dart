@@ -68,10 +68,11 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
   }
 
   void _initialEarpiece() async {
-    Future.delayed(const Duration(seconds: 1)).then((value) async {
+    Future.delayed(const Duration(milliseconds: 200)).then((value) async {
       CallState.instance.audioDevice = TUIAudioPlaybackDevice.earpiece;
-      await CallManager.instance
-          .selectAudioPlaybackDevice(CallState.instance.audioDevice);
+      await CallManager.instance.selectAudioPlaybackDevice(
+        CallState.instance.audioDevice,
+      );
     });
   }
 
