@@ -64,15 +64,20 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
       }
     };
     eventBus.register(setStateEvent, setSateCallBack);
-    _initialEarpiece();
+    _initialize();
   }
 
-  void _initialEarpiece() async {
-    Future.delayed(const Duration(milliseconds: 200)).then((value) async {
+  void _initialize() async {
+    Future.delayed(const Duration(milliseconds: 500)).then((value) async {
+      CallState.instance.isMicrophoneMute = true;
+      await CallManager.instance.closeMicrophone();
+
       CallState.instance.audioDevice = TUIAudioPlaybackDevice.earpiece;
       await CallManager.instance.selectAudioPlaybackDevice(
         CallState.instance.audioDevice,
       );
+      CallState.instance.isMicrophoneMute = false;
+      await CallManager.instance.openMicrophone();
     });
   }
 
