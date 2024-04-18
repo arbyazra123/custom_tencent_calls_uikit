@@ -31,6 +31,7 @@ class TUICallKit {
   CallState get callState => CallState.instance;
   TUICallKitPlatform get tuiCallPlatform => TUICallKitPlatform.instance;
 
+  Future<void> startRing() async => await CallingBellFeature.startRing();
   Future<void> stopRing() async => await CallingBellFeature.stopRing();
 
   Future<TUIPermissionResult> askPermission() async {
@@ -86,7 +87,8 @@ class TUICallKit {
   Future<TUIResult> groupCall(
       String groupId, List<String> userIdList, TUICallMediaType callMediaType,
       [TUICallParams? params]) async {
-    return CallManager.instance.groupCall(groupId, userIdList, callMediaType, params);
+    return CallManager.instance
+        .groupCall(groupId, userIdList, callMediaType, params);
   }
 
   ///Join a current call
@@ -99,7 +101,6 @@ class TUICallKit {
         .joinInGroupCall(roomId, groupId, callMediaType);
   }
 
-
   /// Set the ringtone (preferably shorter than 30s)
   ///
   /// First introduce the ringtone resource into the project
@@ -109,7 +110,6 @@ class TUICallKit {
   Future<void> setCallingBell(String assetName) async {
     return await CallManager.instance.setCallingBell(assetName);
   }
-
 
   ///Enable the mute mode (the callee doesn't ring)
   Future<void> enableMuteMode(bool enable) async {
