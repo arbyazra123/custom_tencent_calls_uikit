@@ -64,7 +64,11 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
       }
     };
     eventBus.register(setStateEvent, setSateCallBack);
-    _initialize();
+    if (TUICallStatus.waiting == CallState.instance.selfUser.callStatus) {
+      if (TUICallRole.caller == CallState.instance.selfUser.callRole) {
+        _initialize();
+      }
+    }
   }
 
   void _initialize() async {
