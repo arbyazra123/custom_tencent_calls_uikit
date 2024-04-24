@@ -60,9 +60,11 @@ public class CallingBellService {
                 }
                 mMediaPlayer.reset();
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                
 
                 try {
                     mMediaPlayer.setDataSource(mRingFilePath);
+                    mMediaPlayer.setVolume(1.0f,1.0f);
                     mMediaPlayer.setLooping(true);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
