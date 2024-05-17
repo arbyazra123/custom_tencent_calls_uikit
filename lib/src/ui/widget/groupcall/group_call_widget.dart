@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
@@ -118,20 +119,26 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: _buildFunctionWidget(),
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 0,
+        backgroundColor: Colors.black,
+      ),
       body: WillPopScope(
         onWillPop: () async {
           return true;
         },
         child: Container(
-          padding: const EdgeInsets.only(top: 40),
+          padding: const EdgeInsets.only(top: 0),
           color: const Color.fromRGBO(45, 45, 45, 1.0),
           child: Stack(
             alignment: Alignment.center,
             fit: StackFit.expand,
             children: <Widget>[
-              _buildUserVideoList(),
               _buildTopWidget(),
-              _buildFunctionWidget(),
+              _buildUserVideoList(),
             ],
           ),
         ),
@@ -223,11 +230,14 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
 
   _buildGroupCallView() {
     return Positioned(
-        top: 50,
-        left: 0,
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.width * 4 / 3,
-        child: Stack(children: _userViewWidgets));
+      top: 50,
+      left: 0,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height -
+          (MediaQuery.of(context).padding.top +
+              MediaQuery.of(context).padding.bottom),
+      child: Stack(children: _userViewWidgets),
+    );
   }
 
   _buildTopWidget() {
@@ -269,17 +279,31 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
     );
 
     return Positioned(
-        top: 15,
+        top: 0,
         width: MediaQuery.of(context).size.width,
-        height: 100,
-        child: Stack(
-          children: [
-            Positioned(left: 16, child: floatWindowBtnWidget),
-            Positioned(
+        height: kToolbarHeight,
+        child: Container(
+          color: const Color.fromRGBO(52, 56, 66, 1.0),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(
+                left: 16,
+                child: floatWindowBtnWidget,
+                top: 15,
+              ),
+              Positioned(
                 left: (MediaQuery.of(context).size.width / 2) - 50,
-                child: timerWidget),
-            Positioned(right: 16, child: inviteBtnWidget),
-          ],
+                child: timerWidget,
+                top: 15,
+              ),
+              Positioned(
+                right: 16,
+                child: inviteBtnWidget,
+                top: 15,
+              ),
+            ],
+          ),
         ));
   }
 
@@ -293,20 +317,22 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
     }
 
     return Positioned(
-        bottom: 0,
-        width: MediaQuery.of(context).size.width,
-        child: functionWidget);
+      bottom: 0,
+      width: MediaQuery.of(context).size.width,
+      child: functionWidget,
+    );
   }
 
   _buildAudioAndVideoCalleeWaitingFunctionView() {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ExtendButton(
               imgUrl: "assets/images/hangup.png",
-              tips: "Hang Up",
+              tips: CallI10n.current.hangup,
               textColor: Colors.white,
               imgHeight: 64,
               onTap: () {
@@ -315,7 +341,7 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
             ),
             ExtendButton(
               imgUrl: "assets/images/dialing.png",
-              tips: "Accept",
+              tips: CallI10n.current.accept,
               textColor: Colors.white,
               imgHeight: 64,
               onTap: () {
@@ -333,7 +359,7 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
     double bigBtnHeight = 52;
     double smallBtnHeight = 35;
     double edge = 40;
-    double bottomEdge = 10;
+    double bottomEdge = 1;
     int duration = 300;
     int btnWidth = 100;
     Curve curve = Curves.easeInOut;
@@ -369,8 +395,8 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                             : "assets/images/mute.png",
                         tips: isFunctionExpand
                             ? (CallState.instance.isMicrophoneMute
-                                ? "Mic is Off"
-                                : "Mic is On")
+                                ? CallI10n.current.microphone
+                                : CallI10n.current.microphone)
                             : '',
                         textColor: Colors.white,
                         imgHeight:
@@ -401,8 +427,8 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                         tips: isFunctionExpand
                             ? (CallState.instance.audioDevice ==
                                     TUIAudioPlaybackDevice.speakerphone
-                                ? CallKit_t("扬声器已开启")
-                                : CallKit_t("扬声器已关闭"))
+                                ? CallI10n.current.speaker
+                                : CallI10n.current.speaker)
                             : '',
                         textColor: Colors.white,
                         imgHeight:
@@ -431,8 +457,8 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                             : "assets/images/camera_off.png",
                         tips: isFunctionExpand
                             ? (CallState.instance.isCameraOpen
-                                ? CallKit_t("摄像头已开启")
-                                : CallKit_t("摄像头已关闭"))
+                                ? CallI10n.current.camera
+                                : CallI10n.current.camera)
                             : '',
                         textColor: Colors.white,
                         imgHeight:
@@ -472,7 +498,7 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                             smallBtnHeight / 2),
                         bottom: isFunctionExpand
                             ? bottomEdge + smallBtnHeight / 4 + 22
-                            : bottomEdge + 22,
+                            : bottomEdge + 26,
                         child: InkWell(
                           onTap: () {
                             setState(() {

@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
 import 'package:tencent_calls_uikit/src/extensions/calling_bell_feature.dart';
@@ -17,6 +19,9 @@ class TUICallKit {
       TUICallKitNavigatorObserver.getInstance(
         onPageChangedParam: onPageChanged,
       );
+
+  static AppLocalizationDelegate get getIntlDelegate => CallI10n.delegate;
+  static Future<CallI10n> load(Locale locale) => CallI10n.load(locale);
 
   void setOnInviteListener(
     Function(

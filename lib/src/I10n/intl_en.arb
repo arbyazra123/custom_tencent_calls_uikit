@@ -1,0 +1,12 @@
+{
+  "_locale": "en",
+  "locale": "en",
+  "local": "en_US",
+  "language": "Language",
+  "languagecode": "EN",
+  "microphone":"Mic",
+  "speaker":"Speaker",
+  "camera":"Camera",
+  "hangup":"Cancel",
+  "accept":"Accept"
+}

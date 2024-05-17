@@ -28,6 +28,7 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var selectedAmount = _groupMemberList.where((element) => element.isSelected).length;
     return Scaffold(
         appBar: AppBar(
           title: Text(CallKit_t('邀请成员')),
@@ -35,15 +36,50 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
               onPressed: _goBack,
               icon: const Icon(
                 Icons.arrow_back,
-                color: Colors.white,
+                // color: Colors.white,
               )),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.control_point_sharp),
-              tooltip: 'Search',
-              onPressed: () => _inviteUser(),
-            ),
-          ],
+          // actions: <Widget>[
+          //   IconButton(
+          //     icon: const Icon(Icons.control_point_sharp),
+          //     tooltip: 'Search',
+          //     onPressed: () => _inviteUser(),
+          //   ),
+          // ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(
+                onPressed: () {
+                  _inviteUser();
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Color(0xFFFFFFFF),
+                  backgroundColor: Color(0xFFFF0025),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 12,
+                  ),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                  elevation: 0,
+                  textStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    // height: 24.0 / titleMedium,
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                      "Invite ${selectedAmount>0?'($selectedAmount)':''}"),
+                ),
+              ),
+            ],
+          ),
         ),
         body: ListView.builder(
             itemCount: _groupMemberList.length,
@@ -59,8 +95,8 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
                         padding: EdgeInsets.symmetric(horizontal: 10)),
                     Image.asset(
                       _groupMemberList[index].isSelected
-                          ? 'assets/images/checkbox_checked.png'
-                          : 'assets/images/checkbox_unchecked.png',
+                          ? 'assets/images/check_box_group_selected.png'
+                          : 'assets/images/check_box_group_unselected.png',
                       package: 'tencent_calls_uikit',
                       color: _groupMemberList[index].isSelected
                           ? const Color(0xFFFF0025)
@@ -136,13 +172,13 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
       memberInfo.isSelected = _defaultSelectList.contains(imUser.userID);
       _groupMemberList.add(memberInfo);
     }
+    _groupMemberList.removeWhere((e) => _defaultSelectList.any((element) => element==e.userId));
     if (mounted) {
       setState(() {});
     }
   }
 
   _selectUser(int index) {
-    if (index == 0) return;
     _groupMemberList[index].isSelected = !_groupMemberList[index].isSelected;
     if (mounted) {
       setState(() {});

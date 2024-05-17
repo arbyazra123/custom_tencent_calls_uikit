@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/common/extent_button.dart';
@@ -622,8 +623,8 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
                       : "assets/images/mute.png",
                   tips: isFunctionExpand
                       ? (CallState.instance.isMicrophoneMute
-                          ? "Mic is Off"
-                          : "Mic is On")
+                          ? CallI10n.current.microphone
+                          : CallI10n.current.microphone)
                       : '',
                   textColor: Colors.white,
                   imgHeight: isFunctionExpand ? bigBtnHeight : smallBtnHeight,
@@ -653,8 +654,8 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
                   tips: isFunctionExpand
                       ? (CallState.instance.audioDevice ==
                               TUIAudioPlaybackDevice.speakerphone
-                          ? CallKit_t("扬声器已开启")
-                          : CallKit_t("扬声器已关闭"))
+                          ? CallI10n.current.speaker
+                          : CallI10n.current.speaker)
                       : '',
                   textColor: Colors.white,
                   imgHeight: isFunctionExpand ? bigBtnHeight : smallBtnHeight,
@@ -682,8 +683,8 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
                       : "assets/images/camera_off.png",
                   tips: isFunctionExpand
                       ? (CallState.instance.isCameraOpen
-                          ? CallKit_t("摄像头已开启")
-                          : CallKit_t("摄像头已关闭"))
+                          ? CallI10n.current.camera
+                          : CallI10n.current.camera)
                       : '',
                   textColor: Colors.white,
                   imgHeight: isFunctionExpand ? bigBtnHeight : smallBtnHeight,

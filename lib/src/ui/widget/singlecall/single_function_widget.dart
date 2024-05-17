@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
@@ -45,7 +46,7 @@ class SingleFunctionWidget {
               ? "assets/images/mute_on.png"
               : "assets/images/mute.png",
           tips:
-              CallState.instance.isMicrophoneMute ? "Mic is Off" : "Mic is On",
+              CallState.instance.isMicrophoneMute ? CallI10n.current.microphone : CallI10n.current.microphone,
           textColor: _getTextColor(),
           imgHeight: 60,
           onTap: () {
@@ -54,7 +55,7 @@ class SingleFunctionWidget {
         ),
         ExtendButton(
           imgUrl: "assets/images/hangup.png",
-          tips: "Hang Up",
+          tips: CallI10n.current.hangup,
           textColor: _getTextColor(),
           imgHeight: 60,
           onTap: () {
@@ -68,8 +69,8 @@ class SingleFunctionWidget {
               : "assets/images/handsfree.png",
           tips: CallState.instance.audioDevice ==
                   TUIAudioPlaybackDevice.speakerphone
-              ? CallKit_t("扬声器已开启")
-              : CallKit_t("扬声器已关闭"),
+              ? CallI10n.current.speaker
+              : CallI10n.current.speaker,
           imgHeight: 60,
           textColor: _getTextColor(),
           onTap: () {
@@ -90,7 +91,7 @@ class SingleFunctionWidget {
           ),
           ExtendButton(
             imgUrl: "assets/images/hangup.png",
-            tips: "Hang Up",
+            tips: CallI10n.current.hangup,
             textColor: _getTextColor(),
             imgHeight: 60,
             onTap: () {
@@ -123,8 +124,8 @@ class SingleFunctionWidget {
                   ? "assets/images/mute_on.png"
                   : "assets/images/mute.png",
               tips: CallState.instance.isMicrophoneMute
-                  ? "Mic is Off"
-                  : "Mic is On",
+                  ? CallI10n.current.microphone
+                  : CallI10n.current.microphone,
               textColor: _getTextColor(),
               imgHeight: 60,
               onTap: () {
@@ -138,8 +139,8 @@ class SingleFunctionWidget {
                   : "assets/images/handsfree.png",
               tips: CallState.instance.audioDevice ==
                       TUIAudioPlaybackDevice.speakerphone
-                  ? CallKit_t("扬声器已开启")
-                  : CallKit_t("扬声器已关闭"),
+                  ? CallI10n.current.speaker
+                  : CallI10n.current.speaker,
               textColor: _getTextColor(),
               imgHeight: 60,
               onTap: () {
@@ -151,8 +152,8 @@ class SingleFunctionWidget {
                   ? "assets/images/camera_on.png"
                   : "assets/images/camera_off.png",
               tips: CallState.instance.isCameraOpen
-                  ? CallKit_t("摄像头已开启")
-                  : CallKit_t("摄像头已关闭"),
+                  ? CallI10n.current.camera
+                  : CallI10n.current.camera,
               textColor: _getTextColor(),
               imgHeight: 60,
               onTap: () {
@@ -200,7 +201,7 @@ class SingleFunctionWidget {
           children: [
             ExtendButton(
               imgUrl: "assets/images/hangup.png",
-              tips: "Hang Up",
+              tips: CallI10n.current.hangup,
               textColor: _getTextColor(),
               imgHeight: 60,
               onTap: () {
@@ -209,7 +210,7 @@ class SingleFunctionWidget {
             ),
             ExtendButton(
               imgUrl: "assets/images/dialing.png",
-              tips: "Accept",
+              tips: CallI10n.current.accept,
               textColor: _getTextColor(),
               imgHeight: 60,
               onTap: () {
