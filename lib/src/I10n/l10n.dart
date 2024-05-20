@@ -149,6 +149,206 @@ class CallI10n {
       args: [],
     );
   }
+
+  /// `Panggilan ditolak`
+  String get callDeclined {
+    return Intl.message(
+      'Panggilan ditolak',
+      name: 'callDeclined',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lawan bicara menolak panggilan {callType}`
+  String callRejected(Object callType) {
+    return Intl.message(
+      'Lawan bicara menolak panggilan $callType',
+      name: 'callRejected',
+      desc: '',
+      args: [callType],
+    );
+  }
+
+  /// `suara`
+  String get voice {
+    return Intl.message(
+      'suara',
+      name: 'voice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `video`
+  String get video {
+    return Intl.message(
+      'video',
+      name: 'video',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lawan bicara tidak menjawab panggilan {callType}`
+  String didNotRespond(Object callType) {
+    return Intl.message(
+      'Lawan bicara tidak menjawab panggilan $callType',
+      name: 'didNotRespond',
+      desc: '',
+      args: [callType],
+    );
+  }
+
+  /// `tidak ada respon`
+  String get noRespond {
+    return Intl.message(
+      'tidak ada respon',
+      name: 'noRespond',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lawan bicara sedang sibuk`
+  String get recepientIsBusy {
+    return Intl.message(
+      'Lawan bicara sedang sibuk',
+      name: 'recepientIsBusy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `sibuk`
+  String get busy {
+    return Intl.message(
+      'sibuk',
+      name: 'busy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lawan bicara telah menutup telepon dan panggilan selesai`
+  String get opponentHangUpAndCallIsOver {
+    return Intl.message(
+      'Lawan bicara telah menutup telepon dan panggilan selesai',
+      name: 'opponentHangUpAndCallIsOver',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `mengakhiri panggilan`
+  String get endTheCall {
+    return Intl.message(
+      'mengakhiri panggilan',
+      name: 'endTheCall',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Jumlah maksimal group call terlampaui`
+  String get groupCallExceed {
+    return Intl.message(
+      'Jumlah maksimal group call terlampaui',
+      name: 'groupCallExceed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Panggilan baru masuk, tetapi panggilan tersebut tidak dapat dijawab karena izin tidak memadai. Harap konfirmasi bahwa izin kamera/mikrofon telah diaktifkan`
+  String get callFailedDuetoPermission {
+    return Intl.message(
+      'Panggilan baru masuk, tetapi panggilan tersebut tidak dapat dijawab karena izin tidak memadai. Harap konfirmasi bahwa izin kamera/mikrofon telah diaktifkan',
+      name: 'callFailedDuetoPermission',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mengundang Anda ke panggilan grup`
+  String get invitedtoGroupCall {
+    return Intl.message(
+      'Mengundang Anda ke panggilan grup',
+      name: 'invitedtoGroupCall',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mereka juga ada di sana`
+  String get theyThere {
+    return Intl.message(
+      'Mereka juga ada di sana',
+      name: 'theyThere',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Undang Anggota`
+  String get inviteMembers {
+    return Intl.message(
+      'Undang Anggota',
+      name: 'inviteMembers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Undang{amount}`
+  String inviteWithAmount(Object amount) {
+    return Intl.message(
+      'Undang$amount',
+      name: 'inviteWithAmount',
+      desc: '',
+      args: [amount],
+    );
+  }
+
+  /// `Anda`
+  String get you {
+    return Intl.message(
+      'Anda',
+      name: 'you',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tunggu hingga lawan bicara menerima panggilan`
+  String get waitTheOtherParty {
+    return Intl.message(
+      'Tunggu hingga lawan bicara menerima panggilan',
+      name: 'waitTheOtherParty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mengundang Anda ke panggilan {callType}`
+  String invitedYouToACall(Object callType) {
+    return Intl.message(
+      'Mengundang Anda ke panggilan $callType',
+      name: 'invitedYouToACall',
+      desc: '',
+      args: [callType],
+    );
+  }
+
+  /// `Terhubung`
+  String get connected {
+    return Intl.message(
+      'Terhubung',
+      name: 'connected',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<CallI10n> {

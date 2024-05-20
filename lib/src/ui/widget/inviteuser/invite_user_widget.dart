@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
@@ -28,10 +29,11 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedAmount = _groupMemberList.where((element) => element.isSelected).length;
+    var selectedAmount =
+        _groupMemberList.where((element) => element.isSelected).length;
     return Scaffold(
         appBar: AppBar(
-          title: Text(CallKit_t('邀请成员')),
+          title: Text(CallI10n.current.inviteMembers),
           leading: IconButton(
               onPressed: _goBack,
               icon: const Icon(
@@ -57,8 +59,8 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
                   _inviteUser();
                 },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Color(0xFFFFFFFF),
-                  backgroundColor: Color(0xFFFF0025),
+                  foregroundColor: const Color(0xFFFFFFFF),
+                  backgroundColor: const Color(0xFFFF0025),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 12,
@@ -67,7 +69,7 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                   ),
                   elevation: 0,
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     // height: 24.0 / titleMedium,
@@ -75,7 +77,9 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
                 ),
                 child: Center(
                   child: Text(
-                      "Invite ${selectedAmount>0?'($selectedAmount)':''}"),
+                    CallI10n.current.inviteWithAmount(
+                        selectedAmount > 0 ? '($selectedAmount)' : ''),
+                  ),
                 ),
               ),
             ],
@@ -153,7 +157,7 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
     var memberInfo = GroupMemberInfo();
     memberInfo.userId = CallState.instance.selfUser.id;
     memberInfo.userName =
-        '${StringStream.makeNull(CallState.instance.selfUser.nickname, CallState.instance.selfUser.id)} (${CallKit_t("你")})';
+        '${StringStream.makeNull(CallState.instance.selfUser.nickname, CallState.instance.selfUser.id)} (${CallI10n.current.you})';
     memberInfo.avatar = StringStream.makeNull(
         CallState.instance.selfUser.avatar, Constants.defaultAvatar);
     memberInfo.isSelected = true;
@@ -172,7 +176,8 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
       memberInfo.isSelected = _defaultSelectList.contains(imUser.userID);
       _groupMemberList.add(memberInfo);
     }
-    _groupMemberList.removeWhere((e) => _defaultSelectList.any((element) => element==e.userId));
+    _groupMemberList.removeWhere(
+        (e) => _defaultSelectList.any((element) => element == e.userId));
     if (mounted) {
       setState(() {});
     }

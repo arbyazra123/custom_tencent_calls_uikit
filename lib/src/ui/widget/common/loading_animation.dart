@@ -53,7 +53,7 @@ class _LoadingAnimationState extends State<LoadingAnimation>
           child: Container(
             width: 20,
             height: 20,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,
             ),

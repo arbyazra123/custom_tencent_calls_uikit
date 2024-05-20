@@ -300,10 +300,13 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
             isWaiting
                 ? Text(
                     CallState.instance.selfUser.callRole == TUICallRole.caller
-                        ? CallKit_t("等待对方接受邀请")
-                        : CallState.instance.mediaType == TUICallMediaType.audio
-                            ? CallKit_t("邀请你进行语音通话")
-                            : CallKit_t("邀请你进行视频通话"),
+                        ? CallI10n.current.waitTheOtherParty
+                        : CallI10n.current.invitedYouToACall(
+                            CallState.instance.mediaType ==
+                                    TUICallMediaType.audio
+                                ? CallI10n.current.voice
+                                : CallI10n.current.video,
+                          ),
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -312,7 +315,7 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
                 : const SizedBox(),
             _isShowAcceptText
                 ? Text(
-                    CallKit_t('已接通'),
+                    CallI10n.current.connected,
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,

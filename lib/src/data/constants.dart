@@ -4,5 +4,5 @@ class Constants {
   static const int roomIdMaxValue = 2147483647; // 2^31 - 1
   static const String spKeyEnableMuteMode = "enableMuteMode";
   static const String defaultAvatar =
-      "https://dldir1.qq.com/hudongzhibo/TUIKit/resource/picture/user_default_icon.png";
+      "https://storage.sapa.co.id/sapawebapi/auth/images/avatar/Image.jpg";
 }

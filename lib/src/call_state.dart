@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/extensions/calling_bell_feature.dart';
 import 'package:tencent_calls_uikit/src/extensions/trtc_logger.dart';
@@ -155,9 +156,16 @@ class CallState {
         }
         TUICallKitPlatform.instance.updateCallStateToNative();
         if (TUICallScene.singleCall == CallState.instance.scene) {
-          CallManager.instance.showToast(CallKit_t('对方拒绝了通话请求'));
+          CallManager.instance.showToast(
+            CallI10n.current.callRejected(
+              CallState.instance.mediaType == TUICallMediaType.audio
+                  ? CallI10n.current.voice
+                  : CallI10n.current.video,
+            ),
+          );
         } else {
-          CallManager.instance.showToast('$userId ${CallKit_t('拒绝了通话请求')}');
+          CallManager.instance
+              .showToast('$userId ${CallI10n.current.callDeclined}');
         }
       },
       onUserNoResponse: (String userId) {
@@ -178,9 +186,15 @@ class CallState {
 
         TUICallKitPlatform.instance.updateCallStateToNative();
         if (TUICallScene.singleCall == CallState.instance.scene) {
-          CallManager.instance.showToast(CallKit_t('对方未响应'));
+          CallManager.instance.showToast(
+            CallI10n.current.didNotRespond(
+              CallState.instance.mediaType == TUICallMediaType.audio
+                  ? CallI10n.current.voice
+                  : CallI10n.current.video,
+            ),
+          );
         } else {
-          CallManager.instance.showToast('$userId ${CallKit_t('未响应')}');
+          CallManager.instance.showToast('$userId ${CallI10n.current.noRespond}');
         }
       },
       onUserLineBusy: (String userId) {
@@ -206,9 +220,9 @@ class CallState {
         TUICallKitPlatform.instance.updateCallStateToNative();
 
         if (TUICallScene.singleCall == CallState.instance.scene) {
-          CallManager.instance.showToast(CallKit_t('对方忙线'));
+          CallManager.instance.showToast(CallI10n.current.recepientIsBusy);
         } else {
-          CallManager.instance.showToast('$userId ${CallKit_t('忙线')}');
+          CallManager.instance.showToast('$userId ${CallI10n.current.busy}');
         }
       },
       onUserJoin: (String userId) async {
@@ -261,10 +275,10 @@ class CallState {
         TUICallKitPlatform.instance.updateCallStateToNative();
 
         if (TUICallScene.singleCall == CallState.instance.scene) {
-          CallManager.instance.showToast(CallKit_t('对方已挂断，通话结束'));
+          CallManager.instance.showToast(CallI10n.current.opponentHangUpAndCallIsOver);
         } else {
-          CallManager.instance.showToast('$userId ${CallKit_t('结束了通话')}');
-        }
+          CallManager.instance.showToast('$userId ${CallI10n.current.endTheCall}');
+        } 
       },
       onUserVideoAvailable: (String userId, bool isVideoAvailable) {
         TRTCLogger.info(
@@ -349,7 +363,7 @@ class CallState {
     }
 
     if (calleeIdList.length >= Constants.groupCallMaxUserCount) {
-      CallManager.instance.showToast(CallKit_t('超过最大人数限制'));
+      CallManager.instance.showToast(CallI10n.current.groupCallExceed);
       return;
     }
 

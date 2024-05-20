@@ -268,7 +268,7 @@ class SingleFunctionWidget {
       CallState.instance.selfUser.callStatus = TUICallStatus.accept;
     } else {
       CallManager.instance
-          .showToast(CallKit_t("新通话呼入，但因权限不足，无法接听。请确认摄像头/麦克风权限已开启。"));
+          .showToast(CallI10n.current.callFailedDuetoPermission);
     }
     eventBus.notify(setStateEvent);
   }

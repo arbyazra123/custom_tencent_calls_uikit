@@ -20,17 +20,54 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(callType) => "The other party rejected the ${callType} call";
+
+  static String m1(callType) =>
+      "The other party did not respond the ${callType} call";
+
+  static String m2(amount) => "Invite${amount}";
+
+  static String m3(callType) => "Invite you to a ${callType} call";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "_locale": MessageLookupByLibrary.simpleMessage("en"),
         "accept": MessageLookupByLibrary.simpleMessage("Accept"),
+        "busy": MessageLookupByLibrary.simpleMessage("busy"),
+        "callDeclined":
+            MessageLookupByLibrary.simpleMessage("Call request declined"),
+        "callFailedDuetoPermission": MessageLookupByLibrary.simpleMessage(
+            "A new call came in, but the call could not be answered due to insufficient permissions. Please confirm that camera/microphone permissions are turned on"),
+        "callRejected": m0,
         "camera": MessageLookupByLibrary.simpleMessage("Camera"),
+        "connected": MessageLookupByLibrary.simpleMessage("Connected"),
+        "didNotRespond": m1,
+        "endTheCall": MessageLookupByLibrary.simpleMessage("end the call"),
+        "groupCallExceed": MessageLookupByLibrary.simpleMessage(
+            "Maximum number of people exceeded"),
         "hangup": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "inviteMembers": MessageLookupByLibrary.simpleMessage("Invite Members"),
+        "inviteWithAmount": m2,
+        "invitedYouToACall": m3,
+        "invitedtoGroupCall":
+            MessageLookupByLibrary.simpleMessage("Invite you to a group call"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "languagecode": MessageLookupByLibrary.simpleMessage("EN"),
         "local": MessageLookupByLibrary.simpleMessage("en_US"),
         "locale": MessageLookupByLibrary.simpleMessage("en"),
         "microphone": MessageLookupByLibrary.simpleMessage("Mic"),
-        "speaker": MessageLookupByLibrary.simpleMessage("Speaker")
+        "noRespond": MessageLookupByLibrary.simpleMessage("no respond"),
+        "opponentHangUpAndCallIsOver": MessageLookupByLibrary.simpleMessage(
+            "The other party has hung up and the call is over"),
+        "recepientIsBusy":
+            MessageLookupByLibrary.simpleMessage("The other party is busy"),
+        "speaker": MessageLookupByLibrary.simpleMessage("Speaker"),
+        "theyThere":
+            MessageLookupByLibrary.simpleMessage("They are also there"),
+        "video": MessageLookupByLibrary.simpleMessage("video"),
+        "voice": MessageLookupByLibrary.simpleMessage("suara"),
+        "waitTheOtherParty": MessageLookupByLibrary.simpleMessage(
+            "Wait for the other party to accept the invitation"),
+        "you": MessageLookupByLibrary.simpleMessage("You")
       };
 }

@@ -20,17 +20,55 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'id';
 
+  static String m0(callType) => "Lawan bicara menolak panggilan ${callType}";
+
+  static String m1(callType) =>
+      "Lawan bicara tidak menjawab panggilan ${callType}";
+
+  static String m2(amount) => "Undang${amount}";
+
+  static String m3(callType) => "Mengundang Anda ke panggilan ${callType}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "_locale": MessageLookupByLibrary.simpleMessage("id"),
         "accept": MessageLookupByLibrary.simpleMessage("Angkat"),
+        "busy": MessageLookupByLibrary.simpleMessage("sibuk"),
+        "callDeclined":
+            MessageLookupByLibrary.simpleMessage("Panggilan ditolak"),
+        "callFailedDuetoPermission": MessageLookupByLibrary.simpleMessage(
+            "Panggilan baru masuk, tetapi panggilan tersebut tidak dapat dijawab karena izin tidak memadai. Harap konfirmasi bahwa izin kamera/mikrofon telah diaktifkan"),
+        "callRejected": m0,
         "camera": MessageLookupByLibrary.simpleMessage("Kamera"),
+        "connected": MessageLookupByLibrary.simpleMessage("Terhubung"),
+        "didNotRespond": m1,
+        "endTheCall":
+            MessageLookupByLibrary.simpleMessage("mengakhiri panggilan"),
+        "groupCallExceed": MessageLookupByLibrary.simpleMessage(
+            "Jumlah maksimal group call terlampaui"),
         "hangup": MessageLookupByLibrary.simpleMessage("Batal"),
+        "inviteMembers": MessageLookupByLibrary.simpleMessage("Undang Anggota"),
+        "inviteWithAmount": m2,
+        "invitedYouToACall": m3,
+        "invitedtoGroupCall": MessageLookupByLibrary.simpleMessage(
+            "Mengundang Anda ke panggilan grup"),
         "language": MessageLookupByLibrary.simpleMessage("Bahasa"),
         "languagecode": MessageLookupByLibrary.simpleMessage("ID"),
         "local": MessageLookupByLibrary.simpleMessage("id_ID"),
         "locale": MessageLookupByLibrary.simpleMessage("id"),
         "microphone": MessageLookupByLibrary.simpleMessage("Mikrofon"),
-        "speaker": MessageLookupByLibrary.simpleMessage("Speaker")
+        "noRespond": MessageLookupByLibrary.simpleMessage("tidak ada respon"),
+        "opponentHangUpAndCallIsOver": MessageLookupByLibrary.simpleMessage(
+            "Lawan bicara telah menutup telepon dan panggilan selesai"),
+        "recepientIsBusy":
+            MessageLookupByLibrary.simpleMessage("Lawan bicara sedang sibuk"),
+        "speaker": MessageLookupByLibrary.simpleMessage("Speaker"),
+        "theyThere":
+            MessageLookupByLibrary.simpleMessage("Mereka juga ada di sana"),
+        "video": MessageLookupByLibrary.simpleMessage("video"),
+        "voice": MessageLookupByLibrary.simpleMessage("suara"),
+        "waitTheOtherParty": MessageLookupByLibrary.simpleMessage(
+            "Tunggu hingga lawan bicara menerima panggilan"),
+        "you": MessageLookupByLibrary.simpleMessage("Anda")
       };
 }

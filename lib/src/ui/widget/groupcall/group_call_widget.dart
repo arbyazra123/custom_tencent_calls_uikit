@@ -187,14 +187,14 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
               ),
             ),
             Text(
-              CallKit_t("邀请你进行多人通话"),
+              CallI10n.current.invitedtoGroupCall,
               style: const TextStyle(fontSize: 18, color: Colors.white),
             ),
             const SizedBox(
               height: 50,
             ),
             Text(
-              CallKit_t("他们也在"),
+              CallI10n.current.theyThere,
               style: const TextStyle(color: Colors.white),
             ),
             Container(
@@ -289,18 +289,18 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
             children: [
               Positioned(
                 left: 16,
-                child: floatWindowBtnWidget,
                 top: 15,
+                child: floatWindowBtnWidget,
               ),
               Positioned(
                 left: (MediaQuery.of(context).size.width / 2) - 50,
-                child: timerWidget,
                 top: 15,
+                child: timerWidget,
               ),
               Positioned(
                 right: 16,
-                child: inviteBtnWidget,
                 top: 15,
+                child: inviteBtnWidget,
               ),
             ],
           ),
@@ -584,8 +584,9 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
       await CallManager.instance.accept();
       CallState.instance.selfUser.callStatus = TUICallStatus.accept;
     } else {
-      CallManager.instance
-          .showToast(CallKit_t("新通话呼入，但因权限不足，无法接听。请确认摄像头/麦克风权限已开启。"));
+      CallManager.instance.showToast(
+        CallI10n.current.callFailedDuetoPermission,
+      );
     }
     setState(() {});
   }
