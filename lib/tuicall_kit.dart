@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
-import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart' as intl;
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
 import 'package:tencent_calls_uikit/src/extensions/calling_bell_feature.dart';
 import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.dart';
 import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/utils/permission_request.dart';
+import 'package:tencent_calls_uikit/src/utils/tuicall_localization_delegate.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
 class TUICallKit {
@@ -20,8 +21,8 @@ class TUICallKit {
         onPageChangedParam: onPageChanged,
       );
 
-  static AppLocalizationDelegate get getIntlDelegate => CallI10n.delegate;
-  static Future<CallI10n> load(Locale locale) => CallI10n.load(locale);
+  static TUICallLocalizationDelegate get getTUICallLocalization => intl.CallI10n.delegate.getTUICallLocalization;
+  static Future<intl.CallI10n> load(Locale locale) => intl.CallI10n.load(locale);
 
   void setOnInviteListener(
     Function(
