@@ -316,11 +316,7 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
       functionWidget = _buildVideoCallerAndCalleeAcceptedFunctionView();
     }
 
-    return Positioned(
-      bottom: 0,
-      width: MediaQuery.of(context).size.width,
-      child: functionWidget,
-    );
+    return functionWidget;
   }
 
   _buildAudioAndVideoCalleeWaitingFunctionView() {
