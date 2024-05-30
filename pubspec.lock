@@ -469,6 +469,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  system_alert_window:
+    dependency: "direct main"
+    description:
+      name: system_alert_window
+      sha256: c9f77a5bc4531547ad243b8ea2f68d54fddd12fd66790e1a8612ea3e151496f6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
   tencent_calls_engine:
     dependency: "direct main"
     description:

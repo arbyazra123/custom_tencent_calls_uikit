@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:system_alert_window/system_alert_window.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
+import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
 import 'package:tencent_calls_uikit/src/extensions/trtc_logger.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/groupcall/group_call_widget.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/singlecall/single_call_widget.dart';
 import 'package:tencent_calls_uikit/src/utils/event_bus.dart';
+import 'package:tencent_calls_uikit/tencent_calls_uikit.dart';
 import 'package:wakelock_for_us/wakelock_for_us.dart';
 
 class TUICallKitWidget extends StatefulWidget {
@@ -48,6 +53,35 @@ class _TUICallKitWidgetState extends State<TUICallKitWidget> {
     return WillPopScope(
       onWillPop: () async {
         return false;
+        // if (Platform.isAndroid) {
+        //   var checkFloatingPermission =
+        //       await SystemAlertWindow.checkPermissions(
+        //     prefMode: SystemWindowPrefMode.OVERLAY,
+        //   );
+        //   if (checkFloatingPermission == false) {
+        //     // ignore: unused_local_variable
+        //     var result = await showModalBottomSheet<bool?>(
+        //       context: context,
+        //       builder: (context) {
+        //         return Container(
+        //           child: Text(
+        //             "Please allow SAPA to Display over other apps, otherwise the call will not be displayed correctly.",
+        //           ),
+        //         );
+        //       },
+        //     );
+        //     SystemAlertWindow.requestPermissions(
+        //         prefMode: SystemWindowPrefMode.OVERLAY);
+        //   } else {
+        //     TUICallKit.instance.enableFloatWindow(true);
+        //     CallManager.instance.openFloatWindow();
+        //     return true;
+        //   }
+        //   debugPrint("checkFloatingPermission: $checkFloatingPermission");
+        //   return true;
+        // } else {
+        //   return true;
+        // }
       },
       child: Scaffold(
           resizeToAvoidBottomInset: false,

@@ -362,6 +362,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "system_alert_window",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/system_alert_window-1.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.13"
+    },
+    {
       "name": "tencent_calls_engine",
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_calls_engine-2.2.0",
       "packageUri": "lib/",
@@ -482,7 +488,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2024-05-30T07:43:47.572554Z",
+  "generated": "2024-05-30T08:29:03.494557Z",
   "generator": "pub",
   "generatorVersion": "3.2.2"
 }

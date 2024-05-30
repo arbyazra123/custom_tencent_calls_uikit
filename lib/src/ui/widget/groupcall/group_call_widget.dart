@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:system_alert_window/system_alert_window.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
@@ -129,21 +130,16 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
         toolbarHeight: 0,
         backgroundColor: Colors.black,
       ),
-      body: WillPopScope(
-        onWillPop: () async {
-          return true;
-        },
-        child: Container(
-          padding: const EdgeInsets.only(top: 0),
-          color: const Color.fromRGBO(45, 45, 45, 1.0),
-          child: Stack(
-            alignment: Alignment.center,
-            fit: StackFit.expand,
-            children: <Widget>[
-              _buildTopWidget(),
-              _buildUserVideoList(),
-            ],
-          ),
+      body: Container(
+        padding: const EdgeInsets.only(top: 0),
+        color: const Color.fromRGBO(45, 45, 45, 1.0),
+        child: Stack(
+          alignment: Alignment.center,
+          fit: StackFit.expand,
+          children: <Widget>[
+            _buildTopWidget(),
+            _buildUserVideoList(),
+          ],
         ),
       ),
     );

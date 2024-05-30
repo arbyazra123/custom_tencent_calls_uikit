@@ -23,6 +23,7 @@ dependencies:
   permission_handler: ^10.2.0
   flutter_svg: ^2.0.7
   multiple_localization: 0.4.0
+  system_alert_window: 1.2.2
 
 dev_dependencies:
   flutter_test:
