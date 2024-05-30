@@ -46,9 +46,12 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
     _userViewWidgets.clear();
 
     GroupCallUserWidgetData.blockCount++;
-    _userViewWidgets.add(GroupCallUserWidget(
+    _userViewWidgets.add(
+      GroupCallUserWidget(
         index: GroupCallUserWidgetData.blockCount,
-        user: CallState.instance.selfUser));
+        user: CallState.instance.selfUser,
+      ),
+    );
 
     for (var remoteUser in CallState.instance.remoteUserList) {
       GroupCallUserWidgetData.blockCount++;
