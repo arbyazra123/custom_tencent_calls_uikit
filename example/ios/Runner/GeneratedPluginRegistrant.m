@@ -24,6 +24,12 @@
 @import shared_preferences_foundation;
 #endif
 
+#if __has_include(<system_alert_window/SystemAlertWindowPlugin.h>)
+#import <system_alert_window/SystemAlertWindowPlugin.h>
+#else
+@import system_alert_window;
+#endif
+
 #if __has_include(<tencent_calls_engine/TUICallEnginePlugin.h>)
 #import <tencent_calls_engine/TUICallEnginePlugin.h>
 #else
@@ -66,6 +72,7 @@
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
   [PermissionHandlerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PermissionHandlerPlugin"]];
   [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];
+  [SystemAlertWindowPlugin registerWithRegistrar:[registry registrarForPlugin:@"SystemAlertWindowPlugin"]];
   [TUICallEnginePlugin registerWithRegistrar:[registry registrarForPlugin:@"TUICallEnginePlugin"]];
   [CallsUikitPlugin registerWithRegistrar:[registry registrarForPlugin:@"CallsUikitPlugin"]];
   [TencentImSDKPlugin registerWithRegistrar:[registry registrarForPlugin:@"TencentImSDKPlugin"]];

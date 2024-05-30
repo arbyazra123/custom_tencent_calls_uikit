@@ -33,6 +33,12 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "_locale": MessageLookupByLibrary.simpleMessage("id"),
         "accept": MessageLookupByLibrary.simpleMessage("Angkat"),
+        "allowPermissionDesc": MessageLookupByLibrary.simpleMessage(
+            "Anda dapat memberi izin melakukan dgn langkah-langkah:"),
+        "allowPermissionStep": MessageLookupByLibrary.simpleMessage(
+            "Buka Pengaturan ponsel Anda > Aplikasi > Akses aplikasi khusus > Tampilkan di aplikasi lain > Sapa Beta > Izinkan tampilan di aplikasi lain"),
+        "allowPermissionTitle": MessageLookupByLibrary.simpleMessage(
+            "Harap izinkan SAPA untuk berjalan di atas aplikasi lain ketika melakukan panggilan. Jika tidak, halaman panggilan tidak akan ditampilkan dengan benar."),
         "busy": MessageLookupByLibrary.simpleMessage("sibuk"),
         "callDeclined":
             MessageLookupByLibrary.simpleMessage("Panggilan ditolak"),
@@ -54,10 +60,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "Mengundang Anda ke panggilan grup"),
         "language": MessageLookupByLibrary.simpleMessage("Bahasa"),
         "languagecode": MessageLookupByLibrary.simpleMessage("ID"),
+        "later": MessageLookupByLibrary.simpleMessage("Lain kali"),
         "local": MessageLookupByLibrary.simpleMessage("id_ID"),
         "locale": MessageLookupByLibrary.simpleMessage("id"),
         "microphone": MessageLookupByLibrary.simpleMessage("Mikrofon"),
         "noRespond": MessageLookupByLibrary.simpleMessage("tidak ada respon"),
+        "openAppSettings":
+            MessageLookupByLibrary.simpleMessage("Buka Pengaturan"),
         "opponentHangUpAndCallIsOver": MessageLookupByLibrary.simpleMessage(
             "Lawan bicara telah menutup telepon dan panggilan selesai"),
         "recepientIsBusy":

@@ -28,5 +28,10 @@
   "you":"You",
   "waitTheOtherParty":"Wait for the other party to accept the invitation",
   "invitedYouToACall":"Invite you to a {callType} call",
-  "connected":"Connected"
+  "connected":"Connected",
+  "allowPermissionTitle":"Please allow SAPA to Display over other apps, otherwise the call will not be displayed correctly.",
+  "allowPermissionDesc":"You can allow the permission by following the steps:",
+  "allowPermissionStep":"Open your phone Settings > Apps > Special app access > Display over other apps > Sapa Beta > Allow display over other apps",
+  "later":"Later",
+  "openAppSettings":"Open Settings"
 }

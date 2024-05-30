@@ -33,6 +33,12 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "_locale": MessageLookupByLibrary.simpleMessage("en"),
         "accept": MessageLookupByLibrary.simpleMessage("Accept"),
+        "allowPermissionDesc": MessageLookupByLibrary.simpleMessage(
+            "You can allow the permission by following the steps:"),
+        "allowPermissionStep": MessageLookupByLibrary.simpleMessage(
+            "Open your phone Settings > Apps > Special app access > Display over other apps > Sapa Beta > Allow display over other apps"),
+        "allowPermissionTitle": MessageLookupByLibrary.simpleMessage(
+            "Please allow SAPA to Display over other apps, otherwise the call will not be displayed correctly."),
         "busy": MessageLookupByLibrary.simpleMessage("busy"),
         "callDeclined":
             MessageLookupByLibrary.simpleMessage("Call request declined"),
@@ -53,10 +59,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invite you to a group call"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "languagecode": MessageLookupByLibrary.simpleMessage("EN"),
+        "later": MessageLookupByLibrary.simpleMessage("Later"),
         "local": MessageLookupByLibrary.simpleMessage("en_US"),
         "locale": MessageLookupByLibrary.simpleMessage("en"),
         "microphone": MessageLookupByLibrary.simpleMessage("Mic"),
         "noRespond": MessageLookupByLibrary.simpleMessage("no respond"),
+        "openAppSettings":
+            MessageLookupByLibrary.simpleMessage("Open Settings"),
         "opponentHangUpAndCallIsOver": MessageLookupByLibrary.simpleMessage(
             "The other party has hung up and the call is over"),
         "recepientIsBusy":

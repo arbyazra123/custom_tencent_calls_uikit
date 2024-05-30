@@ -349,6 +349,56 @@ class CallI10n {
       args: [],
     );
   }
+
+  /// `Harap izinkan SAPA untuk berjalan di atas aplikasi lain ketika melakukan panggilan. Jika tidak, halaman panggilan tidak akan ditampilkan dengan benar.`
+  String get allowPermissionTitle {
+    return Intl.message(
+      'Harap izinkan SAPA untuk berjalan di atas aplikasi lain ketika melakukan panggilan. Jika tidak, halaman panggilan tidak akan ditampilkan dengan benar.',
+      name: 'allowPermissionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Anda dapat memberi izin melakukan dgn langkah-langkah:`
+  String get allowPermissionDesc {
+    return Intl.message(
+      'Anda dapat memberi izin melakukan dgn langkah-langkah:',
+      name: 'allowPermissionDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buka Pengaturan ponsel Anda > Aplikasi > Akses aplikasi khusus > Tampilkan di aplikasi lain > Sapa Beta > Izinkan tampilan di aplikasi lain`
+  String get allowPermissionStep {
+    return Intl.message(
+      'Buka Pengaturan ponsel Anda > Aplikasi > Akses aplikasi khusus > Tampilkan di aplikasi lain > Sapa Beta > Izinkan tampilan di aplikasi lain',
+      name: 'allowPermissionStep',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lain kali`
+  String get later {
+    return Intl.message(
+      'Lain kali',
+      name: 'later',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buka Pengaturan`
+  String get openAppSettings {
+    return Intl.message(
+      'Buka Pengaturan',
+      name: 'openAppSettings',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<CallI10n> {

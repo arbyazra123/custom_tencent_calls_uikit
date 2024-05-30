@@ -31,6 +31,11 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin shared_preferences_android, io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin", e);
     }
     try {
+      flutterEngine.getPlugins().add(new in.jvapps.system_alert_window.SystemAlertWindowPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin system_alert_window, in.jvapps.system_alert_window.SystemAlertWindowPlugin", e);
+    }
+    try {
       flutterEngine.getPlugins().add(new com.tencent.cloud.tuikit.tuicall_engine.TUICallEnginePlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin tencent_calls_engine, com.tencent.cloud.tuikit.tuicall_engine.TUICallEnginePlugin", e);

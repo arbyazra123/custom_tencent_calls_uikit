@@ -28,5 +28,10 @@
   "you":"Anda",
   "waitTheOtherParty":"Tunggu hingga lawan bicara menerima panggilan",
   "invitedYouToACall":"Mengundang Anda ke panggilan {callType}",
-  "connected":"Terhubung"
+  "connected":"Terhubung",
+  "allowPermissionTitle":"Harap izinkan SAPA untuk berjalan di atas aplikasi lain ketika melakukan panggilan. Jika tidak, halaman panggilan tidak akan ditampilkan dengan benar.",
+  "allowPermissionDesc":"Anda dapat memberi izin melakukan dgn langkah-langkah:",
+  "allowPermissionStep":"Buka Pengaturan ponsel Anda > Aplikasi > Akses aplikasi khusus > Tampilkan di aplikasi lain > Sapa Beta > Izinkan tampilan di aplikasi lain",
+  "later":"Lain kali",
+  "openAppSettings":"Buka Pengaturan"
 }
