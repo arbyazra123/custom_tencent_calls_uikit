@@ -67,8 +67,7 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
     bool isShowRemoteMute = (widget.user.callStatus == TUICallStatus.accept) &&
         (widget.user.id != CallState.instance.selfUser.id) &&
         !widget.user.audioAvailable;
-    bool amIMuted = (widget.user.callStatus == TUICallStatus.accept) &&
-        (widget.user.id == CallState.instance.selfUser.id) &&
+    bool amIMuted = (widget.user.id == CallState.instance.selfUser.id) &&
         CallState.instance.isMicrophoneMute;
     bool isShowSwitchCameraAndVB =
         GroupCallUserWidgetData.blockBigger[widget.index]! &&

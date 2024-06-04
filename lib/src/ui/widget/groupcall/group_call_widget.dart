@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:system_alert_window/system_alert_window.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
-import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
 import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.dart';
 import 'package:tencent_calls_uikit/src/data/user.dart';
 import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
