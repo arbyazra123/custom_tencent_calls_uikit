@@ -1,3 +1,4 @@
+import 'package:system_alert_window/system_alert_window.dart' as sys;
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -13,8 +14,10 @@ import 'package:tencent_calls_uikit/src/ui/widget/singlecall/single_function_wid
 import 'package:tencent_calls_uikit/src/utils/event_bus.dart';
 import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
+import 'package:tencent_calls_uikit/src/utils/float_window.dart';
 import 'package:tencent_calls_uikit/src/utils/string_stream.dart';
 import 'package:tencent_calls_uikit/src/data/user.dart';
+import 'package:tencent_calls_uikit/tuicall_kit.dart';
 
 class SingleCallWidget extends StatefulWidget {
   final Function close;
@@ -160,36 +163,34 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
   }
 
   _buildFloatingWindowBtnWidget() {
-    return CallState.instance.enableFloatWindow
-        ? SafeArea(
-            child: SizedBox(
-              width: 24,
-              height: 24,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 24,
-                  top: kToolbarHeight / 2,
-                ),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        child: Image.asset(
-                          'assets/images/floating_button.png',
-                          package: 'tencent_calls_uikit',
-                          width: 24,
-                          height: 24,
-                        ),
-                        onTap: () {
-                          _openFloatWindow();
-                        },
-                      )
-                    ]),
-              ),
-            ),
-          )
-        : const SizedBox();
+    return SafeArea(
+      child: SizedBox(
+        width: 24,
+        height: 24,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 24,
+            top: kToolbarHeight / 2,
+          ),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  child: Image.asset(
+                    'assets/images/floating_button.png',
+                    package: 'tencent_calls_uikit',
+                    width: 24,
+                    height: 24,
+                  ),
+                  onTap: () {
+                    FloatWindow.open(context);
+                  },
+                )
+              ]),
+        ),
+      ),
+    );
   }
 
   _buildTimerWidget() {
@@ -564,17 +565,6 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
 
   double _getOpacityByVis(bool vis) {
     return vis ? 1.0 : 0;
-  }
-
-  _openFloatWindow() async {
-    if (Platform.isAndroid) {
-      bool result = await TUICallKitPlatform.instance.hasFloatPermission();
-      if (!result) {
-        return;
-      }
-    }
-    TUICallKitNavigatorObserver.getInstance().exitCallingPage();
-    CallManager.instance.openFloatWindow();
   }
 
   _getBackgroundColor() {

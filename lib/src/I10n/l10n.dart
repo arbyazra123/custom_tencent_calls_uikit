@@ -399,6 +399,16 @@ class CallI10n {
       args: [],
     );
   }
+
+  /// `Anda dapat Izinkan SAPA untuk Ditampilkan di atas aplikasi lain atau mengakhiri panggilan untuk keluar`
+  String get exitallowpermission {
+    return Intl.message(
+      'Anda dapat Izinkan SAPA untuk Ditampilkan di atas aplikasi lain atau mengakhiri panggilan untuk keluar',
+      name: 'exitallowpermission',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<CallI10n> {

@@ -50,6 +50,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "didNotRespond": m1,
         "endTheCall":
             MessageLookupByLibrary.simpleMessage("mengakhiri panggilan"),
+        "exitallowpermission": MessageLookupByLibrary.simpleMessage(
+            "Anda dapat Izinkan SAPA untuk Ditampilkan di atas aplikasi lain atau mengakhiri panggilan untuk keluar"),
         "groupCallExceed": MessageLookupByLibrary.simpleMessage(
             "Jumlah maksimal group call terlampaui"),
         "hangup": MessageLookupByLibrary.simpleMessage("Batal"),

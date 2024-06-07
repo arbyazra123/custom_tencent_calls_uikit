@@ -49,6 +49,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "connected": MessageLookupByLibrary.simpleMessage("Connected"),
         "didNotRespond": m1,
         "endTheCall": MessageLookupByLibrary.simpleMessage("end the call"),
+        "exitallowpermission": MessageLookupByLibrary.simpleMessage(
+            "You can either Allow SAPA to Display over other apps or end the call to exit"),
         "groupCallExceed": MessageLookupByLibrary.simpleMessage(
             "Maximum number of people exceeded"),
         "hangup": MessageLookupByLibrary.simpleMessage("Cancel"),

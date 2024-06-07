@@ -33,5 +33,6 @@
   "allowPermissionDesc":"You can allow the permission by following the steps:",
   "allowPermissionStep":"Open your phone Settings > Apps > Special app access > Display over other apps > Sapa Beta > Allow display over other apps",
   "later":"Later",
-  "openAppSettings":"Open Settings"
+  "openAppSettings":"Open Settings",
+  "exitallowpermission":"You can either Allow SAPA to Display over other apps or end the call to exit"
 }

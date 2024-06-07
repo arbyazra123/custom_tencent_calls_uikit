@@ -12,6 +12,7 @@ import 'package:tencent_calls_uikit/src/ui/widget/common/extent_button.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/common/timing_widget.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/groupcall/group_call_user_widget_data.dart';
 import 'package:tencent_calls_uikit/src/utils/event_bus.dart';
+import 'package:tencent_calls_uikit/src/utils/float_window.dart';
 import 'package:tencent_calls_uikit/src/utils/permission_request.dart';
 import 'package:tencent_calls_uikit/src/utils/string_stream.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
@@ -238,21 +239,19 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
   }
 
   _buildTopWidget() {
-    final floatWindowBtnWidget = CallState.instance.enableFloatWindow
-        ? Visibility(
-            visible: CallState.instance.enableFloatWindow,
-            child: InkWell(
-                onTap: () => _openFloatWindow(),
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: Image.asset(
-                    'assets/images/floating_button.png',
-                    package: 'tencent_calls_uikit',
-                  ),
-                )),
-          )
-        : const SizedBox();
+    final floatWindowBtnWidget = Visibility(
+      visible: CallState.instance.enableFloatWindow,
+      child: InkWell(
+          onTap: () => FloatWindow.open(context),
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: Image.asset(
+              'assets/images/floating_button.png',
+              package: 'tencent_calls_uikit',
+            ),
+          )),
+    );
 
     final timerWidget =
         (TUICallStatus.accept == CallState.instance.selfUser.callStatus)
@@ -520,17 +519,6 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
       isFunctionExpand = false;
     }
     setState(() {});
-  }
-
-  _openFloatWindow() async {
-    if (Platform.isAndroid) {
-      bool result = await TUICallKitPlatform.instance.hasFloatPermission();
-      if (!result) {
-        return;
-      }
-    }
-    CallManager.instance.openFloatWindow();
-    TUICallKitNavigatorObserver.getInstance().exitCallingPage();
   }
 
   _handleSwitchMic() async {

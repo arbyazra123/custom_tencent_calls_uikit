@@ -33,5 +33,6 @@
   "allowPermissionDesc":"Anda dapat memberi izin melakukan dgn langkah-langkah:",
   "allowPermissionStep":"Buka Pengaturan ponsel Anda > Aplikasi > Akses aplikasi khusus > Tampilkan di aplikasi lain > Sapa Beta > Izinkan tampilan di aplikasi lain",
   "later":"Lain kali",
-  "openAppSettings":"Buka Pengaturan"
+  "openAppSettings":"Buka Pengaturan",
+  "exitallowpermission":"Anda dapat Izinkan SAPA untuk Ditampilkan di atas aplikasi lain atau mengakhiri panggilan untuk keluar"
 }
