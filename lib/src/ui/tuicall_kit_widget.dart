@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
@@ -50,8 +49,10 @@ class _TUICallKitWidgetState extends State<TUICallKitWidget> {
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (_) async {
-        FloatWindow.open(context);
+      onPopInvoked: (value) async {
+        if (value == false) {
+          FloatWindow.open(context);
+        }
       },
       child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -72,6 +73,4 @@ class _TUICallKitWidgetState extends State<TUICallKitWidget> {
     eventBus.unregister(setStateEventOnCallEnd, onCallEndCallBack);
     Wakelock.disable();
   }
-
-  
 }
