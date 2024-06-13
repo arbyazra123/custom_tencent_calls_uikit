@@ -153,6 +153,8 @@ class FloatWindow {
           CallManager.instance.showToast(
             CallI10n.current.exitallowpermission,
           );
+          TUICallKitNavigatorObserver.getInstance().exitCallingPage();
+          TUICallKitNavigatorObserver.isClose = true;
         }
       } else {
         TUICallKit.instance.enableFloatWindow(true);

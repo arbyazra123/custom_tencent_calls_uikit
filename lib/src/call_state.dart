@@ -194,7 +194,8 @@ class CallState {
             ),
           );
         } else {
-          CallManager.instance.showToast('$userId ${CallI10n.current.noRespond}');
+          CallManager.instance
+              .showToast('$userId ${CallI10n.current.noRespond}');
         }
       },
       onUserLineBusy: (String userId) {
@@ -229,6 +230,7 @@ class CallState {
         TRTCLogger.info('TUICallObserver onUserJoin(userId:$userId)');
         for (var remoteUser in CallState.instance.remoteUserList) {
           if (remoteUser.id == userId) {
+            CallState.instance.selfUser.callStatus = TUICallStatus.accept;
             remoteUser.callStatus = TUICallStatus.accept;
             eventBus.notify(setStateEvent);
 
@@ -239,10 +241,12 @@ class CallState {
 
         CallingBellFeature.stopRing();
 
+        CallState.instance.selfUser.callStatus = TUICallStatus.accept;
+        eventBus.notify(setStateEvent);
+
         final user = User();
         user.id = userId;
-        user.callStatus == TUICallStatus.accept;
-        CallState.instance.remoteUserList.add(user);
+        user.callStatus = TUICallStatus.accept;
         final imInfo = await TencentImSDKPlugin.v2TIMManager
             .getFriendshipManager()
             .getFriendsInfo(userIDList: [userId]);
@@ -253,6 +257,7 @@ class CallState {
         user.avatar = StringStream.makeNull(
             imInfo.data?[0].friendInfo?.userProfile?.faceUrl,
             Constants.defaultAvatar);
+        CallState.instance.remoteUserList.add(user);
         eventBus.notify(setStateEvent);
 
         TUICallKitPlatform.instance.updateCallStateToNative();
@@ -275,10 +280,12 @@ class CallState {
         TUICallKitPlatform.instance.updateCallStateToNative();
 
         if (TUICallScene.singleCall == CallState.instance.scene) {
-          CallManager.instance.showToast(CallI10n.current.opponentHangUpAndCallIsOver);
+          CallManager.instance
+              .showToast(CallI10n.current.opponentHangUpAndCallIsOver);
         } else {
-          CallManager.instance.showToast('$userId ${CallI10n.current.endTheCall}');
-        } 
+          CallManager.instance
+              .showToast('$userId ${CallI10n.current.endTheCall}');
+        }
       },
       onUserVideoAvailable: (String userId, bool isVideoAvailable) {
         TRTCLogger.info(

@@ -110,6 +110,8 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
                       image: NetworkImage(StringStream.makeNull(
                           widget.user.avatar, Constants.defaultAvatar)),
                       fit: BoxFit.cover,
+                      width: double.maxFinite,
+                      height: double.maxFinite,
                       errorBuilder: (ctx, err, stackTrace) => Image.asset(
                         'assets/images/user_icon.png',
                         package: 'tencent_calls_uikit',

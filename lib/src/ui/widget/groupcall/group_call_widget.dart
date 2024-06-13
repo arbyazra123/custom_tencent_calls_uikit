@@ -15,6 +15,9 @@ import 'package:tencent_calls_uikit/src/utils/event_bus.dart';
 import 'package:tencent_calls_uikit/src/utils/float_window.dart';
 import 'package:tencent_calls_uikit/src/utils/permission_request.dart';
 import 'package:tencent_calls_uikit/src/utils/string_stream.dart';
+import 'package:tencent_cloud_chat_sdk/models/v2_tim_group_info_result.dart';
+import 'package:tencent_cloud_chat_sdk/models/v2_tim_value_callback.dart';
+import 'package:tencent_cloud_chat_sdk/tencent_im_sdk_plugin.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 import 'group_call_user_widget.dart';
 
@@ -240,7 +243,7 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
 
   _buildTopWidget() {
     final floatWindowBtnWidget = Visibility(
-      visible: CallState.instance.enableFloatWindow,
+      visible: true,
       child: InkWell(
           onTap: () => FloatWindow.open(context),
           child: SizedBox(
@@ -253,10 +256,13 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
           )),
     );
 
-    final timerWidget =
-        (TUICallStatus.accept == CallState.instance.selfUser.callStatus)
-            ? const SizedBox(width: 100, child: Center(child: TimingWidget()))
-            : const SizedBox();
+    var isAccept =
+        TUICallStatus.accept == CallState.instance.selfUser.callStatus;
+    final timerWidget = (isAccept)
+        ? const SizedBox(width: 100, child: Center(child: TimingWidget()))
+        : const SizedBox(
+            width: 100,
+          );
 
     final inviteBtnWidget = Visibility(
       visible: TUICallStatus.accept == CallState.instance.selfUser.callStatus ||
@@ -290,8 +296,41 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
               ),
               Positioned(
                 left: (MediaQuery.of(context).size.width / 2) - 50,
-                top: 15,
-                child: timerWidget,
+                top: isAccept ? 5 : 15,
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      timerWidget,
+                      FutureBuilder(
+                        future: TencentImSDKPlugin.v2TIMManager
+                            .getGroupManager()
+                            .getGroupsInfo(
+                                groupIDList: [CallState.instance.groupId]),
+                        builder: (context,
+                            AsyncSnapshot<
+                                    V2TimValueCallback<
+                                        List<V2TimGroupInfoResult>>>
+                                snapshot) {
+                          if (snapshot.hasData) {
+                            if (snapshot.data?.data?.isNotEmpty ?? false) {
+                              var group = snapshot.data!.data!.first;
+                              return Text(
+                                group.groupInfo?.groupName ?? "",
+                                style: TextStyle(
+                                  color: Colors.grey[200]!,
+                                  fontSize: isAccept ? 12 : 16,
+                                ),
+                              );
+                            }
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
               Positioned(
                 right: 16,

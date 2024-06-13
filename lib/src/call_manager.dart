@@ -291,21 +291,30 @@ class CallManager {
     }
   }
 
-  Future<void> joinInGroupCall(
+  Future<TUIResult> joinInGroupCall(
       TUIRoomId roomId, String groupId, TUICallMediaType mediaType) async {
     TRTCLogger.info(
         'CallManager joinInGroupCall(roomId:$roomId, groupId:$groupId, mediaType:$mediaType), version:${Constants.pluginVersion}');
     if (roomId.intRoomId <= 0 || roomId.intRoomId >= Constants.roomIdMaxValue) {
       debugPrint("joinInGroupCall failed, roomId is invalid");
-      return;
+      return TUIResult(
+        code: "-1",
+        message: "roomId is invalid",
+      );
     }
     if (groupId.isEmpty) {
       debugPrint("joinInGroupCall failed, groupId is empty");
-      return;
+      return TUIResult(
+        code: "-2",
+        message: "joinInGroupCall failed, groupId is empty",
+      );
     }
     if (TUICallMediaType.none == mediaType) {
       debugPrint("joinInGroupCall failed, mediaType is unknown");
-      return;
+      return TUIResult(
+        code: "-3",
+        message: "joinInGroupCall failed, mediaType is unknown",
+      );
     }
     if (Platform.isAndroid) {
       final permissionResult =
@@ -322,15 +331,24 @@ class CallManager {
           CallState.instance.selfUser.callStatus = TUICallStatus.accept;
 
           launchCallingPage();
-          return;
+          return TUIResult(
+            code: "0",
+            message: "success",
+          );
         } else {
           CallManager.instance.showToast("joinInGroupCall Fail, engine call "
               "fail");
-          return;
+          return TUIResult(
+            code: "-4",
+            message: "joinInGroupCall Fail, engine call",
+          );
         }
       } else {
         CallManager.instance.showToast("Permission result fail");
-        return;
+        return TUIResult(
+          code: "-5",
+          message: "Permission result fail",
+        );
       }
     } else {
       final result = await TUICallEngine.instance
@@ -344,10 +362,16 @@ class CallManager {
         CallState.instance.selfUser.callStatus = TUICallStatus.accept;
 
         launchCallingPage();
-        return;
+        return TUIResult(
+          code: "0",
+          message: "success",
+        );
       } else {
         CallManager.instance.showToast("joinInGroupCall Fail,engine call fail");
-        return;
+        return TUIResult(
+          code: "-6",
+          message: "joinInGroupCall Fail,engine call fail",
+        );
       }
     }
   }

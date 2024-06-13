@@ -101,7 +101,7 @@ class TUICallKit {
   ///
   ///@param roomId        current call room ID
   ///@param callMediaType call type
-  Future<void> joinInGroupCall(
+  Future<TUIResult> joinInGroupCall(
       TUIRoomId roomId, String groupId, TUICallMediaType callMediaType) async {
     return await CallManager.instance
         .joinInGroupCall(roomId, groupId, callMediaType);
