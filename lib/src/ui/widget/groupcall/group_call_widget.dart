@@ -159,73 +159,80 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
         top: 0,
         left: 0,
         width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(top: 150),
-              height: 120,
-              width: 120,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Image(
-                image: NetworkImage(StringStream.makeNull(
-                    CallState.instance.caller.avatar, Constants.defaultAvatar)),
-                fit: BoxFit.cover,
-                errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                  'assets/images/user_icon.png',
-                  package: 'tencent_calls_uikit',
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 150),
+                height: 120,
+                width: 120,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Image(
+                  image: NetworkImage(StringStream.makeNull(
+                      CallState.instance.caller.avatar, Constants.defaultAvatar)),
+                  fit: BoxFit.cover,
+                  errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                    'assets/images/user_icon.png',
+                    package: 'tencent_calls_uikit',
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                User.getUserDisplayName(CallState.instance.caller),
-                style: const TextStyle(fontSize: 24, color: Colors.white),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  User.getUserDisplayName(CallState.instance.caller),
+                  style: const TextStyle(fontSize: 24, color: Colors.white),
+                ),
               ),
-            ),
-            Text(
-              CallI10n.current.invitedtoGroupCall,
-              style: const TextStyle(fontSize: 18, color: Colors.white),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Text(
-              CallI10n.current.theyThere,
-              style: const TextStyle(color: Colors.white),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              child: Wrap(
-                spacing: 5,
-                runSpacing: 5,
-                children: List.generate(CallState.instance.calleeList.length,
-                    ((index) {
-                  return Container(
-                    height: 30,
-                    width: 30,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: Image(
-                      image: NetworkImage(StringStream.makeNull(
-                          CallState.instance.calleeList[index].avatar,
-                          Constants.defaultAvatar)),
-                      fit: BoxFit.cover,
-                      errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                        'assets/images/user_icon.png',
-                        package: 'tencent_calls_uikit',
+              Text(
+                CallI10n.current.invitedtoGroupCall,
+                style: const TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Text(
+                CallI10n.current.theyThere,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Wrap(
+                  spacing: 5,
+                  runSpacing: 5,
+                  children: List.generate(CallState.instance.calleeList.length,
+                      ((index) {
+                    return Container(
+                      height: 30,
+                      width: 30,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
                       ),
-                    ),
-                  );
-                })),
-              ),
-            )
-          ],
+                      child: Image(
+                        image: NetworkImage(StringStream.makeNull(
+                            CallState.instance.calleeList[index].avatar,
+                            Constants.defaultAvatar)),
+                        fit: BoxFit.cover,
+                        errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                          'assets/images/user_icon.png',
+                          package: 'tencent_calls_uikit',
+                        ),
+                      ),
+                    );
+                  })),
+                ),
+              )
+            ],
+          ),
         ));
   }
 

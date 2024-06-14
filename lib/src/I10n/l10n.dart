@@ -280,10 +280,10 @@ class CallI10n {
     );
   }
 
-  /// `Mereka juga ada di sana`
+  /// `Anggota yang diundang`
   String get theyThere {
     return Intl.message(
-      'Mereka juga ada di sana',
+      'Anggota yang diundang',
       name: 'theyThere',
       desc: '',
       args: [],

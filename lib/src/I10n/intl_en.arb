@@ -22,7 +22,7 @@
   "groupCallExceed":"Maximum number of people exceeded",
   "callFailedDuetoPermission":"A new call came in, but the call could not be answered due to insufficient permissions. Please confirm that camera/microphone permissions are turned on",
   "invitedtoGroupCall":"Invite you to a group call",
-  "theyThere":"They are also there",
+  "theyThere":"Invited members",
   "inviteMembers":"Invite Members",
   "inviteWithAmount":"Invite{amount}",
   "you":"You",

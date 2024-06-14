@@ -73,8 +73,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "recepientIsBusy":
             MessageLookupByLibrary.simpleMessage("The other party is busy"),
         "speaker": MessageLookupByLibrary.simpleMessage("Speaker"),
-        "theyThere":
-            MessageLookupByLibrary.simpleMessage("They are also there"),
+        "theyThere": MessageLookupByLibrary.simpleMessage("Invited members"),
         "video": MessageLookupByLibrary.simpleMessage("video"),
         "voice": MessageLookupByLibrary.simpleMessage("suara"),
         "waitTheOtherParty": MessageLookupByLibrary.simpleMessage(

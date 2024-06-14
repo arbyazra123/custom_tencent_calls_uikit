@@ -21,8 +21,17 @@ class TUICallKit {
         onPageChangedParam: onPageChanged,
       );
 
-  static TUICallLocalizationDelegate get getTUICallLocalization => intl.CallI10n.delegate.getTUICallLocalization;
-  static Future<intl.CallI10n> load(Locale locale) => intl.CallI10n.load(locale);
+  static TUICallLocalizationDelegate get getTUICallLocalization =>
+      intl.CallI10n.delegate.getTUICallLocalization;
+  static Future<intl.CallI10n> load(Locale locale) =>
+      intl.CallI10n.load(locale);
+
+  static syncrhonizeStartTime(int startTime) =>
+      CallState.instance.clientStartTime = startTime;
+
+  static startTimer() {
+    CallState.instance.startTimer();
+  }
 
   void setOnInviteListener(
     Function(
@@ -39,6 +48,8 @@ class TUICallKit {
 
   Future<void> startRing() async => await CallingBellFeature.startRing();
   Future<void> stopRing() async => await CallingBellFeature.stopRing();
+  Future<void> closeFloatingWindow() async =>
+      await CallManager.instance.closeFloatWindow();
 
   Future<TUIPermissionResult> askPermission() async {
     var permissionResult = await PermissionRequest.checkCallingPermission(

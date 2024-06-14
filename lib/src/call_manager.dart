@@ -660,6 +660,12 @@ class CallManager {
     TUICallKitNavigatorObserver.isClose = true;
   }
 
+  Future<void> closeFloatWindow() async {
+    await TUICallKitPlatform.instance.stopFloatWindow();
+    CallState.instance.isOpenFloatWindow = false;
+    TUICallKitNavigatorObserver.isClose = false;
+  }
+
   void backCallingPageFormFloatWindow() {
     TUICallKitNavigatorObserver.getInstance().enterCallingPage();
     CallState.instance.isOpenFloatWindow = false;

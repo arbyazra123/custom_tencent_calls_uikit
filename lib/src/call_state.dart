@@ -35,6 +35,7 @@ class CallState {
   TUICallMediaType mediaType = TUICallMediaType.none;
   int timeCount = 0;
   int startTime = 0;
+  int? clientStartTime;
   late Timer _timer;
   TUIRoomId roomId = TUIRoomId.intRoomId(intRoomId: 0);
   String groupId = '';
@@ -458,7 +459,14 @@ class CallState {
   }
 
   void startTimer() {
-    CallState.instance.timeCount = 0;
+    var clientST = CallState.instance.clientStartTime;
+    if (clientST != null) {
+      var time = DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(
+          CallState.instance.clientStartTime!));
+      CallState.instance.timeCount = time.inSeconds;
+    } else {
+      CallState.instance.timeCount = 0;
+    }
     CallState.instance._timer =
         Timer.periodic(const Duration(seconds: 1), (timer) {
       if (TUICallStatus.accept != CallState.instance.selfUser.callStatus) {

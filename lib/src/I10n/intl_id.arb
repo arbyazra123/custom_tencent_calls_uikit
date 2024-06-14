@@ -22,7 +22,7 @@
   "groupCallExceed":"Jumlah maksimal group call terlampaui",
   "callFailedDuetoPermission":"Panggilan baru masuk, tetapi panggilan tersebut tidak dapat dijawab karena izin tidak memadai. Harap konfirmasi bahwa izin kamera/mikrofon telah diaktifkan",
   "invitedtoGroupCall":"Mengundang Anda ke panggilan grup",
-  "theyThere":"Mereka juga ada di sana",
+  "theyThere":"Anggota yang diundang",
   "inviteMembers":"Undang Anggota",
   "inviteWithAmount":"Undang{amount}",
   "you":"Anda",
