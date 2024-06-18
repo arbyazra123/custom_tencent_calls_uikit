@@ -27,7 +27,7 @@ class _TimingWidgetState extends State<TimingWidget> {
       _formatCallTime(),
       style: const TextStyle(
         color: Colors.white,
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: FontWeight.bold,
       ),
     );

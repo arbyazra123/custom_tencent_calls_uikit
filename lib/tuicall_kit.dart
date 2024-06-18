@@ -32,6 +32,9 @@ class TUICallKit {
   static startTimer() {
     CallState.instance.startTimer();
   }
+  static stopTimer() {
+    CallState.instance.stopTimer();
+  }
 
   void setOnInviteListener(
     Function(

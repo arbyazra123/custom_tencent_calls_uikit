@@ -327,7 +327,7 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                                 group.groupInfo?.groupName ?? "",
                                 style: TextStyle(
                                   color: Colors.grey[200]!,
-                                  fontSize: isAccept ? 12 : 16,
+                                  fontSize: isAccept ? 11 : 16,
                                 ),
                               );
                             }

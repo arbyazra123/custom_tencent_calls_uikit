@@ -56,8 +56,13 @@ class CallState {
             'TUICallObserver onError(code:$code, message:$message)');
         CallManager.instance.showToast('Error: $code, $message');
       },
-      onCallReceived: (String callerId, List<String> calleeIdList,
-          String groupId, TUICallMediaType callMediaType) async {
+      onCallReceived: (
+        String callerId,
+        List<String> calleeIdList,
+        String groupId,
+        TUICallMediaType callMediaType,
+        String? userData,
+      ) async {
         TRTCLogger.info(
             'TUICallObserver onCallReceived(callerId:$callerId, calleeIdList:$calleeIdList, groupId:$groupId, callMediaType:$callMediaType), version:${Constants.pluginVersion}');
         await CallState.instance.handleCallReceivedData(
