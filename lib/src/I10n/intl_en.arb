@@ -11,7 +11,7 @@
   "accept":"Accept",
   "callDeclined":"Call request declined",
   "callRejected":"The other party rejected the {callType} call",
-  "voice":"suara",
+  "voice":"voice",
   "video":"video",
   "didNotRespond":"The other party did not respond the {callType} call",
   "noRespond":"no respond",

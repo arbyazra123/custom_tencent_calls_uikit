@@ -75,7 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "speaker": MessageLookupByLibrary.simpleMessage("Speaker"),
         "theyThere": MessageLookupByLibrary.simpleMessage("Invited members"),
         "video": MessageLookupByLibrary.simpleMessage("video"),
-        "voice": MessageLookupByLibrary.simpleMessage("suara"),
+        "voice": MessageLookupByLibrary.simpleMessage("voice"),
         "waitTheOtherParty": MessageLookupByLibrary.simpleMessage(
             "Wait for the other party to accept the invitation"),
         "you": MessageLookupByLibrary.simpleMessage("You")
