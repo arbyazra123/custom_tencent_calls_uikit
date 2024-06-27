@@ -169,6 +169,7 @@ class CallState {
                   : CallI10n.current.video,
             ),
           );
+          
         } else {
           CallManager.instance
               .showToast('$userId ${CallI10n.current.callDeclined}');

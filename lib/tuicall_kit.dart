@@ -26,12 +26,16 @@ class TUICallKit {
   static Future<intl.CallI10n> load(Locale locale) =>
       intl.CallI10n.load(locale);
 
-  static syncrhonizeStartTime(int startTime) =>
-      CallState.instance.clientStartTime = startTime;
+  static syncrhonizeStartTime(int startTime) {
+    CallState.instance.startTime = startTime;
+    CallState.instance.clientStartTime = startTime;
+    TUICallKitPlatform.instance.updateCallStateToNative();
+  }
 
   static startTimer() {
     CallState.instance.startTimer();
   }
+
   static stopTimer() {
     CallState.instance.stopTimer();
   }
