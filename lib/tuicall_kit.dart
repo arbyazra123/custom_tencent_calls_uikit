@@ -27,7 +27,7 @@ class TUICallKit {
       intl.CallI10n.load(locale);
 
   static syncrhonizeStartTime(int startTime) {
-    CallState.instance.startTime = startTime;
+    CallState.instance.startTime = startTime ~/ 1000;
     CallState.instance.clientStartTime = startTime;
     TUICallKitPlatform.instance.updateCallStateToNative();
   }
