@@ -163,13 +163,8 @@ class CallState {
         TUICallKitPlatform.instance.updateCallStateToNative();
         if (TUICallScene.singleCall == CallState.instance.scene) {
           CallManager.instance.showToast(
-            CallI10n.current.callRejected(
-              CallState.instance.mediaType == TUICallMediaType.audio
-                  ? CallI10n.current.voice
-                  : CallI10n.current.video,
-            ),
+            CallI10n.current.callRejected,
           );
-          
         } else {
           CallManager.instance
               .showToast('$userId ${CallI10n.current.callDeclined}');
@@ -194,11 +189,7 @@ class CallState {
         TUICallKitPlatform.instance.updateCallStateToNative();
         if (TUICallScene.singleCall == CallState.instance.scene) {
           CallManager.instance.showToast(
-            CallI10n.current.didNotRespond(
-              CallState.instance.mediaType == TUICallMediaType.audio
-                  ? CallI10n.current.voice
-                  : CallI10n.current.video,
-            ),
+            CallI10n.current.didNotRespond,
           );
         } else {
           CallManager.instance

@@ -160,13 +160,13 @@ class CallI10n {
     );
   }
 
-  /// `Lawan bicara menolak panggilan {callType}`
-  String callRejected(Object callType) {
+  /// `Lawan bicara menolak panggilan`
+  String get callRejected {
     return Intl.message(
-      'Lawan bicara menolak panggilan $callType',
+      'Lawan bicara menolak panggilan',
       name: 'callRejected',
       desc: '',
-      args: [callType],
+      args: [],
     );
   }
 
@@ -190,13 +190,13 @@ class CallI10n {
     );
   }
 
-  /// `Lawan bicara tidak menjawab panggilan {callType}`
-  String didNotRespond(Object callType) {
+  /// `Lawan bicara tidak menjawab panggilan`
+  String get didNotRespond {
     return Intl.message(
-      'Lawan bicara tidak menjawab panggilan $callType',
+      'Lawan bicara tidak menjawab panggilan',
       name: 'didNotRespond',
       desc: '',
-      args: [callType],
+      args: [],
     );
   }
 

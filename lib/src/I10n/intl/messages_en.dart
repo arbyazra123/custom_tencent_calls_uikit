@@ -20,14 +20,9 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(callType) => "The other party rejected the ${callType} call";
+  static String m0(amount) => "Invite${amount}";
 
-  static String m1(callType) =>
-      "The other party did not respond the ${callType} call";
-
-  static String m2(amount) => "Invite${amount}";
-
-  static String m3(callType) => "Invite you to a ${callType} call";
+  static String m1(callType) => "Invite you to a ${callType} call";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -44,10 +39,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Call request declined"),
         "callFailedDuetoPermission": MessageLookupByLibrary.simpleMessage(
             "A new call came in, but the call could not be answered due to insufficient permissions. Please confirm that camera/microphone permissions are turned on"),
-        "callRejected": m0,
+        "callRejected": MessageLookupByLibrary.simpleMessage(
+            "The other party rejected the call"),
         "camera": MessageLookupByLibrary.simpleMessage("Camera"),
         "connected": MessageLookupByLibrary.simpleMessage("Connected"),
-        "didNotRespond": m1,
+        "didNotRespond": MessageLookupByLibrary.simpleMessage(
+            "The other party did not respond the call"),
         "endTheCall": MessageLookupByLibrary.simpleMessage("end the call"),
         "exitallowpermission": MessageLookupByLibrary.simpleMessage(
             "You can either Allow SAPA to Display over other apps or end the call to exit"),
@@ -55,8 +52,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Maximum number of people exceeded"),
         "hangup": MessageLookupByLibrary.simpleMessage("Cancel"),
         "inviteMembers": MessageLookupByLibrary.simpleMessage("Invite Members"),
-        "inviteWithAmount": m2,
-        "invitedYouToACall": m3,
+        "inviteWithAmount": m0,
+        "invitedYouToACall": m1,
         "invitedtoGroupCall":
             MessageLookupByLibrary.simpleMessage("Invite you to a group call"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),

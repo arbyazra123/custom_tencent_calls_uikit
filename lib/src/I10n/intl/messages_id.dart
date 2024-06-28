@@ -20,14 +20,9 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'id';
 
-  static String m0(callType) => "Lawan bicara menolak panggilan ${callType}";
+  static String m0(amount) => "Undang${amount}";
 
-  static String m1(callType) =>
-      "Lawan bicara tidak menjawab panggilan ${callType}";
-
-  static String m2(amount) => "Undang${amount}";
-
-  static String m3(callType) => "Mengundang Anda ke panggilan ${callType}";
+  static String m1(callType) => "Mengundang Anda ke panggilan ${callType}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -44,10 +39,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Panggilan ditolak"),
         "callFailedDuetoPermission": MessageLookupByLibrary.simpleMessage(
             "Panggilan baru masuk, tetapi panggilan tersebut tidak dapat dijawab karena izin tidak memadai. Harap konfirmasi bahwa izin kamera/mikrofon telah diaktifkan"),
-        "callRejected": m0,
+        "callRejected": MessageLookupByLibrary.simpleMessage(
+            "Lawan bicara menolak panggilan"),
         "camera": MessageLookupByLibrary.simpleMessage("Kamera"),
         "connected": MessageLookupByLibrary.simpleMessage("Terhubung"),
-        "didNotRespond": m1,
+        "didNotRespond": MessageLookupByLibrary.simpleMessage(
+            "Lawan bicara tidak menjawab panggilan"),
         "endTheCall":
             MessageLookupByLibrary.simpleMessage("mengakhiri panggilan"),
         "exitallowpermission": MessageLookupByLibrary.simpleMessage(
@@ -56,8 +53,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Jumlah maksimal group call terlampaui"),
         "hangup": MessageLookupByLibrary.simpleMessage("Batal"),
         "inviteMembers": MessageLookupByLibrary.simpleMessage("Undang Anggota"),
-        "inviteWithAmount": m2,
-        "invitedYouToACall": m3,
+        "inviteWithAmount": m0,
+        "invitedYouToACall": m1,
         "invitedtoGroupCall": MessageLookupByLibrary.simpleMessage(
             "Mengundang Anda ke panggilan grup"),
         "language": MessageLookupByLibrary.simpleMessage("Bahasa"),
