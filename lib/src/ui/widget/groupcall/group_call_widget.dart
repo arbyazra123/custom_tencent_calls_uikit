@@ -174,7 +174,8 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                 ),
                 child: Image(
                   image: NetworkImage(StringStream.makeNull(
-                      CallState.instance.caller.avatar, Constants.defaultAvatar)),
+                      CallState.instance.caller.avatar,
+                      Constants.defaultAvatar)),
                   fit: BoxFit.cover,
                   errorBuilder: (ctx, err, stackTrace) => Image.asset(
                     'assets/images/user_icon.png',
@@ -401,6 +402,7 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
     int duration = 300;
     int btnWidth = 100;
     Curve curve = Curves.easeInOut;
+    var padBot = MediaQuery.of(context).padding.bottom;
     return ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16.0),
@@ -411,9 +413,10 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                 _functionWidgetVerticalDragUpdate(details),
             child: AnimatedContainer(
                 curve: curve,
-                height: isFunctionExpand ? 200 : 90,
+                height: (isFunctionExpand ? 200 : 90),
                 duration: Duration(milliseconds: duration),
                 color: const Color.fromRGBO(52, 56, 66, 1.0),
+                // padding: EdgeInsets.only(bottom: padBot),
                 child: Stack(
                   children: [
                     AnimatedPositioned(

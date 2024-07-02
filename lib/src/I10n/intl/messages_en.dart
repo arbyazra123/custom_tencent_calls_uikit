@@ -41,10 +41,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "A new call came in, but the call could not be answered due to insufficient permissions. Please confirm that camera/microphone permissions are turned on"),
         "callRejected": MessageLookupByLibrary.simpleMessage(
             "The other party rejected the call"),
+        "callback": MessageLookupByLibrary.simpleMessage("Call again"),
         "camera": MessageLookupByLibrary.simpleMessage("Camera"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "chat": MessageLookupByLibrary.simpleMessage("Chat"),
         "connected": MessageLookupByLibrary.simpleMessage("Connected"),
         "didNotRespond": MessageLookupByLibrary.simpleMessage(
             "The other party did not respond the call"),
+        "didnAnswer": MessageLookupByLibrary.simpleMessage("No answer"),
         "endTheCall": MessageLookupByLibrary.simpleMessage("end the call"),
         "exitallowpermission": MessageLookupByLibrary.simpleMessage(
             "You can either Allow SAPA to Display over other apps or end the call to exit"),

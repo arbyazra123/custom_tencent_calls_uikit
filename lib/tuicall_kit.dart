@@ -8,6 +8,7 @@ import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.
 import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/utils/permission_request.dart';
 import 'package:tencent_calls_uikit/src/utils/tuicall_localization_delegate.dart';
+import 'package:tencent_cloud_chat_sdk/models/v2_tim_user_full_info.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
 class TUICallKit {
@@ -15,11 +16,31 @@ class TUICallKit {
 
   static TUICallKit get instance => _instance;
 
-  static TUICallKitNavigatorObserver navigatorObserver(
-          {Function(CallPage?)? onPageChanged}) =>
+  static TUICallKitNavigatorObserver navigatorObserver({
+    Function(CallPage?)? onPageChanged,
+    Function(String userID, V2TimUserFullInfo userInfo)?
+        onNavigateToChatRoomParam,
+    Function(String userID, V2TimUserFullInfo userInfo)? onCallbackParam,
+  }) =>
       TUICallKitNavigatorObserver.getInstance(
         onPageChangedParam: onPageChanged,
+        onCallbackParam: onCallbackParam,
+        onNavigateToChatRoomParam: onNavigateToChatRoomParam,
       );
+
+  static void setCallbackPageFunctions({
+    Function(String userID, V2TimUserFullInfo userInfo)?
+        onNavigateToChatRoomParam,
+    Function(String userID, V2TimUserFullInfo userInfo)? onCallbackParam,
+  }) {
+    if (onNavigateToChatRoomParam != null) {
+      TUICallKitNavigatorObserver.onNavigateToChatRoom =
+          onNavigateToChatRoomParam;
+    }
+    if (onCallbackParam != null) {
+      TUICallKitNavigatorObserver.onCallback = onCallbackParam;
+    }
+  }
 
   static TUICallLocalizationDelegate get getTUICallLocalization =>
       intl.CallI10n.delegate.getTUICallLocalization;

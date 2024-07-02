@@ -409,6 +409,46 @@ class CallI10n {
       args: [],
     );
   }
+
+  /// `Batal`
+  String get cancel {
+    return Intl.message(
+      'Batal',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pesan`
+  String get chat {
+    return Intl.message(
+      'Pesan',
+      name: 'chat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Panggil\nKembail`
+  String get callback {
+    return Intl.message(
+      'Panggil\nKembail',
+      name: 'callback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tidak ada jawaban`
+  String get didnAnswer {
+    return Intl.message(
+      'Tidak ada jawaban',
+      name: 'didnAnswer',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<CallI10n> {

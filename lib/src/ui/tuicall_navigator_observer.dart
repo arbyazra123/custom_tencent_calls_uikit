@@ -4,6 +4,7 @@ import 'package:tencent_calls_uikit/src/extensions/trtc_logger.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/inviteuser/invite_user_widget.dart';
 import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.dart';
 import 'package:tencent_calls_uikit/src/ui/tuicall_kit_widget.dart';
+import 'package:tencent_cloud_chat_sdk/models/v2_tim_user_full_info.dart';
 
 class TUICallKitNavigatorObserver extends NavigatorObserver {
   static final TUICallKitNavigatorObserver _instance =
@@ -11,12 +12,24 @@ class TUICallKitNavigatorObserver extends NavigatorObserver {
   static bool isClose = true;
   static CallPage currentPage = CallPage.none;
   static Function(CallPage?)? onPageChanged;
+  static Function(String userID, V2TimUserFullInfo userInfo)?
+      onNavigateToChatRoom;
+  static Function(String userID, V2TimUserFullInfo userInfo)? onCallback;
 
   static TUICallKitNavigatorObserver getInstance({
     Function(CallPage?)? onPageChangedParam,
+    Function(String userID, V2TimUserFullInfo userInfo)?
+        onNavigateToChatRoomParam,
+    Function(String userID, V2TimUserFullInfo userInfo)? onCallbackParam,
   }) {
     if (onPageChangedParam != null) {
       onPageChanged = onPageChangedParam;
+    }
+    if (onNavigateToChatRoomParam != null) {
+      onNavigateToChatRoom = onNavigateToChatRoomParam;
+    }
+    if (onCallbackParam != null) {
+      onCallback = onCallbackParam;
     }
     return _instance;
   }
@@ -35,14 +48,16 @@ class TUICallKitNavigatorObserver extends NavigatorObserver {
     TUICallKitNavigatorObserver.getInstance()
         .navigator
         ?.push(MaterialPageRoute(builder: (widget) {
-      return TUICallKitWidget(close: () {
-        if (!isClose) {
-          isClose = true;
-          TUICallKitPlatform.instance.stopForegroundService();
-          CallingBellFeature.stopRing();
-          TUICallKitNavigatorObserver.getInstance().exitCallingPage();
-        }
-      });
+      return TUICallKitWidget(
+        close: () {
+          if (!isClose) {
+            isClose = true;
+            TUICallKitPlatform.instance.stopForegroundService();
+            CallingBellFeature.stopRing();
+            TUICallKitNavigatorObserver.getInstance().exitCallingPage();
+          }
+        },
+      );
     }));
     isClose = false;
   }

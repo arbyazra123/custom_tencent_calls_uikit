@@ -41,10 +41,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Panggilan baru masuk, tetapi panggilan tersebut tidak dapat dijawab karena izin tidak memadai. Harap konfirmasi bahwa izin kamera/mikrofon telah diaktifkan"),
         "callRejected": MessageLookupByLibrary.simpleMessage(
             "Lawan bicara menolak panggilan"),
+        "callback": MessageLookupByLibrary.simpleMessage("Panggil\nKembail"),
         "camera": MessageLookupByLibrary.simpleMessage("Kamera"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Batal"),
+        "chat": MessageLookupByLibrary.simpleMessage("Pesan"),
         "connected": MessageLookupByLibrary.simpleMessage("Terhubung"),
         "didNotRespond": MessageLookupByLibrary.simpleMessage(
             "Lawan bicara tidak menjawab panggilan"),
+        "didnAnswer": MessageLookupByLibrary.simpleMessage("Tidak ada jawaban"),
         "endTheCall":
             MessageLookupByLibrary.simpleMessage("mengakhiri panggilan"),
         "exitallowpermission": MessageLookupByLibrary.simpleMessage(

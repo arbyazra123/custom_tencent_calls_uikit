@@ -34,5 +34,9 @@
   "allowPermissionStep":"Open your phone Settings > Apps > Special app access > Display over other apps > Sapa Beta > Allow display over other apps",
   "later":"Later",
   "openAppSettings":"Open Settings",
-  "exitallowpermission":"You can either Allow SAPA to Display over other apps or end the call to exit"
+  "exitallowpermission":"You can either Allow SAPA to Display over other apps or end the call to exit",
+  "cancel":"Cancel",
+  "chat":"Chat",
+  "callback":"Call again",
+  "didnAnswer":"No answer"
 }

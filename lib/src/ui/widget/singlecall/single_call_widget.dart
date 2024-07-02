@@ -328,26 +328,25 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
   }
 
   _buildFunctionButtonWidget() {
-    return SafeArea(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: EdgeInsets.only(
-              bottom: TUICallStatus.waiting ==
-                      CallState.instance.selfUser.callStatus
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).padding.bottom +
+              (TUICallStatus.waiting == CallState.instance.selfUser.callStatus
                   ? 40
                   : CallState.instance.mediaType == TUICallMediaType.audio
                       ? 40
                       : 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SingleFunctionWidget.buildFunctionWidget(
-                widget.close,
-                _buildVideoCallerAndCalleeAcceptedFunctionView(),
-              ),
-            ],
-          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SingleFunctionWidget.buildFunctionWidget(
+              widget.close,
+              _buildVideoCallerAndCalleeAcceptedFunctionView(),
+            ),
+          ],
         ),
       ),
     );
