@@ -25,6 +25,7 @@ class _CallbackPageState extends State<CallbackPage> {
   }
 
   bool _isLoading = true;
+  bool _isCallingLoading = false;
 
   void _init() async {
     var resultGetUser = await TencentImSDKPlugin.v2TIMManager
@@ -120,14 +121,23 @@ class _CallbackPageState extends State<CallbackPage> {
               ),
             ),
             InkWell(
-              onTap: () {
+              onTap: () async {
+                if (_isCallingLoading) return;
                 if (userInfo == null) {
                   return;
                 }
-                TUICallKitNavigatorObserver.getInstance().navigator?.pop();
-                TUICallKitNavigatorObserver.onCallback?.call(
+                setState(() {
+                  _isCallingLoading = true;
+                });
+                await TUICallKitNavigatorObserver.onCallback?.call(
                   widget.userId,
                   userInfo!,
+                  () {
+                    setState(() {
+                      _isCallingLoading = false;
+                    });
+                    TUICallKitNavigatorObserver.getInstance().navigator?.pop();
+                  },
                 );
               },
               child: Padding(
@@ -137,9 +147,32 @@ class _CallbackPageState extends State<CallbackPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(
-                      "assets/images/ic_callback.svg",
-                      package: 'tencent_calls_uikit',
+                    Visibility(
+                      visible: !_isCallingLoading,
+                      replacement: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFF2BA471),
+                        ),
+                        child: const Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1.2,
+                              valueColor: AlwaysStoppedAnimation(
+                                Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/images/ic_callback.svg",
+                        package: 'tencent_calls_uikit',
+                      ),
                     ),
                     const SizedBox(
                       height: 10,

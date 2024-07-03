@@ -14,13 +14,21 @@ class TUICallKitNavigatorObserver extends NavigatorObserver {
   static Function(CallPage?)? onPageChanged;
   static Function(String userID, V2TimUserFullInfo userInfo)?
       onNavigateToChatRoom;
-  static Function(String userID, V2TimUserFullInfo userInfo)? onCallback;
+  static Function(
+    String userID,
+    V2TimUserFullInfo userInfo,
+    Function onCallSucceed,
+  )? onCallback;
 
   static TUICallKitNavigatorObserver getInstance({
     Function(CallPage?)? onPageChangedParam,
     Function(String userID, V2TimUserFullInfo userInfo)?
         onNavigateToChatRoomParam,
-    Function(String userID, V2TimUserFullInfo userInfo)? onCallbackParam,
+    Function(
+      String userID,
+      V2TimUserFullInfo userInfo,
+      Function onCallSucceed,
+    )? onCallbackParam,
   }) {
     if (onPageChangedParam != null) {
       onPageChanged = onPageChangedParam;

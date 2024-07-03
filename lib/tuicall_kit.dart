@@ -20,7 +20,11 @@ class TUICallKit {
     Function(CallPage?)? onPageChanged,
     Function(String userID, V2TimUserFullInfo userInfo)?
         onNavigateToChatRoomParam,
-    Function(String userID, V2TimUserFullInfo userInfo)? onCallbackParam,
+    Function(
+      String userID,
+      V2TimUserFullInfo userInfo,
+      Function onCallSucceed,
+    )? onCallbackParam,
   }) =>
       TUICallKitNavigatorObserver.getInstance(
         onPageChangedParam: onPageChanged,
@@ -31,7 +35,8 @@ class TUICallKit {
   static void setCallbackPageFunctions({
     Function(String userID, V2TimUserFullInfo userInfo)?
         onNavigateToChatRoomParam,
-    Function(String userID, V2TimUserFullInfo userInfo)? onCallbackParam,
+    Function(String userID, V2TimUserFullInfo userInfo, Function onCallSucceed)?
+        onCallbackParam,
   }) {
     if (onNavigateToChatRoomParam != null) {
       TUICallKitNavigatorObserver.onNavigateToChatRoom =
