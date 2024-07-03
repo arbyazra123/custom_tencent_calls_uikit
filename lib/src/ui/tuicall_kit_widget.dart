@@ -39,7 +39,7 @@ class _TUICallKitWidgetState extends State<TUICallKitWidget> {
     }
     onCallEndCallBack = (arg) {
       if (mounted) {
-        if (CallState.instance.groupId.isEmpty &&
+        if (CallState.instance.scene == TUICallScene.singleCall &&
             (arg?.toString().contains("userNoResponse") ?? false)) {
           TUICallKitNavigatorObserver.isClose = true;
           TUICallKitPlatform.instance.stopForegroundService();
