@@ -107,8 +107,12 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
                   visible: isAvatarImage,
                   child: Positioned.fill(
                     child: Image(
-                      image: NetworkImage(StringStream.makeNull(
-                          widget.user.avatar, Constants.defaultAvatar)),
+                      image: NetworkImage(
+                        StringStream.makeNull(
+                          widget.user.avatar,
+                          Constants.defaultAvatar,
+                        ),
+                      ),
                       fit: BoxFit.cover,
                       width: double.maxFinite,
                       height: double.maxFinite,
