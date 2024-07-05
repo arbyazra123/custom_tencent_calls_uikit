@@ -109,12 +109,7 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image(
-                        image: NetworkImage(
-                          StringStream.makeNull(
-                            widget.user.avatar,
-                            Constants.defaultAvatar,
-                          ),
-                        ),
+                        image: NetworkImage(widget.user.avatar),
                         fit: BoxFit.cover,
                         width: double.maxFinite,
                         height: double.maxFinite,

@@ -175,9 +175,7 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                 child: ClipRRect(
                   // borderRadius: BorderRadius.circular(8),
                   child: Image(
-                    image: NetworkImage(StringStream.makeNull(
-                        CallState.instance.caller.avatar,
-                        Constants.defaultAvatar)),
+                    image: NetworkImage(CallState.instance.caller.avatar),
                     fit: BoxFit.cover,
                     errorBuilder: (ctx, err, stackTrace) => Image.asset(
                       'assets/images/user_icon.png',
@@ -224,9 +222,8 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                       child: ClipRRect(
                         // borderRadius: BorderRadius.circular(8),
                         child: Image(
-                          image: NetworkImage(StringStream.makeNull(
-                              CallState.instance.calleeList[index].avatar,
-                              Constants.defaultAvatar)),
+                          image: NetworkImage(
+                              CallState.instance.calleeList[index].avatar),
                           fit: BoxFit.cover,
                           errorBuilder: (ctx, err, stackTrace) => Image.asset(
                             'assets/images/user_icon.png',
