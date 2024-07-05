@@ -315,6 +315,9 @@ class CallState {
     onUserVoiceVolumeChanged: (Map<String, int> volumeMap) {
       for (var remoteUser in CallState.instance.remoteUserList) {
         remoteUser.playOutVolume = volumeMap[remoteUser.id] ?? 0;
+        if ((volumeMap[remoteUser.id] ?? 0) != 0) {
+          remoteUser.audioAvailable = true;
+        }
       }
       CallState.instance.selfUser.playOutVolume =
           volumeMap[CallState.instance.selfUser.id] ?? 0;

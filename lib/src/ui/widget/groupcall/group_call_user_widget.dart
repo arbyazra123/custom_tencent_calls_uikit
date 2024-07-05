@@ -61,9 +61,7 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
         (widget.user.callStatus == TUICallStatus.waiting) &&
             (widget.user.id != CallState.instance.selfUser.id);
     bool isShowSpeaking = widget.user.playOutVolume != 0 &&
-        ((widget.user.id == CallState.instance.selfUser.id) ||
-            (widget.user.id != CallState.instance.selfUser.id &&
-                widget.user.callStatus == TUICallStatus.accept));
+        widget.user.callStatus == TUICallStatus.accept;
     bool isShowRemoteMute = (widget.user.callStatus == TUICallStatus.accept) &&
         (widget.user.id != CallState.instance.selfUser.id) &&
         !widget.user.audioAvailable;
