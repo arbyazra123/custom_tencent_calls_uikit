@@ -172,14 +172,17 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
-                child: Image(
-                  image: NetworkImage(StringStream.makeNull(
-                      CallState.instance.caller.avatar,
-                      Constants.defaultAvatar)),
-                  fit: BoxFit.cover,
-                  errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                    'assets/images/user_icon.png',
-                    package: 'tencent_calls_uikit',
+                child: ClipRRect(
+                  // borderRadius: BorderRadius.circular(8),
+                  child: Image(
+                    image: NetworkImage(StringStream.makeNull(
+                        CallState.instance.caller.avatar,
+                        Constants.defaultAvatar)),
+                    fit: BoxFit.cover,
+                    errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                      'assets/images/user_icon.png',
+                      package: 'tencent_calls_uikit',
+                    ),
                   ),
                 ),
               ),
@@ -216,16 +219,19 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                       height: 30,
                       width: 30,
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
-                      child: Image(
-                        image: NetworkImage(StringStream.makeNull(
-                            CallState.instance.calleeList[index].avatar,
-                            Constants.defaultAvatar)),
-                        fit: BoxFit.cover,
-                        errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                          'assets/images/user_icon.png',
-                          package: 'tencent_calls_uikit',
+                      child: ClipRRect(
+                        // borderRadius: BorderRadius.circular(8),
+                        child: Image(
+                          image: NetworkImage(StringStream.makeNull(
+                              CallState.instance.calleeList[index].avatar,
+                              Constants.defaultAvatar)),
+                          fit: BoxFit.cover,
+                          errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                            'assets/images/user_icon.png',
+                            package: 'tencent_calls_uikit',
+                          ),
                         ),
                       ),
                     );

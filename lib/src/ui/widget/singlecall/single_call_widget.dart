@@ -482,13 +482,16 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
-                          child: Image(
-                            image: NetworkImage(
-                                isRemoteViewSmall ? remoteAvatar : selfAvatar),
-                            fit: BoxFit.cover,
-                            errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                              'assets/images/user_icon.png',
-                              package: 'tencent_calls_uikit',
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image(
+                              image: NetworkImage(
+                                  isRemoteViewSmall ? remoteAvatar : selfAvatar),
+                              fit: BoxFit.cover,
+                              errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                                'assets/images/user_icon.png',
+                                package: 'tencent_calls_uikit',
+                              ),
                             ),
                           ),
                         ),

@@ -205,13 +205,17 @@ class _CallbackPageState extends State<CallbackPage> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Image(
-          height: double.infinity,
-          image: NetworkImage(avatar),
-          fit: BoxFit.cover,
-          errorBuilder: (ctx, err, stackTrace) => Image.asset(
-            'assets/images/user_icon.png',
-            package: 'tencent_calls_uikit',
+        ClipRRect(
+          // borderRadius: BorderRadius.circular(8),
+          child: Image(
+            height: double.infinity,
+            width: double.maxFinite,
+            image: NetworkImage(avatar),
+            fit: BoxFit.cover,
+            errorBuilder: (ctx, err, stackTrace) => Image.asset(
+              'assets/images/user_icon.png',
+              package: 'tencent_calls_uikit',
+            ),
           ),
         ),
         Opacity(

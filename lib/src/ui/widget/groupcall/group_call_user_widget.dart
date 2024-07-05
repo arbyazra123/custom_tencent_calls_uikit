@@ -106,20 +106,23 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
                 Visibility(
                   visible: isAvatarImage,
                   child: Positioned.fill(
-                    child: Image(
-                      image: NetworkImage(
-                        StringStream.makeNull(
-                          widget.user.avatar,
-                          Constants.defaultAvatar,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image(
+                        image: NetworkImage(
+                          StringStream.makeNull(
+                            widget.user.avatar,
+                            Constants.defaultAvatar,
+                          ),
                         ),
-                      ),
-                      fit: BoxFit.cover,
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                        'assets/images/user_icon.png',
-                        package: 'tencent_calls_uikit',
                         fit: BoxFit.cover,
+                        width: double.maxFinite,
+                        height: double.maxFinite,
+                        errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                          'assets/images/user_icon.png',
+                          package: 'tencent_calls_uikit',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
