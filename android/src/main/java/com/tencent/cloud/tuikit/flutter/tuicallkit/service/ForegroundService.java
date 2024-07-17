@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.text.TextUtils;
@@ -24,7 +25,11 @@ public class ForegroundService extends Service {
         // 获取服务通知
         Notification notification = createForegroundNotification();
         //将服务置于启动状态 ,NOTIFICATION_ID指的是创建的通知的ID
-        startForeground(NOTIFICATION_ID, notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL);
+        } else {
+            startForeground(NOTIFICATION_ID, notification);
+        }
     }
 
     public static void start(Context context) {
@@ -33,7 +38,11 @@ public class ForegroundService extends Service {
         }
         Intent starter = new Intent(context, ForegroundService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(starter);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+                context.startForegroundService(starter);
+            } else {
+                context.startForegroundService(starter);
+            }
         } else {
             context.startService(starter);
         }
