@@ -25,7 +25,7 @@ public class ForegroundService extends Service {
         // 获取服务通知
         Notification notification = createForegroundNotification();
         //将服务置于启动状态 ,NOTIFICATION_ID指的是创建的通知的ID
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
             startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL);
         } else {
             startForeground(NOTIFICATION_ID, notification);
