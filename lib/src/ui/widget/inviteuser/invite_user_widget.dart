@@ -149,8 +149,8 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
       return;
     }
     _defaultSelectList.add(CallState.instance.selfUser.id);
-    for (User user in CallState.instance.remoteUserList) {
-      _defaultSelectList.add(user.id);
+    for (var user in CallState.instance.remoteUserList.entries) {
+      _defaultSelectList.add(user.key);
     }
 
     var memberInfo = GroupMemberInfo();

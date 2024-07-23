@@ -116,6 +116,24 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "leak_tracker",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/leak_tracker-10.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "leak_tracker_flutter_testing",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "leak_tracker_testing",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/leak_tracker_testing-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "lints",
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/lints-2.1.1",
       "packageUri": "lib/",
@@ -123,19 +141,19 @@
     },
     {
       "name": "matcher",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/matcher-0.12.16",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/matcher-0.12.16+1",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/material_color_utilities-0.5.0",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/material_color_utilities-0.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/meta-1.10.0",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/meta-1.11.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -147,9 +165,9 @@
     },
     {
       "name": "path",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/path-1.8.3",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/path-1.9.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "path_parsing",
@@ -321,7 +339,7 @@
     },
     {
       "name": "tencent_calls_engine",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_calls_engine-2.3.2",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_calls_engine-2.4.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -440,6 +458,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "vm_service",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/vm_service-13.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "wakelock_for_us",
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/wakelock_for_us-0.6.3+1",
       "packageUri": "lib/",
@@ -482,7 +506,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2024-07-17T07:54:39.384543Z",
+  "generated": "2024-07-23T03:48:40.457474Z",
   "generator": "pub",
-  "generatorVersion": "3.2.2"
+  "generatorVersion": "3.3.4"
 }

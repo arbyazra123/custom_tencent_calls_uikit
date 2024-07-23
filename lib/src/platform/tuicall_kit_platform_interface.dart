@@ -60,6 +60,10 @@ abstract class TUICallKitPlatform extends PlatformInterface {
     return await instance.initResources(resources);
   }
 
+  Future<void> enableWakeLock(bool enable) async {
+    await instance.enableWakeLock(enable);
+  }
+
   Future<void> openMicrophone() async {
     await instance.openMicrophone();
   }

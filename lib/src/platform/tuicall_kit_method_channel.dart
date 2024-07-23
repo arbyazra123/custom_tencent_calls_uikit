@@ -41,8 +41,8 @@ class MethodChannelTUICallKit extends TUICallKitPlatform {
   @override
   Future<void> updateCallStateToNative() async {
     List remoteUserList = [];
-    for (var i = 0; i < CallState.instance.remoteUserList.length; ++i) {
-      remoteUserList.add(CallState.instance.remoteUserList[i].toJson());
+    for (var element in CallState.instance.remoteUserList.entries) {
+      remoteUserList.add(element.value.toJson());
     }
 
     methodChannel.invokeMethod('updateCallStateToNative', {

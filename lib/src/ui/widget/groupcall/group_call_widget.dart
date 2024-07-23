@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
-import 'package:tencent_calls_uikit/src/data/constants.dart';
-import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.dart';
 import 'package:tencent_calls_uikit/src/data/user.dart';
 import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
@@ -14,7 +12,6 @@ import 'package:tencent_calls_uikit/src/ui/widget/groupcall/group_call_user_widg
 import 'package:tencent_calls_uikit/src/utils/event_bus.dart';
 import 'package:tencent_calls_uikit/src/utils/float_window.dart';
 import 'package:tencent_calls_uikit/src/utils/permission_request.dart';
-import 'package:tencent_calls_uikit/src/utils/string_stream.dart';
 import 'package:tencent_cloud_chat_sdk/models/v2_tim_group_info_result.dart';
 import 'package:tencent_cloud_chat_sdk/models/v2_tim_value_callback.dart';
 import 'package:tencent_cloud_chat_sdk/tencent_im_sdk_plugin.dart';
@@ -37,7 +34,7 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
   EventCallback? setSateCallBack;
   EventCallback? groupCallUserWidgetRefreshCallback;
   bool isFunctionExpand = true;
-  late final List<GroupCallUserWidget> _userViewWidgets = [];
+  late final Map<String, GroupCallUserWidget> _userViewWidgets = {};
 
   _initUsersViewWidget() {
     GroupCallUserWidgetData.initBlockCounter();
@@ -49,17 +46,24 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
     _userViewWidgets.clear();
 
     GroupCallUserWidgetData.blockCount++;
-    _userViewWidgets.add(
-      GroupCallUserWidget(
+    _userViewWidgets.addAll({
+      CallState.instance.selfUser.id: GroupCallUserWidget(
         index: GroupCallUserWidgetData.blockCount,
         user: CallState.instance.selfUser,
-      ),
-    );
+      )
+    });
 
-    for (var remoteUser in CallState.instance.remoteUserList) {
+    for (var remoteUser in CallState.instance.remoteUserList.entries) {
+      if (remoteUser.key == CallState.instance.selfUser.id) {
+        continue;
+      }
       GroupCallUserWidgetData.blockCount++;
-      _userViewWidgets.add(GroupCallUserWidget(
-          index: GroupCallUserWidgetData.blockCount, user: remoteUser));
+      _userViewWidgets.addAll({
+        remoteUser.value.id: GroupCallUserWidget(
+          index: GroupCallUserWidgetData.blockCount,
+          user: remoteUser.value,
+        )
+      });
     }
     setState(() {});
   }
@@ -223,7 +227,8 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
                         // borderRadius: BorderRadius.circular(8),
                         child: Image(
                           image: NetworkImage(
-                              CallState.instance.calleeList[index].avatar),
+                            CallState.instance.calleeList[index]?.avatar ?? "",
+                          ),
                           fit: BoxFit.cover,
                           errorBuilder: (ctx, err, stackTrace) => Image.asset(
                             'assets/images/user_icon.png',
@@ -248,7 +253,9 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
       height: MediaQuery.of(context).size.height -
           (MediaQuery.of(context).padding.top +
               MediaQuery.of(context).padding.bottom),
-      child: Stack(children: _userViewWidgets),
+      child: Stack(
+        children: _userViewWidgets.values.toList(),
+      ),
     );
   }
 

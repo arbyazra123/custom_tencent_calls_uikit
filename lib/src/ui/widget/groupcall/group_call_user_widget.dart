@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
-import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/data/user.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/common/loading_animation.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/groupcall/group_call_user_widget_data.dart';
 import 'package:tencent_calls_uikit/src/utils/event_bus.dart';
 
-import 'package:tencent_calls_uikit/src/utils/string_stream.dart';
 import 'package:tencent_calls_uikit/src/utils/tuple.dart';
+import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
 class GroupCallUserWidget extends StatefulWidget {
   final int index;

@@ -38,4 +38,13 @@ class User {
     }
     return user.id;
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is User ? id == other.id : false;
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^ avatar.hashCode ^ nickname.hashCode ^ remark.hashCode;
 }

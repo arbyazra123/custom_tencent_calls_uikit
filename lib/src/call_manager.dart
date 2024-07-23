@@ -119,7 +119,7 @@ class CallManager {
           user.remark = StringStream.makeNull(
               imUserInfo.data?[0].friendInfo?.friendRemark, '');
 
-          CallState.instance.remoteUserList.add(user);
+          CallState.instance.remoteUserList.addAll({user.id: user});
           CallState.instance.mediaType = callMediaType;
           CallState.instance.scene = TUICallScene.singleCall;
           CallState.instance.selfUser.callRole = TUICallRole.caller;
@@ -151,7 +151,7 @@ class CallManager {
             Constants.defaultAvatar);
         user.remark = StringStream.makeNull(
             imUserInfo.data?[0].friendInfo?.friendRemark, '');
-        CallState.instance.remoteUserList.add(user);
+        CallState.instance.remoteUserList.addAll({user.id: user});
         CallState.instance.mediaType = callMediaType;
         CallState.instance.scene = TUICallScene.singleCall;
         CallState.instance.selfUser.callRole = TUICallRole.caller;
@@ -229,8 +229,8 @@ class CallManager {
                   Constants.defaultAvatar);
               user.remark = StringStream.makeNull(
                   imUserInfo.data?[0].friendInfo?.friendRemark, '');
-              CallState.instance.remoteUserList.add(user);
-              CallState.instance.calleeList.add(user);
+              CallState.instance.remoteUserList.addAll({user.id: user});
+              CallState.instance.calleeList.addAll({user.id: user});
             }
           }
 
@@ -271,7 +271,7 @@ class CallManager {
                 Constants.defaultAvatar);
             user.remark = StringStream.makeNull(
                 imUserInfo.data?[0].friendInfo?.friendRemark, '');
-            CallState.instance.remoteUserList.add(user);
+            CallState.instance.remoteUserList.addAll({user.id: user});
           }
         }
 
@@ -491,6 +491,11 @@ class CallManager {
     return result;
   }
 
+  Future<void> enableWakeLock(bool enable) async {
+    TRTCLogger.info('CallManager enableWakeLock($enable)');
+    await TUICallKitPlatform.instance.enableWakeLock(enable);
+  }
+
   Future<void> inviteUser(List<String> userIdList) async {
     TUICallParams params = TUICallParams();
     var notId = Random().nextInt(256);
@@ -553,7 +558,7 @@ class CallManager {
                     user.remark = StringStream.makeNull(
                         item.friendInfo?.friendRemark, '');
                     user.callStatus = TUICallStatus.waiting;
-                    CallState.instance.remoteUserList.add(user);
+                    CallState.instance.remoteUserList.addAll({user.id: user});
                   });
                   eventBus.notify(setStateEvent);
                 }
@@ -652,6 +657,7 @@ class CallManager {
     eventBus.notify(setStateEventOnCallReceived);
     TUICallKitPlatform.instance.updateCallStateToNative();
     CallState.instance.isOpenFloatWindow = false;
+    CallManager.instance.enableWakeLock(true);
   }
 
   void openFloatWindow() {

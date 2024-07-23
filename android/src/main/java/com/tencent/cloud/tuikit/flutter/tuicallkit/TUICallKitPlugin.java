@@ -23,6 +23,7 @@ import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.KitAppUtils;
 import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.KitEnumUtils;
 import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.KitObjectUtils;
 import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.KitPermissionUtils;
+import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.WakeLock;
 import com.tencent.cloud.tuikit.tuicall_engine.utils.EnumUtils;
 import com.tencent.cloud.tuikit.tuicall_engine.utils.Logger;
 import com.tencent.cloud.tuikit.tuicall_engine.utils.MethodCallUtils;
@@ -56,45 +57,40 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
     private BinaryMessenger binaryMessenger = null;
     public static final String TAG = "TUICallKitPlugin";
 
-    private MethodChannel      mChannel;
-    private Context            mApplicationContext;
+    private MethodChannel     mChannel;
+    private Context           mApplicationContext;
     private CallingBellService mCallingBellService;
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        mApplicationContext = binding.getActivity().getApplicationContext();
-        mCallingBellService = new CallingBellService(mApplicationContext);
+        WakeLock.getInstance().setActivity(binding.getActivity());
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
+        WakeLock.getInstance().setActivity(null);
 
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        mApplicationContext = binding.getActivity().getApplicationContext();
-        mCallingBellService = new CallingBellService(mApplicationContext);
+        WakeLock.getInstance().setActivity(binding.getActivity());
     }
 
     @Override
     public void onDetachedFromActivity() {
-
+        WakeLock.getInstance().setActivity(null);
     }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        registerObserver();
         Logger.info(TAG, "TUICallKitPlugin onAttachedToEngine");
-        binaryMessenger = flutterPluginBinding.getBinaryMessenger();
-        mChannel = new MethodChannel(binaryMessenger, "tuicall_kit");
+        mChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "tuicall_kit");
         mChannel.setMethodCallHandler(this);
 
         mApplicationContext = flutterPluginBinding.getApplicationContext();
         mCallingBellService = new CallingBellService(mApplicationContext);
-
-        registerObserver();
-
-
     }
 
     @Override
@@ -212,6 +208,16 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
             KitPermissionUtils.requestFloatPermission();
             result.error("-1", "No Permission", null);
         }
+    }
+
+    public void enableWakeLock(MethodCall call, MethodChannel.Result result) {
+        boolean enable = MethodCallUtils.getMethodParams(call, "enable");
+        if (enable) {
+            WakeLock.getInstance().enable();
+        } else {
+            WakeLock.getInstance().disable();
+        }
+        result.success(0);
     }
 
     public void stopFloatWindow(MethodCall call, MethodChannel.Result result) {
