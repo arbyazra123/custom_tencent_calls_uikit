@@ -144,6 +144,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.1"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      sha256: f2c445dce49627136094980615a031419f7f3eb393237e4ecd97ac15dea343f3
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.7"
   leak_tracker:
     dependency: transitive
     description:
@@ -200,6 +208,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  mime_type:
+    dependency: transitive
+    description:
+      name: mime_type
+      sha256: "2ad6e67d3d2de9ac0f8ef5352d998fd103cb21351ae8c02fb0c78b079b37d275"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   multiple_localization:
     dependency: transitive
     description:
@@ -441,10 +457,10 @@ packages:
     dependency: transitive
     description:
       name: tencent_calls_engine
-      sha256: "5ddc8f2715f11ed7aa41223676751a6f60671078352ea1928daa52e2ebad19a1"
+      sha256: "32fe05b91674ed625ea7a9d4ff7f4860ffca2a6ae50c5fd65bf474e935af2992"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.3.2"
   tencent_calls_uikit:
     dependency: "direct main"
     description:
@@ -456,26 +472,18 @@ packages:
     dependency: transitive
     description:
       name: tencent_cloud_chat_sdk
-      sha256: "116f11b02f1f27e25fa5fa54b61d8a144f1f8e0c7d47155a1fa766dc86936cba"
+      sha256: ec9d338fe3aa82b71cd9c46b0ebe54267ae6a79f03d1b4b4c506b121fe64bd5b
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.32"
+    version: "8.0.5897"
   tencent_cloud_uikit_core:
     dependency: transitive
     description:
       name: tencent_cloud_uikit_core
-      sha256: ddd9447412835ccb2d739363fd1d73bf7f4488b2b76e8217219d25eb90b088f6
+      sha256: "987e266dec10801510ada00411ddb063de8129bf550d2d25ba32d88afa272a67"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.1"
-  tencent_im_sdk_plugin_platform_interface:
-    dependency: transitive
-    description:
-      name: tencent_im_sdk_plugin_platform_interface
-      sha256: e6120d09fbc0dedc0f5a4143809598ae56f2ab56176b4d2646414a59d6b64371
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.16"
+    version: "1.7.0"
   term_glyph:
     dependency: transitive
     description:

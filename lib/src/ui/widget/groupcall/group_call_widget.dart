@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
@@ -613,14 +614,12 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
   }
 
   _handleAccept() async {
-    TUIPermissionResult permissionRequestResult =
-        TUIPermissionResult.requesting;
+    PermissionStatus permissionRequestResult = PermissionStatus.denied;
     if (Platform.isAndroid) {
       permissionRequestResult = await PermissionRequest.checkCallingPermission(
           CallState.instance.mediaType);
     }
-    if (permissionRequestResult == TUIPermissionResult.granted ||
-        Platform.isIOS) {
+    if (permissionRequestResult == PermissionStatus.granted || Platform.isIOS) {
       await CallManager.instance.accept();
       CallState.instance.selfUser.callStatus = TUICallStatus.accept;
     } else {

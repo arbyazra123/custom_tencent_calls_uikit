@@ -42,8 +42,8 @@
 @import tencent_calls_uikit;
 #endif
 
-#if __has_include(<tencent_cloud_chat_sdk/TencentImSDKPlugin.h>)
-#import <tencent_cloud_chat_sdk/TencentImSDKPlugin.h>
+#if __has_include(<tencent_cloud_chat_sdk/TencentCloudChatSdkPlugin.h>)
+#import <tencent_cloud_chat_sdk/TencentCloudChatSdkPlugin.h>
 #else
 @import tencent_cloud_chat_sdk;
 #endif
@@ -75,7 +75,7 @@
   [SystemAlertWindowPlugin registerWithRegistrar:[registry registrarForPlugin:@"SystemAlertWindowPlugin"]];
   [TUICallEnginePlugin registerWithRegistrar:[registry registrarForPlugin:@"TUICallEnginePlugin"]];
   [CallsUikitPlugin registerWithRegistrar:[registry registrarForPlugin:@"CallsUikitPlugin"]];
-  [TencentImSDKPlugin registerWithRegistrar:[registry registrarForPlugin:@"TencentImSDKPlugin"]];
+  [TencentCloudChatSdkPlugin registerWithRegistrar:[registry registrarForPlugin:@"TencentCloudChatSdkPlugin"]];
   [TencentCloudUikitCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"TencentCloudUikitCorePlugin"]];
   [URLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"URLLauncherPlugin"]];
   [WakelockPluginForUS registerWithRegistrar:[registry registrarForPlugin:@"WakelockPluginForUS"]];

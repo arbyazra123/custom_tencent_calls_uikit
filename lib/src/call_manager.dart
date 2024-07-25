@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/widgets.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/data/offline_push_info.dart';
@@ -39,7 +40,7 @@ class CallManager {
               TUICallMediaType.video);
         }
 
-        if (TUIPermissionResult.granted == permissionResult) {
+        if (PermissionStatus.granted == permissionResult) {
           TUICallKitNavigatorObserver.getInstance().enterCallingPage();
         } else {
           // CallManager.instance.reject();
@@ -100,7 +101,7 @@ class CallManager {
     if (Platform.isAndroid) {
       final permissionResult =
           await PermissionRequest.checkCallingPermission(callMediaType);
-      if (TUIPermissionResult.granted == permissionResult) {
+      if (PermissionStatus.granted == permissionResult) {
         final callResult =
             await TUICallEngine.instance.call(userId, callMediaType, params);
         if (callResult.code.isEmpty) {
@@ -209,7 +210,7 @@ class CallManager {
     if (Platform.isAndroid) {
       final permissionResult =
           await PermissionRequest.checkCallingPermission(mediaType);
-      if (TUIPermissionResult.granted == permissionResult) {
+      if (PermissionStatus.granted == permissionResult) {
         final callResult = await TUICallEngine.instance
             .groupCall(groupId, userIdList, mediaType, params);
         if (callResult.code.isEmpty) {
@@ -319,7 +320,7 @@ class CallManager {
     if (Platform.isAndroid) {
       final permissionResult =
           await PermissionRequest.checkCallingPermission(mediaType);
-      if (TUIPermissionResult.granted == permissionResult) {
+      if (PermissionStatus.granted == permissionResult) {
         final result = await TUICallEngine.instance
             .joinInGroupCall(roomId, groupId, mediaType);
         if (result.code.isEmpty) {
@@ -491,10 +492,10 @@ class CallManager {
     return result;
   }
 
-  Future<void> enableWakeLock(bool enable) async {
-    TRTCLogger.info('CallManager enableWakeLock($enable)');
-    await TUICallKitPlatform.instance.enableWakeLock(enable);
-  }
+  // Future<void> enableWakeLock(bool enable) async {
+  //   TRTCLogger.info('CallManager enableWakeLock($enable)');
+  //   await TUICallKitPlatform.instance.enableWakeLock(enable);
+  // }
 
   Future<void> inviteUser(List<String> userIdList) async {
     TUICallParams params = TUICallParams();
@@ -657,7 +658,7 @@ class CallManager {
     eventBus.notify(setStateEventOnCallReceived);
     TUICallKitPlatform.instance.updateCallStateToNative();
     CallState.instance.isOpenFloatWindow = false;
-    CallManager.instance.enableWakeLock(true);
+    // CallManager.instance.enableWakeLock(true);
   }
 
   void openFloatWindow() {

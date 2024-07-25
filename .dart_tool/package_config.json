@@ -152,6 +152,12 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "js",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/js-0.6.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "leak_tracker",
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/leak_tracker-10.0.0",
       "packageUri": "lib/",
@@ -190,6 +196,12 @@
     {
       "name": "meta",
       "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/meta-1.11.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "mime_type",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/mime_type-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -387,25 +399,19 @@
     },
     {
       "name": "tencent_calls_engine",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_calls_engine-2.4.0",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_calls_engine-2.3.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "tencent_cloud_chat_sdk",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_cloud_chat_sdk-6.1.32",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_cloud_chat_sdk-8.0.5897",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "tencent_cloud_uikit_core",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_cloud_uikit_core-1.5.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "tencent_im_sdk_plugin_platform_interface",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_im_sdk_plugin_platform_interface-1.0.16",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_cloud_uikit_core-1.7.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -512,7 +518,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2024-07-23T03:48:40.350093Z",
+  "generated": "2024-07-24T07:20:07.214076Z",
   "generator": "pub",
   "generatorVersion": "3.3.4"
 }

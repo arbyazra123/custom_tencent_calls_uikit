@@ -107,7 +107,7 @@ class CallState {
       CallState.instance.cleanState();
       eventBus.notify(setStateEventOnCallEnd);
       TUICallKitPlatform.instance.updateCallStateToNative();
-      CallManager.instance.enableWakeLock(false);
+      // CallManager.instance.enableWakeLock(false);
     },
     onCallBegin: (TUIRoomId roomId, TUICallMediaType callMediaType,
         TUICallRole callRole) {
@@ -142,7 +142,7 @@ class CallState {
       CallState.instance.cleanState();
       eventBus.notify(setStateEventOnCallEnd);
       TUICallKitPlatform.instance.updateCallStateToNative();
-      CallManager.instance.enableWakeLock(false);
+      // CallManager.instance.enableWakeLock(false);
     },
     onCallMediaTypeChanged:
         (TUICallMediaType oldCallMediaType, TUICallMediaType newCallMediaType) {

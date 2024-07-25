@@ -46,9 +46,9 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin tencent_calls_uikit, com.tencent.cloud.tuikit.flutter.tuicallkit.TUICallKitPlugin", e);
     }
     try {
-      flutterEngine.getPlugins().add(new com.qq.qcloud.tencent_im_sdk_plugin.tencent_im_sdk_plugin());
+      flutterEngine.getPlugins().add(new com.tencent.chat.tencent_cloud_chat_sdk.TencentCloudChatSdkPlugin());
     } catch (Exception e) {
-      Log.e(TAG, "Error registering plugin tencent_cloud_chat_sdk, com.qq.qcloud.tencent_im_sdk_plugin.tencent_im_sdk_plugin", e);
+      Log.e(TAG, "Error registering plugin tencent_cloud_chat_sdk, com.tencent.chat.tencent_cloud_chat_sdk.TencentCloudChatSdkPlugin", e);
     }
     try {
       flutterEngine.getPlugins().add(new com.tencent.cloud.uikit.core.TUICorePlugin());

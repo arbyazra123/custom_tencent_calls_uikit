@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
-import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
 class PermissionRequest {
   static String getPermissionRequestTitle(TUICallMediaType type) {
@@ -29,7 +28,7 @@ class PermissionRequest {
     }
   }
 
-  static Future<TUIPermissionResult> checkCallingPermission(
+  static Future<PermissionStatus> checkCallingPermission(
       TUICallMediaType type) async {
     if (TUICallMediaType.video == type) {
       Map<Permission, PermissionStatus> statuses = await [
@@ -43,15 +42,15 @@ class PermissionRequest {
         return false;
       });
       if (anyProb != null) {
-        return TUIPermissionResult.denied;
+        return PermissionStatus.denied;
       }
-      return TUIPermissionResult.granted;
+      return PermissionStatus.granted;
     } else {
       var anyProb = await Permission.microphone.request();
       if (!anyProb.isGranted) {
-        return TUIPermissionResult.denied;
+        return PermissionStatus.denied;
       }
-      return TUIPermissionResult.granted;
+      return PermissionStatus.granted;
     }
   }
 }

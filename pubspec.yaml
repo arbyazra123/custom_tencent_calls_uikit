@@ -17,9 +17,9 @@ dependencies:
   shared_preferences: ^2.2.0
   wakelock_for_us:
   intl: ^0.18.1
-  tencent_calls_engine: 2.4.0
-  tencent_cloud_uikit_core: ">=1.5.1 <1.6.0"
-  tencent_cloud_chat_sdk: ^6.1.32
+  tencent_calls_engine: 2.3.2
+  tencent_cloud_uikit_core:
+  tencent_cloud_chat_sdk: 8.0.5897
   permission_handler: ^10.2.0
   flutter_svg: ^2.0.7
   multiple_localization: 0.4.0

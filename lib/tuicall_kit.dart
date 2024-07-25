@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/I10n/l10n.dart' as intl;
 import 'package:tencent_calls_uikit/src/call_manager.dart';
@@ -84,7 +85,7 @@ class TUICallKit {
   Future<void> closeFloatingWindow() async =>
       await CallManager.instance.closeFloatWindow();
 
-  Future<TUIPermissionResult> askPermission() async {
+  Future<PermissionStatus> askPermission() async {
     var permissionResult = await PermissionRequest.checkCallingPermission(
         CallState.instance.mediaType);
     if (CallState.instance.scene != TUICallScene.singleCall) {
