@@ -17,7 +17,9 @@ dependencies:
   shared_preferences: ^2.2.0
   wakelock_for_us:
   intl: ^0.18.1
-  tencent_calls_engine: 2.3.2
+  tencent_calls_engine:
+    git:
+      url: https://github.com/arbyazra123/custom_tencent_calls_engine.git
   tencent_cloud_uikit_core:
   tencent_cloud_chat_sdk: 8.0.5897
   permission_handler: ^10.2.0
