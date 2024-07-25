@@ -457,8 +457,8 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: "308ad3ce7db63335fda80829de7e98972b9253d9"
+      ref: "99929ea3ccd9b0d6de9ac65eb4fc109371f87c37"
+      resolved-ref: "99929ea3ccd9b0d6de9ac65eb4fc109371f87c37"
       url: "https://github.com/arbyazra123/custom_tencent_calls_engine.git"
     source: git
     version: "2.4.0"

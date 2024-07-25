@@ -63,34 +63,34 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        WakeLock.getInstance().setActivity(binding.getActivity());
+        // WakeLock.getInstance().setActivity(binding.getActivity());
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-        WakeLock.getInstance().setActivity(null);
+        // WakeLock.getInstance().setActivity(null);
 
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        WakeLock.getInstance().setActivity(binding.getActivity());
+        // WakeLock.getInstance().setActivity(binding.getActivity());
     }
 
     @Override
     public void onDetachedFromActivity() {
-        WakeLock.getInstance().setActivity(null);
+        // WakeLock.getInstance().setActivity(null);
     }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        registerObserver();
         Logger.info(TAG, "TUICallKitPlugin onAttachedToEngine");
         mChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "tuicall_kit");
         mChannel.setMethodCallHandler(this);
 
         mApplicationContext = flutterPluginBinding.getApplicationContext();
         mCallingBellService = new CallingBellService(mApplicationContext);
+        registerObserver();
     }
 
     @Override
@@ -133,18 +133,30 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
 
     public void startForegroundService(MethodCall call, MethodChannel.Result result) {
         ForegroundService.start(mApplicationContext);
-        result.success(0);
+        try {
+            result.success(0);
+        } catch (Exception e) {
+            Logger.error(TAG, "startForegroundService Success but error"+e.toString());
+        }
     }
 
     public void stopForegroundService(MethodCall call, MethodChannel.Result result) {
         ForegroundService.stop(mApplicationContext);
-        result.success(0);
+        try {
+            result.success(0);
+        } catch (Exception e) {
+            Logger.error(TAG, "stopForegroundService Success but error"+e.toString());
+        }
     }
 
     public void startRing(MethodCall call, MethodChannel.Result result) {
         String filePath = MethodCallUtils.getMethodRequiredParams(call, "filePath", result);
         mCallingBellService.startRing(filePath);
-        result.success(0);
+        try {
+            result.success(0);
+        } catch (Exception e) {
+            Logger.error(TAG, "startRing Success but error"+e.toString());
+        }
     }
 
     public void stopRing(MethodCall call, MethodChannel.Result result) {
@@ -153,7 +165,11 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
         if (TUICallState.getInstance().mIncomingFloatView != null) {
             TUICallState.getInstance().mIncomingFloatView.cancelIncomingView();
         }
-        result.success(0);
+        try {
+            result.success(0);
+        } catch (Exception e) {
+            Logger.error(TAG, "stopRing Success but error"+e.toString());
+        }
     }
 
     public void updateCallStateToNative(MethodCall call, Result result) {
@@ -196,14 +212,22 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
         if (needRefreshView) {
             TUICore.notifyEvent(KEY_TUISTATE_CHANGE, SUBKEY_REFRESH_VIEW, new HashMap<>());
         }
-        result.success(0);
+        try {
+            result.success(0);
+        } catch (Exception e) {
+            Logger.error(TAG, "updateCallStateToNative Success but error"+e.toString());
+        }
     }
 
     public void startFloatWindow(MethodCall call, MethodChannel.Result result) {
         if (KitPermissionUtils.hasPermission(PermissionRequester.FLOAT_PERMISSION)) {
             Intent mStartIntent = new Intent(mApplicationContext, FloatWindowService.class);
             mApplicationContext.startService(mStartIntent);
-            result.success(0);
+            try {
+                result.success(0);
+            } catch (Exception e) {
+                Logger.error(TAG, "startFloatWindow Success but error"+e.toString());
+            }
         } else {
             KitPermissionUtils.requestFloatPermission();
             result.error("-1", "No Permission", null);
@@ -223,30 +247,54 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
     public void stopFloatWindow(MethodCall call, MethodChannel.Result result) {
         Intent mStartIntent = new Intent(mApplicationContext, FloatWindowService.class);
         mApplicationContext.stopService(mStartIntent);
-        result.success(0);
+        try {
+            result.success(0);
+        } catch (Exception e) {
+            Logger.error(TAG, "stopFloatWindow Success but error"+e.toString());
+        }
     }
 
     public void hasFloatPermission(MethodCall call, MethodChannel.Result result) {
         if (KitPermissionUtils.hasPermission(PermissionRequester.FLOAT_PERMISSION)) {
+            try {
             result.success(true);
+            } catch (Exception e) {
+                Logger.error(TAG, "hasFloatPermission Success but error"+e.toString());
+            }
         } else {
+            try {
             result.success(false);
+            } catch (Exception e) {
+                Logger.error(TAG, "hasFloatPermission Success but error"+e.toString());
+            }
         }
         KitPermissionUtils.requestFloatPermission();
     }
 
     public void isAppInForeground(MethodCall call, MethodChannel.Result result) {
         if (KitAppUtils.isAppInForeground(mApplicationContext)) {
+            try {
             result.success(true);
+            } catch (Exception e) {
+                Logger.error(TAG, "isAppInForeground Success but error"+e.toString());
+            }
         } else {
+            try {
             result.success(false);
+            } catch (Exception e) {
+                Logger.error(TAG, "isAppInForeground Success but error"+e.toString());
+            }
         }
     }
 
     public String moveAppToFront(MethodCall call, MethodChannel.Result result) {
         String event = MethodCallUtils.getMethodParams(call, KitAppUtils.EVENT_KEY);
         String resultMove = KitAppUtils.moveAppToForeground(mApplicationContext, event);
-        result.success(resultMove);
+        try {
+            result.success(resultMove);
+        } catch (Exception e) {
+            Logger.error(TAG, "moveAppToFront Success but error"+e.toString());
+        }
         return resultMove;
     }
 
@@ -254,7 +302,11 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
         Map resources = MethodCallUtils.getMethodParams(call, "resources");
         TUICallState.getInstance().mResourceMap.clear();
         TUICallState.getInstance().mResourceMap.putAll(resources);
-        result.success(0);
+        try {
+            result.success(0);
+        } catch (Exception e) {
+            Logger.error(TAG, "moveAppToFront Success but error"+e.toString());
+        }
     }
 
     public void apiLog(MethodCall call, MethodChannel.Result result) {
@@ -272,7 +324,11 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
                 Logger.info(TAG, logString);
                 break;
         }
-        result.success(0);
+        try {
+            result.success(0);
+        } catch (Exception e) {
+            Logger.error(TAG, "apiLog Success but error"+e.toString());
+        }
     }
 
     public void backCallingPage() {
