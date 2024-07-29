@@ -55,16 +55,16 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
     });
 
     for (var remoteUser in CallState.instance.remoteUserList.entries) {
-      if (remoteUser.key == CallState.instance.selfUser.id) {
-        continue;
+      if (remoteUser.key != CallState.instance.selfUser.id &&
+          remoteUser.value.id != CallState.instance.selfUser.id) {
+        GroupCallUserWidgetData.blockCount++;
+        _userViewWidgets.addAll({
+          remoteUser.value.id: GroupCallUserWidget(
+            index: GroupCallUserWidgetData.blockCount,
+            user: remoteUser.value,
+          )
+        });
       }
-      GroupCallUserWidgetData.blockCount++;
-      _userViewWidgets.addAll({
-        remoteUser.value.id: GroupCallUserWidget(
-          index: GroupCallUserWidgetData.blockCount,
-          user: remoteUser.value,
-        )
-      });
     }
     setState(() {});
   }

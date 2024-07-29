@@ -456,11 +456,10 @@ packages:
   tencent_calls_engine:
     dependency: transitive
     description:
-      path: "."
-      ref: "99929ea3ccd9b0d6de9ac65eb4fc109371f87c37"
-      resolved-ref: "99929ea3ccd9b0d6de9ac65eb4fc109371f87c37"
-      url: "https://github.com/arbyazra123/custom_tencent_calls_engine.git"
-    source: git
+      name: tencent_calls_engine
+      sha256: "5ddc8f2715f11ed7aa41223676751a6f60671078352ea1928daa52e2ebad19a1"
+      url: "https://pub.dev"
+    source: hosted
     version: "2.4.0"
   tencent_calls_uikit:
     dependency: "direct main"

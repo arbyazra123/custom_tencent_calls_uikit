@@ -581,7 +581,10 @@ class CallManager {
             onSuccess: () {},
             onError: (code, message) {
               result = TUIResult(code: "$code", message: message);
+              debugPrint("Future<TUIResult> login.result $code $message");
             }));
+    handleLoginSuccess(sdkAppId, userId, userSig);
+
     return result;
   }
 
@@ -699,8 +702,14 @@ class CallManager {
     Timer.periodic(const Duration(milliseconds: 1000), (timer) async {
       CallState.instance.selfUser.id = userId;
       final imInfo = await _im.getUsersInfo(userIDList: [userId]);
+      debugPrint(
+          "_updateLocalSelfUserInfo.imInfo ${imInfo.data?.map((e) => e.userID)}");
       CallState.instance.selfUser.nickname =
           StringStream.makeNull(imInfo.data?[0].nickName, '');
+      var _userId = imInfo.data?[0].userID ?? "";
+      if (_userId.isNotEmpty) {
+        CallState.instance.selfUser.id = _userId;
+      }
       CallState.instance.selfUser.avatar = StringStream.makeNull(
           imInfo.data?[0].faceUrl, Constants.defaultAvatar);
       timer.cancel();

@@ -46,8 +46,9 @@ class SingleFunctionWidget {
           imgUrl: CallState.instance.isMicrophoneMute
               ? "assets/images/mute_on.png"
               : "assets/images/mute.png",
-          tips:
-              CallState.instance.isMicrophoneMute ? CallI10n.current.microphone : CallI10n.current.microphone,
+          tips: CallState.instance.isMicrophoneMute
+              ? CallI10n.current.microphone
+              : CallI10n.current.microphone,
           textColor: _getTextColor(),
           imgHeight: 60,
           onTap: () {
@@ -257,14 +258,15 @@ class SingleFunctionWidget {
   }
 
   static handleAccept() async {
-    PermissionStatus permissionRequestResult =
-        PermissionStatus.denied;
+    PermissionStatus permissionRequestResult = PermissionStatus.denied;
     if (Platform.isAndroid) {
       permissionRequestResult = await PermissionRequest.checkCallingPermission(
           CallState.instance.mediaType);
+      debugPrint(
+          "handleAccept.permissionRequestResult $permissionRequestResult");
     }
-    if (permissionRequestResult == PermissionStatus.granted ||
-        Platform.isIOS) {
+    debugPrint("handleAccept.permissionRequestResult $permissionRequestResult");
+    if (permissionRequestResult == PermissionStatus.granted || Platform.isIOS) {
       await CallManager.instance.accept();
       CallState.instance.selfUser.callStatus = TUICallStatus.accept;
     } else {

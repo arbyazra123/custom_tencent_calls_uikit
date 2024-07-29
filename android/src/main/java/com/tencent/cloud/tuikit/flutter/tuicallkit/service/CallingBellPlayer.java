@@ -11,7 +11,7 @@ import com.tencent.liteav.audio.TXAudioEffectManager;
 import com.tencent.qcloud.tuikit.tuicallengine.TUICallDefine;
 import com.tencent.qcloud.tuikit.tuicallengine.TUICallEngine;
 
-public class CallingBellService {
+public class CallingBellPlayer {
     private final Context mContext;
 
     private MediaPlayer   mMediaPlayer;
@@ -19,9 +19,9 @@ public class CallingBellService {
     private HandlerThread mHandlerThread;
     private Runnable      mPlayRunnable;
     private String        mRingFilePath = "";
-    private int          AUDIO_DIAL_ID = 48;
+    private int           AUDIO_DIAL_ID = 48;
 
-    public CallingBellService(Context mContext) {
+    public CallingBellPlayer(Context mContext) {
         this.mContext = mContext;
         mMediaPlayer = new MediaPlayer();
     }
@@ -60,11 +60,9 @@ public class CallingBellService {
                 }
                 mMediaPlayer.reset();
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                
 
                 try {
                     mMediaPlayer.setDataSource(mRingFilePath);
-                    mMediaPlayer.setVolume(1.0f,1.0f);
                     mMediaPlayer.setLooping(true);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();

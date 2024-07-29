@@ -194,6 +194,7 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
                                 ],
                               )))),
                 ),
+                // Text("${widget.user.id} ${widget.user.id.isEmpty}")
                 // TODO: 虚拟背景开关
                 // Visibility(
                 //   visible: isShowSwitchCameraAndVB,

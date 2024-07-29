@@ -351,7 +351,7 @@
     },
     {
       "name": "tencent_calls_engine",
-      "rootUri": "file:///Users/def/.pub-cache/git/custom_tencent_calls_engine-99929ea3ccd9b0d6de9ac65eb4fc109371f87c37/",
+      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/tencent_calls_engine-2.4.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -512,7 +512,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2024-07-25T13:06:29.013729Z",
+  "generated": "2024-07-29T05:28:01.483887Z",
   "generator": "pub",
   "generatorVersion": "3.3.4"
 }
