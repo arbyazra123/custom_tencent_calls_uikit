@@ -457,10 +457,10 @@ packages:
     dependency: transitive
     description:
       name: tencent_calls_engine
-      sha256: "5ddc8f2715f11ed7aa41223676751a6f60671078352ea1928daa52e2ebad19a1"
+      sha256: e2f965cd04501108e3c103a97b3470a7fa71ace5e7e3fe0f0eed90c774475c13
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.5.0"
   tencent_calls_uikit:
     dependency: "direct main"
     description:
