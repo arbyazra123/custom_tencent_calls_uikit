@@ -542,7 +542,9 @@ class CallManager {
                     list.add(userId);
                   }
                 }
-                onAfterInviteSuccess?.call(list, dataToSend);
+                debugPrint(
+                    "-----CallManager.inviteUser.calling onAfterInviteSuccess()-----");
+                onAfterInviteSuccess?.call(userIdList, dataToSend);
                 final imUserList = await _im
                     .getFriendshipManager()
                     .getFriendsInfo(userIDList: list);
