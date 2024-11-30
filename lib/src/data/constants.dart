@@ -4,7 +4,7 @@ class Constants {
   static const int roomIdMaxValue = 2147483647; // 2^31 - 1
   static const String spKeyEnableMuteMode = "enableMuteMode";
   static const String defaultAvatar =
-      "https://storage.newserver.sapa.co.id/sapawebapi/auth/images/avatar/Image.jpg";
+      "https://networkapp.telkomsel.co.id/sapawebapi/auth/images/avatar/Image.jpg";
 
   static const int blurLevelHigh = 3;
   static const int blurLevelClose = 0;
