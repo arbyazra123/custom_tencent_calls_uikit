@@ -118,7 +118,7 @@ class CallManager {
           user.remark = StringStream.makeNull(
               imUserInfo.data?[0].friendInfo?.friendRemark, '');
 
-          CallState.instance.remoteUserList.add(user);
+          CallState.instance.remoteUserList.addAll({user.id: user});
           CallState.instance.mediaType = callMediaType;
           CallState.instance.scene = TUICallScene.singleCall;
           CallState.instance.selfUser.callRole = TUICallRole.caller;
@@ -149,7 +149,7 @@ class CallManager {
             Constants.defaultAvatar);
         user.remark = StringStream.makeNull(
             imUserInfo.data?[0].friendInfo?.friendRemark, '');
-        CallState.instance.remoteUserList.add(user);
+        CallState.instance.remoteUserList.addAll({user.id: user});
         CallState.instance.mediaType = callMediaType;
         CallState.instance.scene = TUICallScene.singleCall;
         CallState.instance.selfUser.callRole = TUICallRole.caller;
@@ -225,8 +225,8 @@ class CallManager {
                   Constants.defaultAvatar);
               user.remark = StringStream.makeNull(
                   imUserInfo.data?[0].friendInfo?.friendRemark, '');
-              CallState.instance.remoteUserList.add(user);
-              CallState.instance.calleeList.add(user);
+              CallState.instance.remoteUserList.addAll({user.id: user});
+              CallState.instance.calleeList.addAll({user.id: user});
             }
           }
 
@@ -266,7 +266,7 @@ class CallManager {
                 Constants.defaultAvatar);
             user.remark = StringStream.makeNull(
                 imUserInfo.data?[0].friendInfo?.friendRemark, '');
-            CallState.instance.remoteUserList.add(user);
+            CallState.instance.remoteUserList.addAll({user.id: user});
           }
         }
 
@@ -561,7 +561,7 @@ class CallManager {
                     user.remark = StringStream.makeNull(
                         item.friendInfo?.friendRemark, '');
                     user.callStatus = TUICallStatus.waiting;
-                    CallState.instance.remoteUserList.add(user);
+                    CallState.instance.remoteUserList.addAll({user.id: user});
                   });
                   TUICore.instance.notifyEvent(setStateEvent);
                 }

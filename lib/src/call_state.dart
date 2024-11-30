@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/data/user.dart';
@@ -27,9 +28,9 @@ class CallState {
 
   User selfUser = User();
   User caller = User();
-  List<User> calleeList = [];
+  Map<String, User> calleeList = {};
+  Map<String, User> remoteUserList = {};
   List<String> calleeIdList = [];
-  List<User> remoteUserList = [];
   TUICallScene scene = TUICallScene.singleCall;
   TUICallMediaType mediaType = TUICallMediaType.none;
   int timeCount = 0;
@@ -150,12 +151,9 @@ class CallState {
     TUICallKitPlatform.instance.updateCallStateToNative();
   }, onUserReject: (String userId) {
     TRTCLogger.info('TUICallObserver onUserReject(userId:$userId)');
-    for (var remoteUser in CallState.instance.remoteUserList) {
-      if (remoteUser.id == userId) {
-        CallState.instance.remoteUserList.remove(remoteUser);
-        TUICore.instance.notifyEvent(setStateEvent);
-        break;
-      }
+    if (CallState.instance.remoteUserList.containsKey(userId)) {
+      CallState.instance.remoteUserList.remove(userId);
+      TUICore.instance.notifyEvent(setStateEvent);
     }
 
     if (CallState.instance.remoteUserList.isEmpty) {
@@ -163,39 +161,42 @@ class CallState {
       CallState.instance.cleanState();
       TUICore.instance.notifyEvent(setStateEventOnCallEnd);
     }
+
     TUICallKitPlatform.instance.updateCallStateToNative();
     if (TUICallScene.singleCall == CallState.instance.scene) {
+      CallManager.instance.showToast(
+        CallI10n.current.callRejected,
+      );
+    } else {
       CallManager.instance
-          .showToast(CallKit_t('otherPartyDeclinedCallRequest'));
+          .showToast('$userId ${CallI10n.current.callDeclined}');
     }
   }, onUserNoResponse: (String userId) {
     TRTCLogger.info('TUICallObserver onUserNoResponse(userId:$userId)');
-    for (var remoteUser in CallState.instance.remoteUserList) {
-      if (remoteUser.id == userId) {
-        CallState.instance.remoteUserList.remove(remoteUser);
-        TUICore.instance.notifyEvent(setStateEvent);
-        break;
-      }
+    if (CallState.instance.remoteUserList.containsKey(userId)) {
+      CallState.instance.remoteUserList.remove(userId);
+      TUICore.instance.notifyEvent(setStateEvent);
     }
 
     if (CallState.instance.remoteUserList.isEmpty) {
       CallingBellFeature.stopRing();
       CallState.instance.cleanState();
-      TUICore.instance.notifyEvent(setStateEventOnCallEnd);
+      TUICore.instance.notifyEvent(setStateEventOnCallEnd, {
+        "arg": "userNoResponse|$userId",
+      });
     }
 
     TUICallKitPlatform.instance.updateCallStateToNative();
     if (TUICallScene.singleCall == CallState.instance.scene) {
-      CallManager.instance.showToast(CallKit_t('otherPartyNoResponse'));
+      CallManager.instance.showToast(
+        CallI10n.current.didNotRespond,
+      );
     }
   }, onUserLineBusy: (String userId) {
     TRTCLogger.info('TUICallObserver onUserLineBusy(userId:$userId)');
-    for (var remoteUser in CallState.instance.remoteUserList) {
-      if (remoteUser.id == userId) {
-        CallState.instance.remoteUserList.remove(remoteUser);
-        TUICore.instance.notifyEvent(setStateEvent);
-        break;
-      }
+    if (CallState.instance.remoteUserList.containsKey(userId)) {
+      CallState.instance.remoteUserList.remove(userId);
+      TUICore.instance.notifyEvent(setStateEvent);
     }
 
     if (CallState.instance.remoteUserList.isEmpty) {
@@ -211,20 +212,22 @@ class CallState {
     TUICallKitPlatform.instance.updateCallStateToNative();
 
     if (TUICallScene.singleCall == CallState.instance.scene) {
-      CallManager.instance.showToast(CallKit_t('otherPartyBusy'));
+      CallManager.instance.showToast(
+        CallI10n.current.didNotRespond,
+      );
     } else {
-      CallManager.instance.showToast('$userId ${CallKit_t('busy')}');
+      CallManager.instance.showToast('$userId ${CallI10n.current.noRespond}');
     }
   }, onUserJoin: (String userId) async {
     TRTCLogger.info('TUICallObserver onUserJoin(userId:$userId)');
-    for (var remoteUser in CallState.instance.remoteUserList) {
-      if (remoteUser.id == userId) {
-        remoteUser.callStatus = TUICallStatus.accept;
-        TUICore.instance.notifyEvent(setStateEvent);
+    if (CallState.instance.remoteUserList.containsKey(userId)) {
+      CallState.instance.selfUser.callStatus = TUICallStatus.accept;
+      CallState.instance.remoteUserList[userId]?.callStatus =
+          TUICallStatus.accept;
+      TUICore.instance.notifyEvent(setStateEvent);
 
-        TUICallKitPlatform.instance.updateCallStateToNative();
-        return;
-      }
+      TUICallKitPlatform.instance.updateCallStateToNative();
+      return;
     }
 
     CallingBellFeature.stopRing();
@@ -232,7 +235,6 @@ class CallState {
     final user = User();
     user.id = userId;
     user.callStatus == TUICallStatus.accept;
-    CallState.instance.remoteUserList.add(user);
     final imInfo = await TencentImSDKPlugin.v2TIMManager
         .getFriendshipManager()
         .getFriendsInfo(userIDList: [userId]);
@@ -243,17 +245,15 @@ class CallState {
     user.avatar = StringStream.makeNull(
         imInfo.data?[0].friendInfo?.userProfile?.faceUrl,
         Constants.defaultAvatar);
+    CallState.instance.remoteUserList.addAll({user.id: user});
     TUICore.instance.notifyEvent(setStateEvent);
 
     TUICallKitPlatform.instance.updateCallStateToNative();
   }, onUserLeave: (String userId) {
     TRTCLogger.info('TUICallObserver onUserLeave(userId:$userId)');
-    for (var remoteUser in CallState.instance.remoteUserList) {
-      if (remoteUser.id == userId) {
-        CallState.instance.remoteUserList.remove(remoteUser);
-        TUICore.instance.notifyEvent(setStateEvent);
-        break;
-      }
+    if (CallState.instance.remoteUserList.containsKey(userId)) {
+      CallState.instance.remoteUserList.remove(userId);
+      TUICore.instance.notifyEvent(setStateEvent);
     }
 
     if (CallState.instance.remoteUserList.isEmpty) {
@@ -264,29 +264,32 @@ class CallState {
     TUICallKitPlatform.instance.updateCallStateToNative();
 
     if (TUICallScene.singleCall == CallState.instance.scene) {
-      CallManager.instance.showToast(CallKit_t('otherPartyHungUp'));
+      CallManager.instance
+          .showToast(CallI10n.current.opponentHangUpAndCallIsOver);
+    } else {
+      CallManager.instance.showToast('$userId ${CallI10n.current.endTheCall}');
     }
   }, onUserVideoAvailable: (String userId, bool isVideoAvailable) {
     TRTCLogger.info(
         'TUICallObserver onUserVideoAvailable(userId:$userId, isVideoAvailable:$isVideoAvailable)');
-    for (var remoteUser in CallState.instance.remoteUserList) {
-      if (remoteUser.id == userId) {
-        remoteUser.videoAvailable = isVideoAvailable;
-        TUICore.instance.notifyEvent(setStateEvent);
+    if (CallState.instance.remoteUserList.containsKey(userId)) {
+      CallState.instance.remoteUserList[userId]?.videoAvailable =
+          isVideoAvailable;
+      TUICore.instance.notifyEvent(setStateEvent);
 
-        TUICallKitPlatform.instance.updateCallStateToNative();
-        return;
-      }
+      TUICallKitPlatform.instance.updateCallStateToNative();
+      return;
     }
   }, onUserAudioAvailable: (String userId, bool isAudioAvailable) {
     TRTCLogger.info(
         'TUICallObserver onUserAudioAvailable(userId:$userId, isVideoAvailable:$isAudioAvailable)');
-    for (var remoteUser in CallState.instance.remoteUserList) {
-      if (remoteUser.id == userId) {
-        remoteUser.audioAvailable = isAudioAvailable;
-        TUICore.instance.notifyEvent(setStateEvent);
-        return;
-      }
+    if (CallState.instance.remoteUserList.containsKey(userId)) {
+      CallState.instance.remoteUserList[userId]?.audioAvailable =
+          isAudioAvailable;
+      TUICore.instance.notifyEvent(setStateEvent);
+
+      TUICallKitPlatform.instance.updateCallStateToNative();
+      return;
     }
   }, onUserNetworkQualityChanged:
       (List<TUINetworkQualityInfo> networkQualityList) {
@@ -300,11 +303,11 @@ class CallState {
               CallState.instance.isBadNetwork(networkQualityInfo.quality);
           continue;
         }
-        for (var remoteUser in CallState.instance.remoteUserList) {
-          if (remoteUser.id == networkQualityInfo.userId) {
-            remoteUser.networkQualityReminder =
-                CallState.instance.isBadNetwork(networkQualityInfo.quality);
-          }
+        if (CallState.instance.remoteUserList
+            .containsKey(networkQualityInfo.userId)) {
+          CallState.instance.remoteUserList[networkQualityInfo.userId]
+                  ?.networkQualityReminder =
+              CallState.instance.isBadNetwork(networkQualityInfo.quality);
         }
       }
     } else if (TUICallScene.singleCall == CallState.instance.scene) {
@@ -330,11 +333,16 @@ class CallState {
     TUICore.instance.notifyEvent(setStateEvent);
   }, onUserVoiceVolumeChanged: (Map<String, int> volumeMap) {
     bool needUpdate2Native = false;
-    for (var remoteUser in CallState.instance.remoteUserList) {
-      var volume = volumeMap[remoteUser.id] ?? 0;
-      remoteUser.playOutVolume = volume;
-      if (volume > 10) {
-        needUpdate2Native = true;
+    for (var element in volumeMap.entries) {
+      CallState.instance.remoteUserList[element.key]?.playOutVolume =
+          element.value;
+      var volume =
+          (CallState.instance.remoteUserList[element.key]?.playOutVolume ?? 0);
+      if (volume != 0) {
+        CallState.instance.remoteUserList[element.key]?.audioAvailable = true;
+        if (volume > 10) {
+          needUpdate2Native = true;
+        }
       }
     }
 
@@ -396,7 +404,7 @@ class CallState {
     }
 
     if (calleeIdList.length >= Constants.groupCallMaxUserCount) {
-      CallManager.instance.showToast(CallKit_t('exceededMaximumNumber'));
+      CallManager.instance.showToast(CallI10n.current.groupCallExceed);
       return;
     }
 
@@ -419,7 +427,8 @@ class CallState {
         if (userId == callerId) {
           CallState.instance.caller = CallState.instance.selfUser;
         } else {
-          CallState.instance.calleeList.add(CallState.instance.selfUser);
+          CallState.instance.calleeList.addAll(
+              {CallState.instance.selfUser.id: CallState.instance.selfUser});
         }
         continue;
       }
@@ -430,7 +439,7 @@ class CallState {
       if (userId == callerId) {
         CallState.instance.caller = user;
       } else {
-        CallState.instance.calleeList.add(user);
+        CallState.instance.calleeList.addAll({user.id: user});
       }
     }
 
@@ -454,18 +463,21 @@ class CallState {
         CallState.instance.caller.callStatus = TUICallStatus.waiting;
         CallState.instance.caller.callRole = TUICallRole.caller;
       } else {
-        for (var calleeUser in CallState.instance.calleeList) {
-          if (calleeUser.id == imFriendUserInfo.friendInfo?.userID) {
-            calleeUser.nickname = StringStream.makeNull(
-                imFriendUserInfo.friendInfo?.userProfile?.nickName, "");
-            calleeUser.remark = StringStream.makeNull(
-                imFriendUserInfo.friendInfo?.friendRemark, "");
-            calleeUser.avatar = StringStream.makeNull(
-                imFriendUserInfo.friendInfo?.userProfile?.faceUrl,
-                Constants.defaultAvatar);
-            calleeUser.callStatus = TUICallStatus.waiting;
-            calleeUser.callRole = TUICallRole.called;
-          }
+        var userID2 = imFriendUserInfo.friendInfo?.userID;
+        if (CallState.instance.calleeList.containsKey(userID2)) {
+          CallState.instance.calleeList[userID2]?.nickname =
+              StringStream.makeNull(
+                  imFriendUserInfo.friendInfo?.userProfile?.nickName, "");
+          CallState.instance.calleeList[userID2]?.remark =
+              StringStream.makeNull(
+                  imFriendUserInfo.friendInfo?.friendRemark, "");
+          CallState.instance.calleeList[userID2]?.avatar =
+              StringStream.makeNull(
+                  imFriendUserInfo.friendInfo?.userProfile?.faceUrl,
+                  Constants.defaultAvatar);
+          CallState.instance.calleeList[userID2]?.callStatus =
+              TUICallStatus.waiting;
+          CallState.instance.calleeList[userID2]?.callRole = TUICallRole.called;
         }
       }
     }
@@ -473,13 +485,14 @@ class CallState {
     CallState.instance.remoteUserList.clear();
     if (CallState.instance.caller.id.isNotEmpty &&
         CallState.instance.selfUser.id != CallState.instance.caller.id) {
-      CallState.instance.remoteUserList.add(CallState.instance.caller);
+      CallState.instance.remoteUserList
+          .addAll({CallState.instance.caller.id: CallState.instance.caller});
     }
-    for (var callee in CallState.instance.calleeList) {
-      if (CallState.instance.selfUser.id == callee.id) {
+    for (var element in CallState.instance.calleeList.entries) {
+      if (CallState.instance.selfUser.id == element.key) {
         continue;
       }
-      CallState.instance.remoteUserList.add(callee);
+      CallState.instance.remoteUserList.addAll({element.key: element.value});
     }
   }
 

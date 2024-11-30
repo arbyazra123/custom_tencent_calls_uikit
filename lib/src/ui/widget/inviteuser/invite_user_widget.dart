@@ -150,14 +150,14 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
       return;
     }
     _defaultSelectList.add(CallState.instance.selfUser.id);
-    for (User user in CallState.instance.remoteUserList) {
-      _defaultSelectList.add(user.id);
+    for (var user in CallState.instance.remoteUserList.entries) {
+      _defaultSelectList.add(user.key);
     }
 
     var memberInfo = GroupMemberInfo();
     memberInfo.userId = CallState.instance.selfUser.id;
     memberInfo.userName =
-        '${StringStream.makeNull(CallState.instance.selfUser.nickname, CallState.instance.selfUser.id)} (${CallKit_t("yourself")})';
+        '${StringStream.makeNull(CallState.instance.selfUser.nickname, CallState.instance.selfUser.id)} (${CallI10n.current.you})';
     memberInfo.avatar = StringStream.makeNull(
         CallState.instance.selfUser.avatar, Constants.defaultAvatar);
     memberInfo.isSelected = true;

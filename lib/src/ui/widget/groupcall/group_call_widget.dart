@@ -39,7 +39,7 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
   ITUINotificationCallback? setSateCallBack;
   ITUINotificationCallback? groupCallUserWidgetRefreshCallback;
   bool isFunctionExpand = true;
-  late final List<GroupCallUserWidget> _userViewWidgets = [];
+  late final Map<String, GroupCallUserWidget> _userViewWidgets = {};
 
   _initUsersViewWidget() {
     GroupCallUserWidgetData.initBlockCounter();
@@ -51,14 +51,24 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
     _userViewWidgets.clear();
 
     GroupCallUserWidgetData.blockCount++;
-    _userViewWidgets.add(GroupCallUserWidget(
+    _userViewWidgets.addAll({
+      CallState.instance.selfUser.id: GroupCallUserWidget(
         index: GroupCallUserWidgetData.blockCount,
-        user: CallState.instance.selfUser));
+        user: CallState.instance.selfUser,
+      )
+    });
 
-    for (var remoteUser in CallState.instance.remoteUserList) {
-      GroupCallUserWidgetData.blockCount++;
-      _userViewWidgets.add(GroupCallUserWidget(
-          index: GroupCallUserWidgetData.blockCount, user: remoteUser));
+    for (var remoteUser in CallState.instance.remoteUserList.entries) {
+      if (remoteUser.key != CallState.instance.selfUser.id &&
+          remoteUser.value.id != CallState.instance.selfUser.id) {
+        GroupCallUserWidgetData.blockCount++;
+        _userViewWidgets.addAll({
+          remoteUser.value.id: GroupCallUserWidget(
+            index: GroupCallUserWidgetData.blockCount,
+            user: remoteUser.value,
+          )
+        });
+      }
     }
     setState(() {});
   }
@@ -105,6 +115,11 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 0,
+        backgroundColor: Colors.black,
+      ),
       floatingActionButton: _buildFunctionWidget(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Container(
@@ -181,28 +196,28 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
             child: Wrap(
               spacing: 5,
               runSpacing: 5,
-              children: List.generate(
-                CallState.instance.calleeList.length,
-                ((index) {
-                  return Container(
-                    height: 30,
-                    width: 30,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: Image(
-                      image: NetworkImage(StringStream.makeNull(
-                          CallState.instance.calleeList[index].avatar,
-                          Constants.defaultAvatar)),
-                      fit: BoxFit.cover,
-                      errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                        'assets/images/user_icon.png',
-                        package: 'tencent_calls_uikit',
+              children: CallState.instance.calleeList.values.map((e) {
+                return Container(
+                  height: 30,
+                  width: 30,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Image(
+                    image: NetworkImage(
+                      StringStream.makeNull(
+                        e.avatar,
+                        Constants.defaultAvatar,
                       ),
                     ),
-                  );
-                }),
-              ),
+                    fit: BoxFit.cover,
+                    errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                      'assets/images/user_icon.png',
+                      package: 'tencent_calls_uikit',
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
           )
         ],
@@ -216,7 +231,9 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
         left: 0,
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width * 4 / 3,
-        child: Stack(children: _userViewWidgets));
+        child: Stack(
+          children: _userViewWidgets.values.toList(),
+        ));
   }
 
   _buildTopWidget() {
@@ -596,7 +613,9 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
       await CallManager.instance.accept();
       CallState.instance.selfUser.callStatus = TUICallStatus.accept;
     } else {
-      CallManager.instance.showToast(CallKit_t("insufficientPermissions"));
+      CallManager.instance.showToast(
+        CallI10n.current.callFailedDuetoPermission,
+      );
     }
     setState(() {});
   }

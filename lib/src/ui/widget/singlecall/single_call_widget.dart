@@ -52,11 +52,11 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
   final Widget _remoteVideoView = TUIVideoView(
       key: CallState.instance.remoteUserList.isEmpty
           ? GlobalKey()
-          : CallState.instance.remoteUserList[0].key,
+          : CallState.instance.remoteUserList.values.first.key,
       onPlatformViewCreated: (viewId) {
-        CallState.instance.remoteUserList[0].viewID = viewId;
-        CallManager.instance
-            .startRemoteView(CallState.instance.remoteUserList[0].id, viewId);
+        var firstData = CallState.instance.remoteUserList.values.first;
+        firstData.viewID = viewId;
+        CallManager.instance.startRemoteView(firstData.id, viewId);
       });
 
   @override
@@ -110,7 +110,8 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
     var avatar = '';
     if (CallState.instance.remoteUserList.isNotEmpty) {
       avatar = StringStream.makeNull(
-          CallState.instance.remoteUserList[0].avatar, Constants.defaultAvatar);
+          CallState.instance.remoteUserList.values.first.avatar,
+          Constants.defaultAvatar);
     }
 
     return Stack(
@@ -193,9 +194,11 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
     var showName = '';
     var avatar = '';
     if (CallState.instance.remoteUserList.isNotEmpty) {
-      showName = User.getUserDisplayName(CallState.instance.remoteUserList[0]);
+      showName = User.getUserDisplayName(
+          CallState.instance.remoteUserList.values.first);
       avatar = StringStream.makeNull(
-          CallState.instance.remoteUserList[0].avatar, Constants.defaultAvatar);
+          CallState.instance.remoteUserList.values.first.avatar,
+          Constants.defaultAvatar);
     }
 
     final userInfoWidget = Positioned(
@@ -503,9 +506,10 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
     var remoteVideoAvailable = false;
     if (CallState.instance.remoteUserList.isNotEmpty) {
       remoteAvatar = StringStream.makeNull(
-          CallState.instance.remoteUserList[0].avatar, Constants.defaultAvatar);
+          CallState.instance.remoteUserList.values.first.avatar,
+          Constants.defaultAvatar);
       remoteVideoAvailable =
-          CallState.instance.remoteUserList[0].videoAvailable;
+          CallState.instance.remoteUserList.values.first.videoAvailable;
     }
     var selfAvatar = StringStream.makeNull(
         CallState.instance.selfUser.avatar, Constants.defaultAvatar);
@@ -596,11 +600,12 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
 
     if (CallState.instance.remoteUserList.isNotEmpty) {
       remoteAvatar = StringStream.makeNull(
-          CallState.instance.remoteUserList[0].avatar, Constants.defaultAvatar);
+          CallState.instance.remoteUserList.values.first.avatar,
+          Constants.defaultAvatar);
       remoteVideoAvailable =
-          CallState.instance.remoteUserList[0].videoAvailable;
+          CallState.instance.remoteUserList.values.first.videoAvailable;
       remoteAudioAvailable =
-          CallState.instance.remoteUserList[0].audioAvailable;
+          CallState.instance.remoteUserList.values.first.audioAvailable;
     }
     var selfAvatar = StringStream.makeNull(
         CallState.instance.selfUser.avatar, Constants.defaultAvatar);

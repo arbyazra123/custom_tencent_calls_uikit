@@ -364,7 +364,8 @@ class SingleFunctionWidget {
       await CallManager.instance.accept();
       CallState.instance.selfUser.callStatus = TUICallStatus.accept;
     } else {
-      CallManager.instance.showToast(CallKit_t("insufficientPermissions"));
+      CallManager.instance
+          .showToast(CallI10n.current.callFailedDuetoPermission);
     }
     TUICore.instance.notifyEvent(setStateEvent);
   }
