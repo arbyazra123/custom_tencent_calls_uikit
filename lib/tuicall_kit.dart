@@ -10,7 +10,6 @@ import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/utils/permission_request.dart';
 import 'package:tencent_calls_uikit/src/utils/tuicall_localization_delegate.dart';
 import 'package:tencent_cloud_chat_sdk/models/v2_tim_user_full_info.dart';
-import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
 class TUICallKit {
   static final TUICallKit _instance = TUICallKit();

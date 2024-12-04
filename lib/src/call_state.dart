@@ -531,6 +531,7 @@ class CallState {
 
     CallState.instance.mediaType = TUICallMediaType.none;
     CallState.instance.timeCount = 0;
+    CallState.instance.clientStartTime = 0;
     CallState.instance.roomId = TUIRoomId.intRoomId(intRoomId: 0);
     CallState.instance.groupId = '';
 
