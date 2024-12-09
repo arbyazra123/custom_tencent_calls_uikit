@@ -57,6 +57,14 @@ abstract class TUICallKitPlatform extends PlatformInterface {
     return await instance.showIncomingBanner();
   }
 
+  Future<String> moveAppToFront(String event) async {
+    return await instance.moveAppToFront(event);
+  }
+
+  Future<void> switchAudioState(bool isUsingSpeaker) async {
+    return await instance.switchAudioState(isUsingSpeaker);
+  }
+
   Future<bool> initResources(Map resources) async {
     return await instance.initResources(resources);
   }
@@ -73,7 +81,8 @@ abstract class TUICallKitPlatform extends PlatformInterface {
     await instance.apiLog(level, logString);
   }
 
-  Future<bool> hasPermissions({required List<PermissionType> permissions}) async {
+  Future<bool> hasPermissions(
+      {required List<PermissionType> permissions}) async {
     return await instance.hasPermissions(permissions: permissions);
   }
 
@@ -83,7 +92,10 @@ abstract class TUICallKitPlatform extends PlatformInterface {
       String description = "",
       String settingsTip = ""}) async {
     return await instance.requestPermissions(
-        permissions: permissions, title: title, description: description, settingsTip: settingsTip);
+        permissions: permissions,
+        title: title,
+        description: description,
+        settingsTip: settingsTip);
   }
 
   Future<void> pullBackgroundApp() async {

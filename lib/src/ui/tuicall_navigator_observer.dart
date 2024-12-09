@@ -5,6 +5,7 @@ import 'package:tencent_calls_uikit/src/extensions/trtc_logger.dart';
 import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.dart';
 import 'package:tencent_calls_uikit/src/ui/tuicall_kit_widget.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/inviteuser/invite_user_widget.dart';
+import 'package:tencent_calls_uikit/tencent_calls_uikit.dart';
 import 'package:tencent_cloud_chat_sdk/models/v2_tim_user_full_info.dart';
 
 class TUICallKitNavigatorObserver extends NavigatorObserver {
@@ -32,6 +33,7 @@ class TUICallKitNavigatorObserver extends NavigatorObserver {
       V2TimUserFullInfo userInfo,
       Function onCallSucceed,
     )? onCallbackParam,
+    Function(TUIAudioPlaybackDevice output)? onAudioOutputChangedParam,
   }) {
     if (onPageChangedParam != null) {
       onPageChanged = onPageChangedParam;
@@ -42,6 +44,7 @@ class TUICallKitNavigatorObserver extends NavigatorObserver {
     if (onCallbackParam != null) {
       onCallback = onCallbackParam;
     }
+
     return _instance;
   }
 
@@ -61,12 +64,12 @@ class TUICallKitNavigatorObserver extends NavigatorObserver {
     TUICallKitNavigatorObserver.getInstance()
         .navigator
         ?.push(MaterialPageRoute(builder: (widget) {
-      return TUICallKitWidget(close: () {
+      return TUICallKitWidget(close: () async {
         if (!isClose) {
           isClose = true;
+          TUICallKitNavigatorObserver.getInstance().exitCallingPage();
           TUICallKitPlatform.instance.stopForegroundService();
           CallingBellFeature.stopRing();
-          TUICallKitNavigatorObserver.getInstance().exitCallingPage();
         }
       });
     }));

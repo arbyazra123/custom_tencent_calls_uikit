@@ -16,6 +16,7 @@ import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/utils/permission.dart';
 import 'package:tencent_calls_uikit/src/utils/preference_utils.dart';
 import 'package:tencent_calls_uikit/src/utils/string_stream.dart';
+import 'package:tencent_calls_uikit/tuicall_kit.dart';
 import 'package:tencent_cloud_chat_sdk/tencent_im_sdk_plugin.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
@@ -476,6 +477,11 @@ class CallManager {
   Future<void> selectAudioPlaybackDevice(TUIAudioPlaybackDevice device) async {
     TUICallEngine.instance.selectAudioPlaybackDevice(device);
     CallState.instance.audioDevice = device;
+
+    TUICallKit.onAudioOutputChanged?.call(
+      CallState.instance.audioDevice,
+      CallState.instance.customRoomId,
+    );
 
     TUICallKitPlatform.instance.updateCallStateToNative();
   }

@@ -4,17 +4,23 @@ import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/I10n/l10n.dart' as intl;
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
+import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/extensions/calling_bell_feature.dart';
 import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.dart';
 import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/utils/permission_request.dart';
 import 'package:tencent_calls_uikit/src/utils/tuicall_localization_delegate.dart';
 import 'package:tencent_cloud_chat_sdk/models/v2_tim_user_full_info.dart';
+import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
 class TUICallKit {
   static final TUICallKit _instance = TUICallKit();
 
   static TUICallKit get instance => _instance;
+  static Function(
+    TUIAudioPlaybackDevice output,
+    String customRoomId,
+  )? onAudioOutputChanged;
 
   static TUICallKitNavigatorObserver navigatorObserver({
     Function(CallPage?)? onPageChanged,
@@ -31,6 +37,25 @@ class TUICallKit {
         onCallbackParam: onCallbackParam,
         onNavigateToChatRoomParam: onNavigateToChatRoomParam,
       );
+
+  static Future<bool> isAppInForeground() async {
+    return await TUICallKitPlatform.instance.isAppInForeground();
+  }
+
+  static Future<void> setAudioOutputCallback(
+    Function(
+      TUIAudioPlaybackDevice output,
+      String customRoomId,
+    ) onAudioOutputChangedParam,
+  ) async {
+    onAudioOutputChanged = onAudioOutputChangedParam;
+  }
+
+  static Future<void> setCustomRoomId(
+    String? customRoomId,
+  ) async {
+    CallState.instance.customRoomId = customRoomId ?? "";
+  }
 
   static void setCallbackPageFunctions({
     Function(String userID, V2TimUserFullInfo userInfo)?
@@ -55,6 +80,7 @@ class TUICallKit {
   static syncrhonizeStartTime(int startTime) {
     CallState.instance.startTime = startTime ~/ 1000;
     CallState.instance.clientStartTime = startTime;
+    TUICore.instance.notifyEvent(setStateEventRefreshTiming);
     TUICallKitPlatform.instance.updateCallStateToNative();
   }
 

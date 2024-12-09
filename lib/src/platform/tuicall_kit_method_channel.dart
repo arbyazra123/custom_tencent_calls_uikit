@@ -50,6 +50,19 @@ class MethodChannelTUICallKit extends TUICallKitPlatform {
   }
 
   @override
+  Future<String> moveAppToFront(String event) async {
+    try {
+      var result =
+          await methodChannel.invokeMethod('moveAppToFront', {"event": event});
+      return result.toString();
+    } on PlatformException catch (e) {
+      return "failed_${e.toString()}";
+    } on Exception catch (e) {
+      return "failed_${e.toString()}";
+    }
+  }
+
+  @override
   Future<void> updateCallStateToNative() async {
     if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
       List remoteUserList = [];
@@ -74,6 +87,15 @@ class MethodChannelTUICallKit extends TUICallKitPlatform {
   Future<void> startFloatWindow() async {
     if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
       await methodChannel.invokeMethod('startFloatWindow', {});
+    }
+  }
+
+  @override
+  Future<void> switchAudioState(bool isUsingSpeaker) async {
+    if (!kIsWeb && (Platform.isAndroid)) {
+      await methodChannel.invokeMethod('switchAudioState', {
+        "isUsingSpeaker": isUsingSpeaker,
+      });
     }
   }
 

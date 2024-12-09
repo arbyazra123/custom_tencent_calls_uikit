@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
@@ -12,6 +13,7 @@ import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
 import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.dart';
 import 'package:tencent_calls_uikit/src/utils/preference_utils.dart';
 import 'package:tencent_calls_uikit/src/utils/string_stream.dart';
+import 'package:tencent_calls_uikit/tuicall_kit.dart';
 import 'package:tencent_cloud_chat_sdk/tencent_im_sdk_plugin.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
@@ -38,6 +40,7 @@ class CallState {
   int? clientStartTime;
   late Timer _timer;
   TUIRoomId roomId = TUIRoomId.intRoomId(intRoomId: 0);
+  String customRoomId = '';
   String groupId = '';
   bool isCameraOpen = false;
   TUICamera camera = TUICamera.front;
@@ -67,34 +70,36 @@ class CallState {
         .handleCallReceivedData(callerId, calleeIdList, groupId, callMediaType);
     await TUICallKitPlatform.instance.updateCallStateToNative();
     await CallManager.instance.enableWakeLock(true);
-    CallingBellFeature.startRing();
 
-    if (Platform.isIOS) {
-      if (CallState.instance.enableIncomingBanner) {
-        CallState.instance.isInNativeIncomingBanner = true;
-        await TUICallKitPlatform.instance.showIncomingBanner();
+    if (!await TUICallKitPlatform.instance.isAppInForeground()) {
+      if (Platform.isAndroid) {
+        var result = await TUICallKitPlatform.instance
+            .moveAppToFront("event_handle_receive_call");
+        debugPrint(
+            "TUICallKitPlatform.instance.moveAppToFront.result: $result");
+        switch (result) {
+          case 'success_start_call':
+            break;
+          case 'success_launching_intent':
+            break;
+          case 'success_float_window':
+            break;
+          case 'success_showing_notification':
+            break;
+          case 'failed_no_permissions':
+            break;
+          case 'failed_caller_null':
+            break;
+          case 'failed_event_not_match':
+            break;
+          default:
+        }
+        CallState.instance.moveAppToFrontStatus = result;
       } else {
-        CallState.instance.isInNativeIncomingBanner = false;
         CallManager.instance.launchCallingPage();
       }
-    } else if (Platform.isAndroid) {
-      if (await CallManager.instance.isScreenLocked()) {
-        CallManager.instance.openLockScreenApp();
-        return;
-      }
-
-      if (CallState.instance.enableIncomingBanner &&
-          !(await CallManager.instance.isSamsungDevice())) {
-        CallState.instance.isInNativeIncomingBanner = true;
-        CallManager.instance.showIncomingBanner();
-      } else {
-        if (await TUICallKitPlatform.instance.isAppInForeground()) {
-          CallState.instance.isInNativeIncomingBanner = false;
-          CallManager.instance.launchCallingPage();
-        } else {
-          CallManager.instance.pullBackgroundApp();
-        }
-      }
+    } else {
+      CallManager.instance.launchCallingPage();
     }
   }, onCallCancelled: (String callerId) {
     TRTCLogger.info('TUICallObserver onCallCancelled(callerId:$callerId)');
@@ -123,6 +128,9 @@ class CallState {
       CallManager.instance.closeMicrophone();
     } else {
       CallManager.instance.openMicrophone();
+    }
+    if (Platform.isIOS) {
+      TUICallKit.instance.enableFloatWindow(true);
     }
     CallManager.instance
         .selectAudioPlaybackDevice(CallState.instance.audioDevice);
@@ -498,9 +506,9 @@ class CallState {
 
   void startTimer() {
     var clientST = CallState.instance.clientStartTime;
-    if (clientST != null) {
-      var time = DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(
-          CallState.instance.clientStartTime!));
+    if ((clientST ?? 0) > 0) {
+      var time = DateTime.now()
+          .difference(DateTime.fromMillisecondsSinceEpoch(clientST!));
       CallState.instance.timeCount = time.inSeconds;
     } else {
       CallState.instance.timeCount = 0;
@@ -517,6 +525,9 @@ class CallState {
   }
 
   void stopTimer() {
+    CallState.instance.timeCount = 0;
+    CallState.instance.clientStartTime = 0;
+    TUICore.instance.notifyEvent(setStateEventRefreshTiming);
     CallState.instance._timer.cancel();
   }
 
@@ -532,6 +543,7 @@ class CallState {
     CallState.instance.mediaType = TUICallMediaType.none;
     CallState.instance.timeCount = 0;
     CallState.instance.clientStartTime = 0;
+    CallState.instance.startTime = 0;
     CallState.instance.roomId = TUIRoomId.intRoomId(intRoomId: 0);
     CallState.instance.groupId = '';
 

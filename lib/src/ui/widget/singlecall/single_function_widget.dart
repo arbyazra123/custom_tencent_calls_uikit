@@ -9,6 +9,7 @@ import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/common/extent_button.dart';
 import 'package:tencent_calls_uikit/src/utils/permission.dart';
+import 'package:tencent_calls_uikit/tencent_calls_uikit.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
 class SingleFunctionWidget {
@@ -58,7 +59,8 @@ class SingleFunctionWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          _buildSwitchCameraButton(),
+          if (CallState.instance.mediaType == TUICallMediaType.video)
+            _buildSwitchCameraButton(),
           _buildHangupButton(close),
           buildCameraControlButton(),
         ]),
@@ -73,7 +75,8 @@ class SingleFunctionWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildSwitchCameraButton(),
+            if (CallState.instance.mediaType == TUICallMediaType.video)
+              _buildSwitchCameraButton(),
             _buildVirtualBackgroundButton(),
             buildCameraControlButton(),
           ],
@@ -104,6 +107,8 @@ class SingleFunctionWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            if (CallState.instance.mediaType == TUICallMediaType.video)
+              _buildSwitchCameraButton(),
             ExtendButton(
               imgUrl: CallState.instance.isMicrophoneMute
                   ? "assets/images/mute_on.png"
@@ -184,6 +189,8 @@ class SingleFunctionWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            if (CallState.instance.mediaType == TUICallMediaType.video)
+              buildCameraControlButton(),
             ExtendButton(
               imgUrl: "assets/images/hangup.png",
               tips: CallKit_t("hangUp"),
@@ -222,11 +229,14 @@ class SingleFunctionWidget {
   static handleSwitchAudioDevice() async {
     if (CallState.instance.audioDevice == TUIAudioPlaybackDevice.earpiece) {
       CallState.instance.audioDevice = TUIAudioPlaybackDevice.speakerphone;
+      await CallManager.instance
+          .selectAudioPlaybackDevice(TUIAudioPlaybackDevice.speakerphone);
     } else {
       CallState.instance.audioDevice = TUIAudioPlaybackDevice.earpiece;
+      await CallManager.instance
+          .selectAudioPlaybackDevice(TUIAudioPlaybackDevice.earpiece);
     }
-    await CallManager.instance
-        .selectAudioPlaybackDevice(CallState.instance.audioDevice);
+
     TUICore.instance.notifyEvent(setStateEvent);
   }
 
@@ -333,15 +343,19 @@ class SingleFunctionWidget {
   }
 
   static Widget _buildSwitchCameraButton() {
-    return ExtendButton(
-      imgUrl: "assets/images/switch_camera_group.png",
-      tips: CallKit_t("switchCamera"),
-      textColor: _getTextColor(),
-      imgHeight: 60,
-      onTap: () {
-        handleSwitchCamera();
-      },
-    );
+    if (CallState.instance.mediaType == TUICallMediaType.video) {
+      return ExtendButton(
+        onlyIcon: true,
+        imgUrl: "assets/images/switch_camera.png",
+        tips: CallKit_t("switchCamera"),
+        textColor: _getTextColor(),
+        imgHeight: 60,
+        onTap: () {
+          handleSwitchCamera();
+        },
+      );
+    }
+    return const SizedBox.shrink();
   }
 
   static handleHangUp(Function close) async {
