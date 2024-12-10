@@ -107,33 +107,31 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
       ),
       backgroundColor: const Color.fromRGBO(52, 56, 66, 1),
       body: Builder(builder: (context) {
-        return Expanded(
-          child: Stack(
-            alignment: Alignment.topLeft,
-            fit: StackFit.expand,
-            children: [
-              if (CallState.instance.mediaType == TUICallMediaType.video)
-                _buildBackground(),
-              _buildBigVideoWidget(),
-              _isOnlyShowBigVideoView
-                  ? const SizedBox()
-                  : _buildSmallVideoWidget(),
-              _isOnlyShowBigVideoView
-                  ? const SizedBox()
-                  : _buildFloatingWindowBtnWidget(),
-              if (CallState.instance.mediaType == TUICallMediaType.video)
-                _buildTimerWidget(),
-              _isOnlyShowBigVideoView
-                  ? const SizedBox()
-                  : _buildUserInfoWidget(),
-              _isOnlyShowBigVideoView
-                  ? const SizedBox()
-                  : _buildHintTextWidget(),
-              _isOnlyShowBigVideoView
-                  ? const SizedBox()
-                  : _buildFunctionButtonWidget(),
-            ],
-          ),
+        return Stack(
+          alignment: Alignment.topLeft,
+          fit: StackFit.expand,
+          children: [
+            if (CallState.instance.mediaType == TUICallMediaType.video)
+              _buildBackground(),
+            _buildBigVideoWidget(),
+            _isOnlyShowBigVideoView
+                ? const SizedBox()
+                : _buildSmallVideoWidget(),
+            _isOnlyShowBigVideoView
+                ? const SizedBox()
+                : _buildFloatingWindowBtnWidget(),
+            if (CallState.instance.mediaType == TUICallMediaType.video)
+              _buildTimerWidget(),
+            _isOnlyShowBigVideoView
+                ? const SizedBox()
+                : _buildUserInfoWidget(),
+            _isOnlyShowBigVideoView
+                ? const SizedBox()
+                : _buildHintTextWidget(),
+            _isOnlyShowBigVideoView
+                ? const SizedBox()
+                : _buildFunctionButtonWidget(),
+          ],
         );
       }),
     );
@@ -159,13 +157,16 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Image(
-            height: double.infinity,
-            image: NetworkImage(avatar),
-            fit: BoxFit.cover,
-            errorBuilder: (ctx, err, stackTrace) => Image.asset(
-              'assets/images/user_icon.png',
-              package: 'tencent_calls_uikit',
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Image(
+              height: double.infinity,
+              image: NetworkImage(avatar),
+              fit: BoxFit.cover,
+              errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                'assets/images/user_icon.png',
+                package: 'tencent_calls_uikit',
+              ),
             ),
           ),
           Opacity(

@@ -15,23 +15,21 @@ class TUICallKitNavigatorObserver extends NavigatorObserver {
   static CallPage currentPage = CallPage.none;
   // CUSTOM
   static Function(CallPage?)? onPageChanged;
-  static Function(String userID, V2TimUserFullInfo userInfo)?
+  static Function(String userID)?
       onNavigateToChatRoom;
   static Function(
     String userID,
-    V2TimUserFullInfo userInfo,
-    Function onCallSucceed,
+    Function(int code, String status) onMakeCallProgress,
   )? onCallback;
   // CUSTOM
 
   static TUICallKitNavigatorObserver getInstance({
     Function(CallPage?)? onPageChangedParam,
-    Function(String userID, V2TimUserFullInfo userInfo)?
+    Function(String userID)?
         onNavigateToChatRoomParam,
     Function(
       String userID,
-      V2TimUserFullInfo userInfo,
-      Function onCallSucceed,
+      Function(int code, String status) onMakeCallProgress,
     )? onCallbackParam,
     Function(TUIAudioPlaybackDevice output)? onAudioOutputChangedParam,
   }) {

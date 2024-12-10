@@ -122,7 +122,6 @@ class _GroupCallWidgetState extends State<GroupCallWidget> {
         backgroundColor: Colors.black,
       ),
       backgroundColor: const Color.fromRGBO(52, 56, 66, 1),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Container(
         color: const Color.fromRGBO(45, 45, 45, 1.0),
         child: Stack(

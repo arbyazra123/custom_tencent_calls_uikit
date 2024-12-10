@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
+import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/utils/string_stream.dart';
@@ -26,9 +27,10 @@ class _CallbackPageState extends State<CallbackPage> {
   bool _isLoading = true;
   bool _isCallingLoading = false;
 
-  void _init() async {
+  Future<void> _init() async {
     var resultGetUser = await TencentImSDKPlugin.v2TIMManager
         .getUsersInfo(userIDList: [widget.userId]);
+    debugPrint("aksdljalsdalksdl resultGetUser ${resultGetUser.data?.length}");
     if (resultGetUser.code == 0) {
       _isLoading = false;
       userInfo = resultGetUser.data?.firstOrNull;
@@ -95,7 +97,6 @@ class _CallbackPageState extends State<CallbackPage> {
                 TUICallKitNavigatorObserver.getInstance().navigator?.pop();
                 TUICallKitNavigatorObserver.onNavigateToChatRoom?.call(
                   widget.userId,
-                  userInfo!,
                 );
               },
               child: Column(
@@ -121,21 +122,36 @@ class _CallbackPageState extends State<CallbackPage> {
             ),
             InkWell(
               onTap: () async {
-                if (_isCallingLoading) return;
-                if (userInfo == null) {
-                  return;
-                }
-                setState(() {
-                  _isCallingLoading = true;
-                });
                 await TUICallKitNavigatorObserver.onCallback?.call(
                   widget.userId,
-                  userInfo!,
-                  () {
-                    setState(() {
-                      _isCallingLoading = false;
-                    });
-                    TUICallKitNavigatorObserver.getInstance().navigator?.pop();
+                  (code, status) {
+                    switch (code) {
+                      case 1:
+                        setState(() {
+                          _isCallingLoading = true;
+                        });
+                        break;
+                      case 0:
+                        setState(() {
+                          _isCallingLoading = false;
+                        });
+                        TUICallKitNavigatorObserver.getInstance()
+                            .navigator
+                            ?.pop();
+
+                        break;
+                      case 2:
+                        setState(() {
+                          _isCallingLoading = false;
+                        });
+                        CallManager.instance.showToast('Error: $code, $status');
+                        TUICallKitNavigatorObserver.getInstance()
+                            .navigator
+                            ?.pop();
+
+                        break;
+                      default:
+                    }
                   },
                 );
               },

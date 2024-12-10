@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
@@ -43,13 +45,21 @@ class _TUICallKitWidgetState extends State<TUICallKitWidget> {
           TUICallKitNavigatorObserver.isClose = true;
           TUICallKitPlatform.instance.stopForegroundService();
           CallingBellFeature.stopRing();
+          var userID = arg['arg']?.toString().split("|").last;
+          if (userID == null) {
+            TUICallKitNavigatorObserver.currentPage = CallPage.none;
+            TUICallKitNavigatorObserver.onPageChanged?.call(CallPage.none);
+            return;
+          }
           TUICallKitNavigatorObserver.getInstance().navigator?.pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => CallbackPage(
-                    userId: arg!.toString().split("|").last,
-                  ),
-                ),
-              );
+            MaterialPageRoute(
+              builder: (context) {
+                return CallbackPage(
+                  userId: userID,
+                );
+              },
+            ),
+          );
           TUICallKitNavigatorObserver.currentPage = CallPage.none;
           TUICallKitNavigatorObserver.onPageChanged?.call(CallPage.none);
         } else {
