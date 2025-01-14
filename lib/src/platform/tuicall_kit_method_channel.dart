@@ -91,6 +91,15 @@ class MethodChannelTUICallKit extends TUICallKitPlatform {
   }
 
   @override
+  Future<void> switchAudioState(bool isUsingSpeaker) async {
+    if (!kIsWeb && (Platform.isAndroid)) {
+      await methodChannel.invokeMethod('switchAudioState', {
+        "isUsingSpeaker": isUsingSpeaker,
+      });
+    }
+  }
+
+  @override
   Future<void> stopFloatWindow() async {
     if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
       await methodChannel.invokeMethod('stopFloatWindow', {});

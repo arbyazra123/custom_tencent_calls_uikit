@@ -19,22 +19,27 @@ class _TimingWidgetState extends State<TimingWidget> {
     refreshTimingCallBack = (arg) {
       setState(() {});
     };
-    TUICore.instance.registerEvent(setStateEventRefreshTiming, refreshTimingCallBack);
+    TUICore.instance
+        .registerEvent(setStateEventRefreshTiming, refreshTimingCallBack);
   }
 
   @override
   Widget build(BuildContext context) {
     return Text(
       _formatCallTime(),
-      textScaleFactor: 1.0,
-      style: const TextStyle(color: Colors.white, fontSize: 14),
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 
   @override
   void dispose() {
     super.dispose();
-    TUICore.instance.unregisterEvent(setStateEventRefreshTiming, refreshTimingCallBack);
+    TUICore.instance
+        .unregisterEvent(setStateEventRefreshTiming, refreshTimingCallBack);
   }
 
   String _formatCallTime() {
@@ -44,6 +49,8 @@ class _TimingWidgetState extends State<TimingWidget> {
     String minuteShow = minute <= 9 ? "0$minute" : "$minute";
     int second = CallState.instance.timeCount % 60;
     String secondShow = second <= 9 ? "0$second" : "$second";
-    return hour > 0 ? "$hourShow:$minuteShow:$secondShow" : "$minuteShow:$secondShow";
+    return hour > 0
+        ? "$hourShow:$minuteShow:$secondShow"
+        : "$minuteShow:$secondShow";
   }
 }
