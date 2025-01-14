@@ -1,13 +1,127 @@
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart' as intl;
 import 'package:tencent_calls_uikit/src/call_manager.dart';
+import 'package:tencent_calls_uikit/src/call_state.dart';
+import 'package:tencent_calls_uikit/src/data/constants.dart';
+import 'package:tencent_calls_uikit/src/extensions/calling_bell_feature.dart';
+import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.dart';
 import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
+import 'package:tencent_calls_uikit/src/utils/permission_request.dart';
+import 'package:tencent_calls_uikit/src/utils/tuicall_localization_delegate.dart';
+import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
 class TUICallKit {
   static final TUICallKit _instance = TUICallKit();
 
   static TUICallKit get instance => _instance;
+  static Function(
+    TUIAudioPlaybackDevice output,
+    String customRoomId,
+  )? onAudioOutputChanged;
 
-  static TUICallKitNavigatorObserver navigatorObserver = TUICallKitNavigatorObserver.getInstance();
+  static TUICallKitNavigatorObserver navigatorObserver({
+    Function(CallPage?)? onPageChanged,
+    Function(
+      String userID,
+    )? onNavigateToChatRoomParam,
+    Function(
+      String userID,
+      Function(int code, String status) onMakeCallProgress,
+    )? onCallbackParam,
+  }) =>
+      TUICallKitNavigatorObserver.getInstance(
+        onPageChangedParam: onPageChanged,
+        onCallbackParam: onCallbackParam,
+        onNavigateToChatRoomParam: onNavigateToChatRoomParam,
+      );
+
+  static Future<bool> isAppInForeground() async {
+    return await TUICallKitPlatform.instance.isAppInForeground();
+  }
+
+  static Future<void> setAudioOutputCallback(
+    Function(
+      TUIAudioPlaybackDevice output,
+      String customRoomId,
+    ) onAudioOutputChangedParam,
+  ) async {
+    onAudioOutputChanged = onAudioOutputChangedParam;
+  }
+
+  static Future<void> setCustomRoomId(
+    String? customRoomId,
+  ) async {
+    CallState.instance.customRoomId = customRoomId ?? "";
+  }
+
+  static void setCallbackPageFunctions({
+    Function(
+      String userID,
+    )? onNavigateToChatRoomParam,
+    Function(
+      String userID,
+      Function(int code, String status) onCallSucceed,
+    )? onCallbackParam,
+  }) {
+    if (onNavigateToChatRoomParam != null) {
+      TUICallKitNavigatorObserver.onNavigateToChatRoom =
+          onNavigateToChatRoomParam;
+    }
+    if (onCallbackParam != null) {
+      TUICallKitNavigatorObserver.onCallback = onCallbackParam;
+    }
+  }
+
+  static TUICallLocalizationDelegate get getTUICallLocalization =>
+      intl.CallI10n.delegate.getTUICallLocalization;
+  static Future<intl.CallI10n> load(Locale locale) =>
+      intl.CallI10n.load(locale);
+
+  static syncrhonizeStartTime(int startTime) {
+    CallState.instance.startTime = startTime ~/ 1000;
+    CallState.instance.clientStartTime = startTime;
+    TUICore.instance.notifyEvent(setStateEventRefreshTiming);
+    TUICallKitPlatform.instance.updateCallStateToNative();
+  }
+
+  void setOnInviteListener(
+    Function(
+      List<String> userIds,
+      Map<String, String> data,
+    ) onAfterInviteSuccess,
+  ) {
+    CallManager.instance.onAfterInviteSuccess = onAfterInviteSuccess;
+  }
+
+  CallPage get getCallCurrentPage => TUICallKitNavigatorObserver.currentPage;
+  CallState get callState => CallState.instance;
+  TUICallKitPlatform get tuiCallPlatform => TUICallKitPlatform.instance;
+
+  Future<void> startRing() async => await CallingBellFeature.startRing();
+  Future<void> stopRing() async => await CallingBellFeature.stopRing();
+  Future<void> closeFloatingWindow() async =>
+      await CallManager.instance.closeFloatWindow();
+
+  static startTimer() {
+    CallState.instance.startTimer();
+  }
+
+  static stopTimer() {
+    CallState.instance.stopTimer();
+  }
+
+  Future<PermissionStatus> askPermission() async {
+    var permissionResult = await PermissionRequest.checkCallingPermission(
+        CallState.instance.mediaType);
+    if (CallState.instance.scene != TUICallScene.singleCall) {
+      permissionResult = await PermissionRequest.checkCallingPermission(
+        TUICallMediaType.video,
+      );
+    }
+    return permissionResult;
+  }
 
   /// login TUICallKit
   ///
@@ -51,16 +165,18 @@ class TUICallKit {
   Future<TUIResult> groupCall(
       String groupId, List<String> userIdList, TUICallMediaType callMediaType,
       [TUICallParams? params]) async {
-    return await CallManager.instance.groupCall(groupId, userIdList, callMediaType, params);
+    return await CallManager.instance
+        .groupCall(groupId, userIdList, callMediaType, params);
   }
 
   ///Join a current call
   ///
   ///@param roomId        current call room ID
   ///@param callMediaType call type
-  Future<void> joinInGroupCall(
+  Future<TUIResult> joinInGroupCall(
       TUIRoomId roomId, String groupId, TUICallMediaType callMediaType) async {
-    return await CallManager.instance.joinInGroupCall(roomId, groupId, callMediaType);
+    return await CallManager.instance
+        .joinInGroupCall(roomId, groupId, callMediaType);
   }
 
   /// Set the ringtone (preferably shorter than 30s)

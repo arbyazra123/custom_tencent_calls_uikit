@@ -21,6 +21,7 @@ import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.Devices;
 import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.KitEnumUtils;
 import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.KitObjectUtils;
 import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.Permission;
+import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.KitAppUtils;
 import com.tencent.cloud.tuikit.flutter.tuicallkit.utils.WakeLock;
 import com.tencent.cloud.tuikit.flutter.tuicallkit.view.WindowManager;
 import com.tencent.cloud.tuikit.flutter.tuicallkit.view.incomingfloatwindow.IncomingNotificationView;
@@ -115,6 +116,17 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
     public void startForegroundService(MethodCall call, MethodChannel.Result result) {
         ForegroundService.start(mApplicationContext);
         result.success(0);
+    }
+
+    public String moveAppToFront(MethodCall call, MethodChannel.Result result) {
+        String event = MethodCallUtils.getMethodParams(call, KitAppUtils.EVENT_KEY);
+        String resultMove = KitAppUtils.moveAppToForeground(mApplicationContext, event);
+        try {
+            result.success(resultMove);
+        } catch (Exception e) {
+            Logger.error(TAG, "moveAppToFront Success but error"+e.toString());
+        }
+        return resultMove;
     }
 
     public void stopForegroundService(MethodCall call, MethodChannel.Result result) {
@@ -214,6 +226,11 @@ public class TUICallKitPlugin implements FlutterPlugin, MethodCallHandler, ITUIN
         } else {
             result.success(false);
         }
+    }
+
+    public void switchAudioState(MethodCall call, MethodChannel.Result result) {
+        boolean isUsingSpeaker = MethodCallUtils.getMethodRequiredParams(call, "isUsingSpeaker", result);
+        KitAppUtils.switchSpeakerState(mApplicationContext, isUsingSpeaker);
     }
 
     public void showIncomingBanner(MethodCall call, MethodChannel.Result result) {

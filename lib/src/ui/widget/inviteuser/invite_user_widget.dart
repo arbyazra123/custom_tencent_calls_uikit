@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
-import 'package:tencent_calls_uikit/src/data/user.dart';
-import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
 import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/utils/string_stream.dart';
 import 'package:tencent_cloud_chat_sdk/enum/group_member_filter_enum.dart';
@@ -28,72 +27,112 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var selectedAmount =
+        _groupMemberList.where((element) => element.isSelected).length;
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-              CallKit_t('inviteMembers'),
-              textScaleFactor: 1.0,
-          ),
-          leading: IconButton(
-              onPressed: _goBack,
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              )),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.control_point_sharp),
-              tooltip: 'Search',
-              onPressed: () => _inviteUser(),
+      appBar: AppBar(
+        title: Text(CallI10n.current.inviteMembers),
+        leading: IconButton(
+            onPressed: _goBack,
+            icon: const Icon(
+              Icons.arrow_back,
+              // color: Colors.white,
+            )),
+        // actions: <Widget>[
+        //   IconButton(
+        //     icon: const Icon(Icons.control_point_sharp),
+        //     tooltip: 'Search',
+        //     onPressed: () => _inviteUser(),
+        //   ),
+        // ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextButton(
+              onPressed: () {
+                _inviteUser();
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: const Color(0xFFFFFFFF),
+                backgroundColor: const Color(0xFFFF0025),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 12,
+                ),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ),
+                elevation: 0,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  // height: 24.0 / titleMedium,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  CallI10n.current.inviteWithAmount(
+                      selectedAmount > 0 ? '($selectedAmount)' : ''),
+                ),
+              ),
             ),
           ],
         ),
-        body: ListView.builder(
-            itemCount: _groupMemberList.length,
-            itemExtent: 60,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  _selectUser(index);
-                },
-                child: Row(
-                  children: [
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
-                    Image.asset(
-                      _groupMemberList[index].isSelected
-                          ? 'assets/images/check_box_group_selected.png'
-                          : 'assets/images/check_box_group_unselected.png',
-                      package: 'tencent_calls_uikit',
-                      width: 18,
-                      height: 18,
-                    ),
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: Image(
-                        image: NetworkImage(_groupMemberList[index].avatar),
-                        fit: BoxFit.cover,
-                        errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                          'assets/images/user_icon.png',
-                          package: 'tencent_calls_uikit',
-                        ),
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
-                    Text(
-                      _getMemberDisPlayName(_groupMemberList[index]),
-                      textScaleFactor: 1.0,
-                      style: const TextStyle(color: Colors.black, fontSize: 18),
-                    )
-                  ],
+      ),
+      body: ListView.builder(
+        itemCount: _groupMemberList.length,
+        itemExtent: 60,
+        itemBuilder: (context, index) {
+          return InkWell(
+            onTap: () {
+              _selectUser(index);
+            },
+            child: Row(
+              children: [
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
+                Image.asset(
+                  _groupMemberList[index].isSelected
+                      ? 'assets/images/check_box_group_selected.png'
+                      : 'assets/images/check_box_group_unselected.png',
+                  package: 'tencent_calls_uikit',
+                  color: _groupMemberList[index].isSelected
+                      ? const Color(0xFFFF0025)
+                      : null,
+                  width: 20,
+                  height: 20,
                 ),
-              );
-            }));
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
+                Container(
+                  width: 40,
+                  height: 40,
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: Image(
+                    image: NetworkImage(_groupMemberList[index].avatar),
+                    fit: BoxFit.cover,
+                    errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                      'assets/images/user_icon.png',
+                      package: 'tencent_calls_uikit',
+                    ),
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
+                Text(
+                  _getMemberDisPlayName(_groupMemberList[index]),
+                  style: const TextStyle(color: Colors.black, fontSize: 18),
+                )
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   _getGroupMember() async {
@@ -104,20 +143,21 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
             filter: GroupMemberFilterTypeEnum.V2TIM_GROUP_MEMBER_FILTER_ALL,
             nextSeq: '0');
     _groupMemberList.clear();
-    if (imuserInfoBack.data == null || imuserInfoBack.data!.memberInfoList == null) {
+    if (imuserInfoBack.data == null ||
+        imuserInfoBack.data!.memberInfoList == null) {
       return;
     }
     _defaultSelectList.add(CallState.instance.selfUser.id);
-    for (User user in CallState.instance.remoteUserList) {
-      _defaultSelectList.add(user.id);
+    for (var user in CallState.instance.remoteUserList.entries) {
+      _defaultSelectList.add(user.key);
     }
 
     var memberInfo = GroupMemberInfo();
     memberInfo.userId = CallState.instance.selfUser.id;
     memberInfo.userName =
-        '${StringStream.makeNull(CallState.instance.selfUser.nickname, CallState.instance.selfUser.id)} (${CallKit_t("yourself")})';
-    memberInfo.avatar =
-        StringStream.makeNull(CallState.instance.selfUser.avatar, Constants.defaultAvatar);
+        '${StringStream.makeNull(CallState.instance.selfUser.nickname, CallState.instance.selfUser.id)} (${CallI10n.current.you})';
+    memberInfo.avatar = StringStream.makeNull(
+        CallState.instance.selfUser.avatar, Constants.defaultAvatar);
     memberInfo.isSelected = true;
     _groupMemberList.add(memberInfo);
 
@@ -129,7 +169,8 @@ class _InviteUserWidgetState extends State<InviteUserWidget> {
       memberInfo.userId = imUser.userID;
       memberInfo.userName = StringStream.makeNull(imUser.nickName, '');
       memberInfo.remark = StringStream.makeNull(imUser.friendRemark, '');
-      memberInfo.avatar = StringStream.makeNull(imUser.faceUrl, Constants.defaultAvatar);
+      memberInfo.avatar =
+          StringStream.makeNull(imUser.faceUrl, Constants.defaultAvatar);
       memberInfo.isSelected = _defaultSelectList.contains(imUser.userID);
       _groupMemberList.add(memberInfo);
     }

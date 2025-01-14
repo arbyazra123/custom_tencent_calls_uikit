@@ -23,7 +23,7 @@ class OfflinePushInfoConfig {
     //HuaWei message type: https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides/message-classification-0000001149358835
     pushInfo.androidHuaWeiCategory = "IM";
     //IOS push type: if you want user VoIP, please modify type to TUICallDefine.IOSOfflinePushType.VoIP
-    pushInfo.iOSPushType = TUICallIOSOfflinePushType.APNs;
+    pushInfo.iOSPushType = TUICallIOSOfflinePushType.VoIP;
     return pushInfo;
   }
 }

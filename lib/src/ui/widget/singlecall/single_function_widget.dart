@@ -2,16 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
+import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
 import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/common/extent_button.dart';
 import 'package:tencent_calls_uikit/src/utils/permission.dart';
+import 'package:tencent_calls_uikit/tencent_calls_uikit.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
 class SingleFunctionWidget {
-  static Widget buildFunctionWidget(Function close) {
+  static Widget buildFunctionWidget(
+      Function close, Widget? videoCallerAndCalleAcceptedView) {
     if (TUICallStatus.waiting == CallState.instance.selfUser.callStatus) {
       if (TUICallRole.caller == CallState.instance.selfUser.callRole) {
         if (TUICallMediaType.audio == CallState.instance.mediaType) {
@@ -30,6 +33,9 @@ class SingleFunctionWidget {
       if (TUICallMediaType.audio == CallState.instance.mediaType) {
         return _buildAudioCallerWaitingAndAcceptedView(close);
       } else {
+        if (videoCallerAndCalleAcceptedView != null) {
+          return videoCallerAndCalleAcceptedView;
+        }
         return _buildVideoCallerAndCalleeAcceptedView(close);
       }
     } else {
@@ -43,7 +49,7 @@ class SingleFunctionWidget {
       children: [
         _buildMicControlButton(),
         _buildHangupButton(close),
-        _buildSpeakerphoneButton(),
+        buildSpeakerphoneButton(),
       ],
     );
   }
@@ -53,9 +59,10 @@ class SingleFunctionWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          _buildSwitchCameraButton(),
+          if (CallState.instance.mediaType == TUICallMediaType.video)
+            _buildSwitchCameraButton(),
           _buildHangupButton(close),
-          _buildCameraControlButton(),
+          buildCameraControlButton(),
         ]),
       ],
     );
@@ -68,9 +75,10 @@ class SingleFunctionWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildSwitchCameraButton(),
+            if (CallState.instance.mediaType == TUICallMediaType.video)
+              _buildSwitchCameraButton(),
             _buildVirtualBackgroundButton(),
-            _buildCameraControlButton(),
+            buildCameraControlButton(),
           ],
         ),
         const SizedBox(
@@ -99,26 +107,76 @@ class SingleFunctionWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildMicControlButton(),
-            _buildSpeakerphoneButton(),
-            _buildCameraControlButton(),
+            if (CallState.instance.mediaType == TUICallMediaType.video)
+              _buildSwitchCameraButton(),
+            ExtendButton(
+              imgUrl: CallState.instance.isMicrophoneMute
+                  ? "assets/images/mute_on.png"
+                  : "assets/images/mute.png",
+              tips: CallState.instance.isMicrophoneMute
+                  ? CallI10n.current.microphone
+                  : CallI10n.current.microphone,
+              textColor: _getTextColor(),
+              imgHeight: 60,
+              onTap: () {
+                handleSwitchMic();
+              },
+            ),
+            ExtendButton(
+              imgUrl: CallState.instance.audioDevice ==
+                      TUIAudioPlaybackDevice.speakerphone
+                  ? "assets/images/handsfree_on.png"
+                  : "assets/images/handsfree.png",
+              tips: CallState.instance.audioDevice ==
+                      TUIAudioPlaybackDevice.speakerphone
+                  ? CallI10n.current.speaker
+                  : CallI10n.current.speaker,
+              textColor: _getTextColor(),
+              imgHeight: 60,
+              onTap: () {
+                handleSwitchMic();
+              },
+            ),
+            ExtendButton(
+              imgUrl: CallState.instance.isCameraOpen
+                  ? "assets/images/camera_on.png"
+                  : "assets/images/camera_off.png",
+              tips: CallState.instance.isCameraOpen
+                  ? CallI10n.current.camera
+                  : CallI10n.current.camera,
+              textColor: _getTextColor(),
+              imgHeight: 60,
+              onTap: () {
+                handleOpenCloseCamera();
+              },
+            ),
           ],
         ),
         const SizedBox(
           height: 20,
         ),
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          CallState.instance.showVirtualBackgroundButton
-              ? _buildVirtualBackgroundSmallButton()
-              : const SizedBox(
-                  width: 100,
-                ),
-          _buildHangupButton(close),
-          CallState.instance.isCameraOpen
-              ? _buildSwitchCameraSmallButton()
-              : const SizedBox(
-                  width: 100,
-                ),
+          const SizedBox(
+            width: 100,
+          ),
+          ExtendButton(
+            imgUrl: "assets/images/hangup.png",
+            tips: '',
+            textColor: _getTextColor(),
+            imgHeight: 60,
+            onTap: () {
+              handleHangUp(close);
+            },
+          ),
+          ExtendButton(
+            imgUrl: "assets/images/switch_camera.png",
+            tips: CallKit_t(" "),
+            textColor: _getTextColor(),
+            imgHeight: 28,
+            onTap: () {
+              handleSwitchCamera();
+            },
+          ),
         ]),
       ],
     );
@@ -131,13 +189,15 @@ class SingleFunctionWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            if (CallState.instance.mediaType == TUICallMediaType.video)
+              buildCameraControlButton(),
             ExtendButton(
               imgUrl: "assets/images/hangup.png",
               tips: CallKit_t("hangUp"),
               textColor: _getTextColor(),
               imgHeight: 60,
               onTap: () {
-                _handleReject(close);
+                handleReject(close);
               },
             ),
             ExtendButton(
@@ -146,7 +206,7 @@ class SingleFunctionWidget {
               textColor: _getTextColor(),
               imgHeight: 60,
               onTap: () {
-                _handleAccept();
+                handleAccept();
               },
             ),
           ],
@@ -155,7 +215,7 @@ class SingleFunctionWidget {
     );
   }
 
-  static _handleSwitchMic() async {
+  static handleSwitchMic() async {
     if (CallState.instance.isMicrophoneMute) {
       CallState.instance.isMicrophoneMute = false;
       await CallManager.instance.openMicrophone();
@@ -166,42 +226,50 @@ class SingleFunctionWidget {
     TUICore.instance.notifyEvent(setStateEvent);
   }
 
-  static _handleSwitchAudioDevice() async {
+  static handleSwitchAudioDevice() async {
     if (CallState.instance.audioDevice == TUIAudioPlaybackDevice.earpiece) {
       CallState.instance.audioDevice = TUIAudioPlaybackDevice.speakerphone;
+      await CallManager.instance
+          .selectAudioPlaybackDevice(TUIAudioPlaybackDevice.speakerphone);
     } else {
       CallState.instance.audioDevice = TUIAudioPlaybackDevice.earpiece;
+      await CallManager.instance
+          .selectAudioPlaybackDevice(TUIAudioPlaybackDevice.earpiece);
     }
-    await CallManager.instance.selectAudioPlaybackDevice(CallState.instance.audioDevice);
+
     TUICore.instance.notifyEvent(setStateEvent);
   }
 
-  static Widget _buildSpeakerphoneButton() {
+  static Widget buildSpeakerphoneButton() {
     return ExtendButton(
-      imgUrl: CallState.instance.audioDevice == TUIAudioPlaybackDevice.speakerphone
-          ? "assets/images/handsfree_on.png"
-          : "assets/images/handsfree.png",
-      tips: CallState.instance.audioDevice == TUIAudioPlaybackDevice.speakerphone
-          ? CallKit_t("speakerIsOn")
-          : CallKit_t("speakerIsOff"),
-      textColor: _getTextColor(),
+      imgUrl:
+          CallState.instance.audioDevice == TUIAudioPlaybackDevice.speakerphone
+              ? "assets/images/handsfree_on.png"
+              : "assets/images/handsfree.png",
+      tips:
+          CallState.instance.audioDevice == TUIAudioPlaybackDevice.speakerphone
+              ? CallI10n.current.speaker
+              : CallI10n.current.speaker,
       imgHeight: 60,
+      textColor: _getTextColor(),
       onTap: () {
-        _handleSwitchAudioDevice();
+        handleSwitchAudioDevice();
       },
     );
   }
 
-  static Widget _buildCameraControlButton() {
+  static Widget buildCameraControlButton() {
     return ExtendButton(
       imgUrl: CallState.instance.isCameraOpen
           ? "assets/images/camera_on.png"
           : "assets/images/camera_off.png",
-      tips: CallState.instance.isCameraOpen ? CallKit_t("cameraIsOn") : CallKit_t("cameraIsOff"),
+      tips: CallState.instance.isCameraOpen
+          ? CallKit_t("cameraIsOn")
+          : CallKit_t("cameraIsOff"),
       textColor: _getTextColor(),
       imgHeight: 60,
       onTap: () {
-        _handleOpenCloseCamera();
+        handleOpenCloseCamera();
       },
     );
   }
@@ -212,12 +280,12 @@ class SingleFunctionWidget {
           ? "assets/images/mute_on.png"
           : "assets/images/mute.png",
       tips: CallState.instance.isMicrophoneMute
-          ? CallKit_t("microphoneIsOff")
-          : CallKit_t("microphoneIsOn"),
+          ? CallI10n.current.microphone
+          : CallI10n.current.microphone,
       textColor: _getTextColor(),
       imgHeight: 60,
       onTap: () {
-        _handleSwitchMic();
+        handleSwitchMic();
       },
     );
   }
@@ -225,11 +293,11 @@ class SingleFunctionWidget {
   static Widget _buildHangupButton(Function close) {
     return ExtendButton(
       imgUrl: "assets/images/hangup.png",
-      tips: CallKit_t("hangUp"),
+      tips: CallI10n.current.hangup,
       textColor: _getTextColor(),
       imgHeight: 60,
       onTap: () {
-        _handleHangUp(close);
+        handleHangUp(close);
       },
     );
   }
@@ -242,7 +310,7 @@ class SingleFunctionWidget {
       imgHeight: 28,
       imgOffsetX: -16,
       onTap: () {
-        _handleSwitchCamera();
+        handleSwitchCamera();
       },
     );
   }
@@ -255,7 +323,7 @@ class SingleFunctionWidget {
       imgHeight: 28,
       imgOffsetX: 16,
       onTap: () {
-        _handleOpenBlurBackground();
+        handleOpenBlurBackground();
       },
     );
   }
@@ -269,65 +337,73 @@ class SingleFunctionWidget {
       textColor: _getTextColor(),
       imgHeight: 60,
       onTap: () {
-        _handleOpenBlurBackground();
+        handleOpenBlurBackground();
       },
     );
   }
 
   static Widget _buildSwitchCameraButton() {
-    return ExtendButton(
-      imgUrl: "assets/images/switch_camera_group.png",
-      tips: CallKit_t("switchCamera"),
-      textColor: _getTextColor(),
-      imgHeight: 60,
-      onTap: () {
-        _handleSwitchCamera();
-      },
-    );
+    if (CallState.instance.mediaType == TUICallMediaType.video) {
+      return ExtendButton(
+        onlyIcon: true,
+        imgUrl: "assets/images/switch_camera.png",
+        tips: CallKit_t("switchCamera"),
+        textColor: _getTextColor(),
+        imgHeight: 60,
+        onTap: () {
+          handleSwitchCamera();
+        },
+      );
+    }
+    return const SizedBox.shrink();
   }
 
-  static _handleHangUp(Function close) async {
+  static handleHangUp(Function close) async {
     await CallManager.instance.hangup();
     close();
   }
 
-  static _handleReject(Function close) async {
+  static handleReject(Function close) async {
     await CallManager.instance.reject();
     close();
   }
 
-  static _handleAccept() async {
+  static handleAccept() async {
     PermissionResult permissionRequestResult = PermissionResult.requesting;
     if (Platform.isAndroid) {
-      permissionRequestResult = await Permission.request(CallState.instance.mediaType);
+      permissionRequestResult =
+          await Permission.request(CallState.instance.mediaType);
     }
     if (permissionRequestResult == PermissionResult.granted || Platform.isIOS) {
       await CallManager.instance.accept();
       CallState.instance.selfUser.callStatus = TUICallStatus.accept;
     } else {
-      CallManager.instance.showToast(CallKit_t("insufficientPermissions"));
+      CallManager.instance
+          .showToast(CallI10n.current.callFailedDuetoPermission);
     }
     TUICore.instance.notifyEvent(setStateEvent);
   }
 
-  static void _handleOpenCloseCamera() async {
+  static void handleOpenCloseCamera() async {
     CallState.instance.isCameraOpen = !CallState.instance.isCameraOpen;
     if (CallState.instance.isCameraOpen) {
-      await CallManager.instance
-          .openCamera(CallState.instance.camera, CallState.instance.selfUser.viewID);
+      await CallManager.instance.openCamera(
+          CallState.instance.camera, CallState.instance.selfUser.viewID);
     } else {
       await CallManager.instance.closeCamera();
     }
     TUICore.instance.notifyEvent(setStateEvent);
   }
 
-  static void _handleOpenBlurBackground() async {
-    CallState.instance.enableBlurBackground = !CallState.instance.enableBlurBackground;
-    await CallManager.instance.setBlurBackground(CallState.instance.enableBlurBackground);
+  static void handleOpenBlurBackground() async {
+    CallState.instance.enableBlurBackground =
+        !CallState.instance.enableBlurBackground;
+    await CallManager.instance
+        .setBlurBackground(CallState.instance.enableBlurBackground);
     TUICore.instance.notifyEvent(setStateEvent);
   }
 
-  static void _handleSwitchCamera() async {
+  static void handleSwitchCamera() async {
     if (TUICamera.front == CallState.instance.camera) {
       CallState.instance.camera = TUICamera.back;
     } else {

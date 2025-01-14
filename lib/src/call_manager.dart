@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
@@ -15,6 +16,7 @@ import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/utils/permission.dart';
 import 'package:tencent_calls_uikit/src/utils/preference_utils.dart';
 import 'package:tencent_calls_uikit/src/utils/string_stream.dart';
+import 'package:tencent_calls_uikit/tuicall_kit.dart';
 import 'package:tencent_cloud_chat_sdk/tencent_im_sdk_plugin.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
@@ -25,10 +27,18 @@ class CallManager {
   final _im = TencentImSDKPlugin.v2TIMManager;
   int _sdkAppId = 0;
 
+  Function(List<String> userIds, Map<String, String> data)?
+      onAfterInviteSuccess;
+
   CallManager() {
     TUICore.instance.registerEvent(setStateEventOnCallReceived, (arg) async {
-      if (Platform.isAndroid && await TUICallKitPlatform.instance.isAppInForeground()) {
-        var permissionResult = await Permission.request(CallState.instance.mediaType);
+      if (Platform.isAndroid &&
+          await TUICallKitPlatform.instance.isAppInForeground()) {
+        var permissionResult =
+            await Permission.request(CallState.instance.mediaType);
+        if (CallState.instance.scene != TUICallScene.singleCall) {
+          permissionResult = await Permission.request(TUICallMediaType.video);
+        }
 
         if (PermissionResult.granted == permissionResult) {
           TUICallKitNavigatorObserver.getInstance().enterCallingPage();
@@ -43,15 +53,19 @@ class CallManager {
   }
 
   Future<void> initEngine(int sdkAppID, String userId, String userSig) async {
-    TRTCLogger.info('CallManager initEngine(sdkAppID:$sdkAppID, userId: $userId)');
+    TRTCLogger.info(
+        'CallManager initEngine(sdkAppID:$sdkAppID, userId: $userId)');
     CallManager.instance.initResources();
     final result = await TUICallEngine.instance.init(sdkAppID, userId, userSig);
 
     if (result.code.isEmpty) {
       TUICallEngine.instance.setVideoEncoderParams(VideoEncoderParams(
-          resolution: Resolution.resolution_640_360, resolutionMode: ResolutionMode.portrait));
+          resolution: Resolution.resolution_640_360,
+          resolutionMode: ResolutionMode.portrait));
       TUICallEngine.instance.setVideoRenderParams(
-          userId, VideoRenderParams(fillMode: FillMode.fill, rotation: Rotation.rotation_0));
+          userId,
+          VideoRenderParams(
+              fillMode: FillMode.fill, rotation: Rotation.rotation_0));
       TUICallEngine.instance.setBeautyLevel(6.0);
       _updateLocalSelfUserInfo(userId);
     } else {
@@ -69,7 +83,8 @@ class CallManager {
     }
     if (TUICallMediaType.none == callMediaType) {
       debugPrint("Call failed, callMediaType is Unknown");
-      return TUIResult(code: "-1", message: "Call failed, callMediaType is Unknown");
+      return TUIResult(
+          code: "-1", message: "Call failed, callMediaType is Unknown");
     }
     if (params != null &&
         params.roomId != null &&
@@ -86,20 +101,25 @@ class CallManager {
     if (Platform.isAndroid) {
       final permissionResult = await Permission.request(callMediaType);
       if (PermissionResult.granted == permissionResult) {
-        final callResult = await TUICallEngine.instance.call(userId, callMediaType, params);
+        final callResult =
+            await TUICallEngine.instance.call(userId, callMediaType, params);
         if (callResult.code.isEmpty) {
           User user = User();
           user.id = userId;
           user.callRole = TUICallRole.called;
           user.callStatus = TUICallStatus.waiting;
-          final imUserInfo = await _im.getFriendshipManager().getFriendsInfo(userIDList: [userId]);
-          user.nickname =
-              StringStream.makeNull(imUserInfo.data?[0].friendInfo?.userProfile?.nickName, '');
+          final imUserInfo = await _im
+              .getFriendshipManager()
+              .getFriendsInfo(userIDList: [userId]);
+          user.nickname = StringStream.makeNull(
+              imUserInfo.data?[0].friendInfo?.userProfile?.nickName, '');
           user.avatar = StringStream.makeNull(
-              imUserInfo.data?[0].friendInfo?.userProfile?.faceUrl, Constants.defaultAvatar);
-          user.remark = StringStream.makeNull(imUserInfo.data?[0].friendInfo?.friendRemark, '');
+              imUserInfo.data?[0].friendInfo?.userProfile?.faceUrl,
+              Constants.defaultAvatar);
+          user.remark = StringStream.makeNull(
+              imUserInfo.data?[0].friendInfo?.friendRemark, '');
 
-          CallState.instance.remoteUserList.add(user);
+          CallState.instance.remoteUserList.addAll({user.id: user});
           CallState.instance.mediaType = callMediaType;
           CallState.instance.scene = TUICallScene.singleCall;
           CallState.instance.selfUser.callRole = TUICallRole.caller;
@@ -113,19 +133,24 @@ class CallManager {
         return TUIResult(code: "-1", message: "Permission result fail");
       }
     } else {
-      final callResult = await TUICallEngine.instance.call(userId, callMediaType, params);
+      final callResult =
+          await TUICallEngine.instance.call(userId, callMediaType, params);
       if (callResult.code.isEmpty) {
         User user = User();
         user.id = userId;
         user.callRole = TUICallRole.called;
         user.callStatus = TUICallStatus.waiting;
-        final imUserInfo = await _im.getFriendshipManager().getFriendsInfo(userIDList: [userId]);
-        user.nickname =
-            StringStream.makeNull(imUserInfo.data?[0].friendInfo?.userProfile?.nickName, '');
+        final imUserInfo = await _im
+            .getFriendshipManager()
+            .getFriendsInfo(userIDList: [userId]);
+        user.nickname = StringStream.makeNull(
+            imUserInfo.data?[0].friendInfo?.userProfile?.nickName, '');
         user.avatar = StringStream.makeNull(
-            imUserInfo.data?[0].friendInfo?.userProfile?.faceUrl, Constants.defaultAvatar);
-        user.remark = StringStream.makeNull(imUserInfo.data?[0].friendInfo?.friendRemark, '');
-        CallState.instance.remoteUserList.add(user);
+            imUserInfo.data?[0].friendInfo?.userProfile?.faceUrl,
+            Constants.defaultAvatar);
+        user.remark = StringStream.makeNull(
+            imUserInfo.data?[0].friendInfo?.friendRemark, '');
+        CallState.instance.remoteUserList.addAll({user.id: user});
         CallState.instance.mediaType = callMediaType;
         CallState.instance.scene = TUICallScene.singleCall;
         CallState.instance.selfUser.callRole = TUICallRole.caller;
@@ -138,17 +163,20 @@ class CallManager {
     }
   }
 
-  Future<TUIResult> groupCall(String groupId, List<String> userIdList, TUICallMediaType mediaType,
+  Future<TUIResult> groupCall(
+      String groupId, List<String> userIdList, TUICallMediaType mediaType,
       [TUICallParams? params]) async {
     TRTCLogger.info(
         'CallManager groupCall(groupId:$groupId, userIdList:$userIdList, mediaType:$mediaType, params:${params.toString()}), version:${Constants.pluginVersion}');
     if (groupId.isEmpty) {
       debugPrint("groupCall failed, groupId is empty");
-      return TUIResult(code: "-1", message: "groupCall failed, groupId is empty");
+      return TUIResult(
+          code: "-1", message: "groupCall failed, groupId is empty");
     }
     if (TUICallMediaType.none == mediaType) {
       debugPrint("groupCall failed, callMediaType is Unknown");
-      return TUIResult(code: "-1", message: "groupCall failed, callMediaType is Unknown");
+      return TUIResult(
+          code: "-1", message: "groupCall failed, callMediaType is Unknown");
     }
     if (userIdList.isEmpty) {
       debugPrint("groupCall failed, userIdList is empty");
@@ -166,8 +194,11 @@ class CallManager {
               "2147483647");
     }
     if (userIdList.length >= Constants.groupCallMaxUserCount) {
-      CallManager.instance.showToast("groupCall failed, exceeding max user number: 9");
-      return TUIResult(code: "-1", message: "groupCall failed, exceeding max user number: 9");
+      CallManager.instance
+          .showToast("groupCall failed, exceeding max user number: 9");
+      return TUIResult(
+          code: "-1",
+          message: "groupCall failed, exceeding max user number: 9");
     }
     if (params == null) {
       params = TUICallParams();
@@ -176,8 +207,8 @@ class CallManager {
     if (Platform.isAndroid) {
       final permissionResult = await Permission.request(mediaType);
       if (PermissionResult.granted == permissionResult) {
-        final callResult =
-            await TUICallEngine.instance.groupCall(groupId, userIdList, mediaType, params);
+        final callResult = await TUICallEngine.instance
+            .groupCall(groupId, userIdList, mediaType, params);
         if (callResult.code.isEmpty) {
           for (String userId in userIdList) {
             if (userId.isNotEmpty) {
@@ -185,15 +216,18 @@ class CallManager {
               user.id = userId;
               user.callRole = TUICallRole.called;
               user.callStatus = TUICallStatus.waiting;
-              final imUserInfo =
-                  await _im.getFriendshipManager().getFriendsInfo(userIDList: [userId]);
-              user.nickname =
-                  StringStream.makeNull(imUserInfo.data?[0].friendInfo?.userProfile?.nickName, '');
+              final imUserInfo = await _im
+                  .getFriendshipManager()
+                  .getFriendsInfo(userIDList: [userId]);
+              user.nickname = StringStream.makeNull(
+                  imUserInfo.data?[0].friendInfo?.userProfile?.nickName, '');
               user.avatar = StringStream.makeNull(
-                  imUserInfo.data?[0].friendInfo?.userProfile?.faceUrl, Constants.defaultAvatar);
-              user.remark = StringStream.makeNull(imUserInfo.data?[0].friendInfo?.friendRemark, '');
-              CallState.instance.remoteUserList.add(user);
-              CallState.instance.calleeList.add(user);
+                  imUserInfo.data?[0].friendInfo?.userProfile?.faceUrl,
+                  Constants.defaultAvatar);
+              user.remark = StringStream.makeNull(
+                  imUserInfo.data?[0].friendInfo?.friendRemark, '');
+              CallState.instance.remoteUserList.addAll({user.id: user});
+              CallState.instance.calleeList.addAll({user.id: user});
             }
           }
 
@@ -214,8 +248,8 @@ class CallManager {
         return TUIResult(code: "-1", message: "Permission result fail");
       }
     } else {
-      final callResult =
-          await TUICallEngine.instance.groupCall(groupId, userIdList, mediaType, params);
+      final callResult = await TUICallEngine.instance
+          .groupCall(groupId, userIdList, mediaType, params);
       if (callResult.code.isEmpty) {
         for (String userId in userIdList) {
           if (userId.isNotEmpty) {
@@ -223,14 +257,17 @@ class CallManager {
             user.id = userId;
             user.callRole = TUICallRole.called;
             user.callStatus = TUICallStatus.waiting;
-            final imUserInfo =
-                await _im.getFriendshipManager().getFriendsInfo(userIDList: [userId]);
-            user.nickname =
-                StringStream.makeNull(imUserInfo.data?[0].friendInfo?.userProfile?.nickName, '');
+            final imUserInfo = await _im
+                .getFriendshipManager()
+                .getFriendsInfo(userIDList: [userId]);
+            user.nickname = StringStream.makeNull(
+                imUserInfo.data?[0].friendInfo?.userProfile?.nickName, '');
             user.avatar = StringStream.makeNull(
-                imUserInfo.data?[0].friendInfo?.userProfile?.faceUrl, Constants.defaultAvatar);
-            user.remark = StringStream.makeNull(imUserInfo.data?[0].friendInfo?.friendRemark, '');
-            CallState.instance.remoteUserList.add(user);
+                imUserInfo.data?[0].friendInfo?.userProfile?.faceUrl,
+                Constants.defaultAvatar);
+            user.remark = StringStream.makeNull(
+                imUserInfo.data?[0].friendInfo?.friendRemark, '');
+            CallState.instance.remoteUserList.addAll({user.id: user});
           }
         }
 
@@ -249,25 +286,36 @@ class CallManager {
     }
   }
 
-  Future<void> joinInGroupCall(TUIRoomId roomId, String groupId, TUICallMediaType mediaType) async {
+  Future<TUIResult> joinInGroupCall(
+      TUIRoomId roomId, String groupId, TUICallMediaType mediaType) async {
     TRTCLogger.info(
         'CallManager joinInGroupCall(roomId:$roomId, groupId:$groupId, mediaType:$mediaType), version:${Constants.pluginVersion}');
     if (roomId.intRoomId <= 0 || roomId.intRoomId >= Constants.roomIdMaxValue) {
       debugPrint("joinInGroupCall failed, roomId is invalid");
-      return;
+      return TUIResult(
+        code: "-1",
+        message: "roomId is invalid",
+      );
     }
     if (groupId.isEmpty) {
       debugPrint("joinInGroupCall failed, groupId is empty");
-      return;
+      return TUIResult(
+        code: "-2",
+        message: "joinInGroupCall failed, groupId is empty",
+      );
     }
     if (TUICallMediaType.none == mediaType) {
       debugPrint("joinInGroupCall failed, mediaType is unknown");
-      return;
+      return TUIResult(
+        code: "-3",
+        message: "joinInGroupCall failed, mediaType is unknown",
+      );
     }
     if (Platform.isAndroid) {
       final permissionResult = await Permission.request(mediaType);
       if (PermissionResult.granted == permissionResult) {
-        final result = await TUICallEngine.instance.joinInGroupCall(roomId, groupId, mediaType);
+        final result = await TUICallEngine.instance
+            .joinInGroupCall(roomId, groupId, mediaType);
         if (result.code.isEmpty) {
           CallState.instance.groupId = groupId;
           CallState.instance.roomId = roomId;
@@ -278,18 +326,28 @@ class CallManager {
 
           launchCallingPage();
           CallManager.instance.enableWakeLock(true);
-          return;
+          return TUIResult(
+            code: "0",
+            message: "success",
+          );
         } else {
           CallManager.instance.showToast("joinInGroupCall Fail, engine call "
               "fail");
-          return;
+          return TUIResult(
+            code: "-4",
+            message: "joinInGroupCall Fail, engine call",
+          );
         }
       } else {
         CallManager.instance.showToast("Permission result fail");
-        return;
+        return TUIResult(
+          code: "-5",
+          message: "Permission result fail",
+        );
       }
     } else {
-      final result = await TUICallEngine.instance.joinInGroupCall(roomId, groupId, mediaType);
+      final result = await TUICallEngine.instance
+          .joinInGroupCall(roomId, groupId, mediaType);
       if (result.code.isEmpty) {
         CallState.instance.groupId = groupId;
         CallState.instance.roomId = roomId;
@@ -300,10 +358,17 @@ class CallManager {
 
         launchCallingPage();
         CallManager.instance.enableWakeLock(true);
-        return;
+        return TUIResult(
+          code: "0",
+          message: "success",
+        );
       } else {
         CallManager.instance.showToast("joinInGroupCall Fail,engine call fail");
-        return;
+        CallManager.instance.showToast("joinInGroupCall Fail,engine call fail");
+        return TUIResult(
+          code: "-6",
+          message: "joinInGroupCall Fail,engine call fail",
+        );
       }
     }
   }
@@ -347,27 +412,16 @@ class CallManager {
 
   Future<TUIResult> openCamera(TUICamera camera, int viewId) async {
     TUIResult result = TUIResult(code: '', message: 'success');
-    if (Platform.isAndroid) {
-      if (await TUICallKitPlatform.instance.checkUsbCameraService()) {
-        TRTCLogger.info('CallManager openUsbCamera');
-        await TUICallKitPlatform.instance.openUsbCamera(viewId);
-      } else {
-        TRTCLogger.info('CallManager openCamera');
-        PermissionResult permissionResult = PermissionResult.granted;
-        if (await Permission.has(permissions: [PermissionType.camera])) {
-          permissionResult = await Permission.request(TUICallMediaType.video);
-        }
-        if (PermissionResult.granted == permissionResult) {
-          result = await TUICallEngine.instance.openCamera(camera, viewId);
-        } else {
-          result = TUIResult(code: "-1", message: "Start camera permission denied.");
-        }
-      }
+    if (await TUICallKitPlatform.instance.checkUsbCameraService()) {
+      TRTCLogger.info('CallManager openUsbCamera');
+      await TUICallKitPlatform.instance.openUsbCamera(viewId);
     } else {
+      TRTCLogger.info('CallManager openCamera');
       result = await TUICallEngine.instance.openCamera(camera, viewId);
     }
 
-    if (result.code.isEmpty && TUICallStatus.none != CallState.instance.selfUser.callStatus) {
+    if (result.code.isEmpty &&
+        TUICallStatus.none != CallState.instance.selfUser.callStatus) {
       CallState.instance.isCameraOpen = true;
       CallState.instance.camera = camera;
       CallState.instance.selfUser.videoAvailable = true;
@@ -384,7 +438,7 @@ class CallManager {
     } else {
       TRTCLogger.info('CallManager closeCamera');
       TUICallEngine.instance.closeCamera();
-  }
+    }
     CallState.instance.isCameraOpen = false;
     CallState.instance.selfUser.videoAvailable = false;
     TUICallKitPlatform.instance.updateCallStateToNative();
@@ -397,25 +451,25 @@ class CallManager {
     TUICallKitPlatform.instance.updateCallStateToNative();
   }
 
-  Future<TUIResult> openMicrophone([bool notify = true]) async {
+  Future<TUIResult> openMicrophone() async {
     final result = await TUICallEngine.instance.openMicrophone();
     CallState.instance.isMicrophoneMute = false;
 
     TUICallKitPlatform.instance.updateCallStateToNative();
 
-    if (notify && Platform.isIOS && result.code.isEmpty) {
+    if (Platform.isIOS && result.code.isEmpty) {
       TUICallKitPlatform.instance.openMicrophone();
     }
     return result;
   }
 
-  Future<void> closeMicrophone([bool notify = true]) async {
+  Future<void> closeMicrophone() async {
     TUICallEngine.instance.closeMicrophone();
     CallState.instance.isMicrophoneMute = true;
 
     TUICallKitPlatform.instance.updateCallStateToNative();
 
-    if (notify && Platform.isIOS) {
+    if (Platform.isIOS) {
       TUICallKitPlatform.instance.closeMicrophone();
     }
   }
@@ -424,11 +478,17 @@ class CallManager {
     TUICallEngine.instance.selectAudioPlaybackDevice(device);
     CallState.instance.audioDevice = device;
 
+    TUICallKit.onAudioOutputChanged?.call(
+      CallState.instance.audioDevice,
+      CallState.instance.customRoomId,
+    );
+
     TUICallKitPlatform.instance.updateCallStateToNative();
   }
 
   Future<void> startRemoteView(String userId, int viewId) async {
-    TRTCLogger.info('CallManager startRemoteView(userId:$userId, viewId:$viewId)');
+    TRTCLogger.info(
+        'CallManager startRemoteView(userId:$userId, viewId:$viewId)');
     await TUICallEngine.instance.startRemoteView(userId, viewId);
 
     TUICallKitPlatform.instance.updateCallStateToNative();
@@ -447,7 +507,35 @@ class CallManager {
 
   Future<void> inviteUser(List<String> userIdList) async {
     TUICallParams params = TUICallParams();
+    var notId = Random().nextInt(256);
+    final groups = await _im.getGroupManager().getGroupsInfo(
+      groupIDList: [CallState.instance.groupId],
+    );
+    Map<String, String> dataToSend = {};
+    if (groups.code == 0) {
+      if (groups.data?.isEmpty ?? true) {
+        return;
+      }
+      var avatar = groups.data?.first.groupInfo?.faceUrl ?? "";
+      if (avatar.isNotEmpty) {
+        avatar = Uri.parse(avatar).path;
+      }
+      var groupName = groups.data?.first.groupInfo?.groupName ?? "";
+      dataToSend = {
+        "call": "1",
+        "notificationId": "$notId",
+        "callerId": CallState.instance.groupId,
+        "callerName": groupName,
+        "pict": avatar,
+        "desc": CallState.instance.mediaType == TUICallMediaType.audio
+            ? "$groupName wants you to join audio call"
+            : "$groupName wants you to join video call",
+        "invitation": "1",
+      };
+    }
     params.offlinePushInfo = OfflinePushInfoConfig.createOfflinePushInfo();
+    params.offlinePushInfo?.androidFCMChannelID = "sapa_default_call";
+    params.offlinePushInfo?.iOSPushType = TUICallIOSOfflinePushType.VoIP;
     await TUICallEngine.instance.iniviteUser(
         userIdList,
         params,
@@ -460,19 +548,26 @@ class CallManager {
                     list.add(userId);
                   }
                 }
-                final imUserList =
-                    await _im.getFriendshipManager().getFriendsInfo(userIDList: list);
+                debugPrint(
+                    "-----CallManager.inviteUser.calling onAfterInviteSuccess()-----");
+                onAfterInviteSuccess?.call(userIdList, dataToSend);
+                final imUserList = await _im
+                    .getFriendshipManager()
+                    .getFriendsInfo(userIDList: list);
                 if (imUserList.data != null) {
                   imUserList.data?.forEach((item) {
                     User user = User();
-                    user.id = StringStream.makeNull(item.friendInfo?.userID, '');
-                    user.nickname =
-                        StringStream.makeNull(item.friendInfo?.userProfile?.nickName, '');
+                    user.id =
+                        StringStream.makeNull(item.friendInfo?.userID, '');
+                    user.nickname = StringStream.makeNull(
+                        item.friendInfo?.userProfile?.nickName, '');
                     user.avatar = StringStream.makeNull(
-                        item.friendInfo?.userProfile?.faceUrl, Constants.defaultAvatar);
-                    user.remark = StringStream.makeNull(item.friendInfo?.friendRemark, '');
+                        item.friendInfo?.userProfile?.faceUrl,
+                        Constants.defaultAvatar);
+                    user.remark = StringStream.makeNull(
+                        item.friendInfo?.friendRemark, '');
                     user.callStatus = TUICallStatus.waiting;
-                    CallState.instance.remoteUserList.add(user);
+                    CallState.instance.remoteUserList.addAll({user.id: user});
                   });
                   TUICore.instance.notifyEvent(setStateEvent);
                 }
@@ -500,12 +595,14 @@ class CallManager {
 
   Future<void> logout() async {
     TRTCLogger.info('CallManager logout()');
-    await TUILogin.instance.logout(TUICallback(onSuccess: () {}, onError: (code, message) {}));
+    await TUILogin.instance
+        .logout(TUICallback(onSuccess: () {}, onError: (code, message) {}));
   }
 
   Future<void> setCallingBell(String assetName) async {
     String filePath = await CallingBellFeature.getAssetsFilePath(assetName);
-    PreferenceUtils.getInstance().saveString(CallingBellFeature.keyRingPath, filePath);
+    PreferenceUtils.getInstance()
+        .saveString(CallingBellFeature.keyRingPath, filePath);
   }
 
   Future<void> enableFloatWindow(bool enable) async {
@@ -532,8 +629,8 @@ class CallManager {
 
   Future<void> enableMuteMode(bool enable) async {
     CallState.instance.enableMuteMode = enable;
-    PreferenceUtils.getInstance()
-        .saveBool(Constants.spKeyEnableMuteMode, CallState.instance.enableMuteMode);
+    PreferenceUtils.getInstance().saveBool(
+        Constants.spKeyEnableMuteMode, CallState.instance.enableMuteMode);
   }
 
   void initAudioPlayDeviceAndCamera() {
@@ -545,7 +642,8 @@ class CallManager {
       CallState.instance.isCameraOpen = true;
     }
 
-    CallManager.instance.selectAudioPlaybackDevice(CallState.instance.audioDevice);
+    CallManager.instance
+        .selectAudioPlaybackDevice(CallState.instance.audioDevice);
   }
 
   void handleLoginSuccess(int sdkAppId, String userId, String userSig) {
@@ -568,8 +666,8 @@ class CallManager {
   Future<void> initResources() async {
     var resources = {};
     resources["k_0000088"] = CallKit_t("waiting");
-    resources["k_0000089"] =
-        CallKit_t("displayPopUpWindowWhileRunningInTheBackgroundAndDisplayPopUpWindowPermissions");
+    resources["k_0000089"] = CallKit_t(
+        "displayPopUpWindowWhileRunningInTheBackgroundAndDisplayPopUpWindowPermissions");
     resources["k_0000002"] = CallKit_t("invitedToAudioCall");
     resources["k_0000002_1"] = CallKit_t("invitedToVideoCall");
     resources["k_0000003"] = CallKit_t("invitedToGroupCall");
@@ -585,6 +683,12 @@ class CallManager {
         !(await CallManager.instance.isScreenLocked())) {
       launchCallingPage();
     }
+  }
+
+  Future<void> closeFloatWindow() async {
+    await TUICallKitPlatform.instance.stopFloatWindow();
+    CallState.instance.isOpenFloatWindow = false;
+    TUICallKitNavigatorObserver.isClose = false;
   }
 
   void launchCallingPage() {
@@ -655,9 +759,7 @@ class CallManager {
   void _enablePictureInPicture() async {
     await TUICallEngine.instance.callExperimentalAPI({
       "api": "enablePictureInPicture",
-      "params": {
-        "enable": true
-      }
+      "params": {"enable": true}
     });
   }
 
@@ -700,9 +802,10 @@ class CallManager {
     Timer.periodic(const Duration(milliseconds: 1000), (timer) async {
       CallState.instance.selfUser.id = userId;
       final imInfo = await _im.getUsersInfo(userIDList: [userId]);
-      CallState.instance.selfUser.nickname = StringStream.makeNull(imInfo.data?[0].nickName, '');
-      CallState.instance.selfUser.avatar =
-          StringStream.makeNull(imInfo.data?[0].faceUrl, Constants.defaultAvatar);
+      CallState.instance.selfUser.nickname =
+          StringStream.makeNull(imInfo.data?[0].nickName, '');
+      CallState.instance.selfUser.avatar = StringStream.makeNull(
+          imInfo.data?[0].faceUrl, Constants.defaultAvatar);
       timer.cancel();
     });
   }
@@ -710,10 +813,12 @@ class CallManager {
   _checkLocalSelfUserInfo() async {
     if (CallState.instance.selfUser.nickname == '' &&
         CallState.instance.selfUser.avatar == Constants.defaultAvatar) {
-      final imInfo = await _im.getUsersInfo(userIDList: [CallState.instance.selfUser.id]);
-      CallState.instance.selfUser.nickname = StringStream.makeNull(imInfo.data?[0].nickName, '');
-      CallState.instance.selfUser.avatar =
-          StringStream.makeNull(imInfo.data?[0].faceUrl, Constants.defaultAvatar);
+      final imInfo =
+          await _im.getUsersInfo(userIDList: [CallState.instance.selfUser.id]);
+      CallState.instance.selfUser.nickname =
+          StringStream.makeNull(imInfo.data?[0].nickName, '');
+      CallState.instance.selfUser.avatar = StringStream.makeNull(
+          imInfo.data?[0].faceUrl, Constants.defaultAvatar);
     }
   }
 }

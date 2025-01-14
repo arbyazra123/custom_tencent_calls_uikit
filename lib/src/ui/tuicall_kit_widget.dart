@@ -1,13 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
 import 'package:tencent_calls_uikit/src/data/constants.dart';
+import 'package:tencent_calls_uikit/src/extensions/calling_bell_feature.dart';
 import 'package:tencent_calls_uikit/src/extensions/trtc_logger.dart';
 import 'package:tencent_calls_uikit/src/i18n/i18n_utils.dart';
+import 'package:tencent_calls_uikit/src/platform/tuicall_kit_platform_interface.dart';
+import 'package:tencent_calls_uikit/src/ui/tuicall_navigator_observer.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/groupcall/group_call_widget.dart';
+import 'package:tencent_calls_uikit/src/ui/widget/no_respond_call/callback_page.dart';
 import 'package:tencent_calls_uikit/src/ui/widget/singlecall/single_call_widget.dart';
+import 'package:tencent_calls_uikit/src/utils/float_window.dart';
 import 'package:tencent_cloud_uikit_core/tencent_cloud_uikit_core.dart';
 
 class TUICallKitWidget extends StatefulWidget {
@@ -33,7 +40,31 @@ class _TUICallKitWidgetState extends State<TUICallKitWidget> {
     }
     onCallEndCallBack = (arg) {
       if (mounted) {
-        widget.close();
+        if (CallState.instance.scene == TUICallScene.singleCall &&
+            (arg?.toString().contains("userNoResponse") ?? false)) {
+          TUICallKitNavigatorObserver.isClose = true;
+          TUICallKitPlatform.instance.stopForegroundService();
+          CallingBellFeature.stopRing();
+          var userID = arg['arg']?.toString().split("|").last;
+          if (userID == null) {
+            TUICallKitNavigatorObserver.currentPage = CallPage.none;
+            TUICallKitNavigatorObserver.onPageChanged?.call(CallPage.none);
+            return;
+          }
+          TUICallKitNavigatorObserver.getInstance().navigator?.pushReplacement(
+            MaterialPageRoute(
+              builder: (context) {
+                return CallbackPage(
+                  userId: userID,
+                );
+              },
+            ),
+          );
+          TUICallKitNavigatorObserver.currentPage = CallPage.none;
+          TUICallKitNavigatorObserver.onPageChanged?.call(CallPage.none);
+        } else {
+          widget.close();
+        }
       }
     };
     TUICore.instance.registerEvent(setStateEventOnCallEnd, onCallEndCallBack);
@@ -48,9 +79,12 @@ class _TUICallKitWidgetState extends State<TUICallKitWidget> {
       DeviceOrientation.portraitDown,
     ]);
 
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (value) async {
+        if (value == false) {
+          FloatWindow.open(context);
+        }
       },
       child: Scaffold(
           resizeToAvoidBottomInset: false,

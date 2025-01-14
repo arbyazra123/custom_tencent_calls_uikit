@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
 import 'package:tencent_calls_uikit/src/call_state.dart';
@@ -14,7 +15,8 @@ class GroupCallUserWidget extends StatefulWidget {
   final int index;
   final User user;
 
-  const GroupCallUserWidget({Key? key, required this.index, required this.user}) : super(key: key);
+  const GroupCallUserWidget({Key? key, required this.index, required this.user})
+      : super(key: key);
 
   @override
   State<GroupCallUserWidget> createState() => _GroupCallUserWidgetState();
@@ -32,40 +34,44 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
         setState(() {});
       }
     };
-    TUICore.instance.registerEvent(setStateEventGroupCallUserWidgetRefresh, refreshCallback);
+    TUICore.instance.registerEvent(
+        setStateEventGroupCallUserWidgetRefresh, refreshCallback);
   }
 
   @override
   void dispose() {
     super.dispose();
-    TUICore.instance.unregisterEvent(setStateEventGroupCallUserWidgetRefresh, refreshCallback);
+    TUICore.instance.unregisterEvent(
+        setStateEventGroupCallUserWidgetRefresh, refreshCallback);
   }
 
   @override
   Widget build(BuildContext context) {
-    final wh = _getWH(
-        GroupCallUserWidgetData.blockBigger, widget.index, GroupCallUserWidgetData.blockCount);
+    final wh = _getWH(GroupCallUserWidgetData.blockBigger, widget.index,
+        GroupCallUserWidgetData.blockCount);
     final Tuple<double, double> tl = _getTopLeft(
-        GroupCallUserWidgetData.blockBigger, widget.index, GroupCallUserWidgetData.blockCount);
+        GroupCallUserWidgetData.blockBigger,
+        widget.index,
+        GroupCallUserWidgetData.blockCount);
 
-    bool isAvatarImage =
-        (widget.user.id == CallState.instance.selfUser.id && !CallState.instance.isCameraOpen) ||
-            (widget.user.id != CallState.instance.selfUser.id && !widget.user.videoAvailable);
-    bool isShowLoadingImage = (widget.user.callStatus == TUICallStatus.waiting) &&
-        (widget.user.id != CallState.instance.selfUser.id);
+    bool isAvatarImage = (widget.user.id == CallState.instance.selfUser.id &&
+            !CallState.instance.isCameraOpen) ||
+        (widget.user.id != CallState.instance.selfUser.id &&
+            !widget.user.videoAvailable);
+    bool isShowLoadingImage =
+        (widget.user.callStatus == TUICallStatus.waiting) &&
+            (widget.user.id != CallState.instance.selfUser.id);
     bool isShowSpeaking = widget.user.playOutVolume != 0 &&
-        ((widget.user.id == CallState.instance.selfUser.id) ||
-            (widget.user.id != CallState.instance.selfUser.id &&
-                widget.user.callStatus == TUICallStatus.accept));
-    bool isShowLocalMute = (widget.user.id == CallState.instance.selfUser.id) &&
+        widget.user.callStatus == TUICallStatus.accept;
+    bool isShowRemoteMute = (widget.user.callStatus == TUICallStatus.accept) &&
+        (widget.user.id != CallState.instance.selfUser.id) &&
+        !widget.user.audioAvailable;
+    bool amIMuted = (widget.user.id == CallState.instance.selfUser.id) &&
         CallState.instance.isMicrophoneMute;
-    bool isShowSwitchCameraAndVB = GroupCallUserWidgetData.blockBigger[widget.index]! &&
-        (widget.user.id == CallState.instance.selfUser.id) &&
-        (CallState.instance.isCameraOpen == true);
-    bool isShowVBButton = GroupCallUserWidgetData.blockBigger[widget.index]! &&
-        (widget.user.id == CallState.instance.selfUser.id) &&
-        (CallState.instance.isCameraOpen == true) &&
-        (CallState.instance.showVirtualBackgroundButton == true);
+    bool isShowSwitchCameraAndVB =
+        GroupCallUserWidgetData.blockBigger[widget.index]! &&
+            (widget.user.id == CallState.instance.selfUser.id) &&
+            (CallState.instance.isCameraOpen == true);
 
     return AnimatedPositioned(
         width: wh,
@@ -76,29 +82,35 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
         child: InkWell(
             onTap: () {
               GroupCallUserWidgetData.blockBigger.forEach((key, value) {
-                GroupCallUserWidgetData.blockBigger[key] =
-                    (key == widget.index) ? !GroupCallUserWidgetData.blockBigger[key]! : false;
+                GroupCallUserWidgetData.blockBigger[key] = (key == widget.index)
+                    ? !GroupCallUserWidgetData.blockBigger[key]!
+                    : false;
               });
 
-              GroupCallUserWidgetData.initCanPlaceSquare(GroupCallUserWidgetData.blockBigger,
+              GroupCallUserWidgetData.initCanPlaceSquare(
+                  GroupCallUserWidgetData.blockBigger,
                   CallState.instance.remoteUserList.length + 1);
-              TUICore.instance.notifyEvent(setStateEventGroupCallUserWidgetRefresh);
+              TUICore.instance
+                  .notifyEvent(setStateEventGroupCallUserWidgetRefresh);
             },
             child: Stack(
               alignment: Alignment.center,
               children: [
-                TUIVideoView(
-                  key: widget.user.key,
-                  onPlatformViewCreated: (viewId) {
-                    _onPlatformViewCreated(widget.user, viewId);
-                  },
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: TUIVideoView(
+                    key: widget.user.key,
+                    onPlatformViewCreated: (viewId) {
+                      _onPlatformViewCreated(widget.user, viewId);
+                    },
+                  ),
                 ),
                 Visibility(
                   visible: isAvatarImage,
                   child: Positioned.fill(
                     child: Image(
-                      image: NetworkImage(
-                          StringStream.makeNull(widget.user.avatar, Constants.defaultAvatar)),
+                      image: NetworkImage(StringStream.makeNull(
+                          widget.user.avatar, Constants.defaultAvatar)),
                       fit: BoxFit.cover,
                       errorBuilder: (ctx, err, stackTrace) => Image.asset(
                         'assets/images/user_icon.png',
@@ -112,6 +124,47 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
                   visible: isShowLoadingImage,
                   child: Center(
                     child: LoadingAnimation(),
+                  ),
+                ),
+                Visibility(
+                  visible: isShowSpeaking,
+                  child: Positioned(
+                    left: 5,
+                    bottom: 5,
+                    width: 24,
+                    height: 24,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Image.asset(
+                        "assets/images/speaking.png",
+                        package: 'tencent_calls_uikit',
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: isShowRemoteMute || amIMuted,
+                  child: Positioned(
+                    left: 5,
+                    bottom: 5,
+                    width: 24,
+                    height: 24,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.mic_off_outlined,
+                        size: 16,
+                        color: Colors.red[300]!,
+                      ),
+                    ),
                   ),
                 ),
                 Visibility(
@@ -137,114 +190,62 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
                                   Positioned(
                                       width: 14,
                                       height: 14,
-                                      child: Image.asset("assets/images/switch_camera.png",
-                                          package: 'tencent_calls_uikit', fit: BoxFit.contain))
+                                      child: Image.asset(
+                                          "assets/images/switch_camera.png",
+                                          package: 'tencent_calls_uikit',
+                                          fit: BoxFit.contain))
                                 ],
                               )))),
                 ),
-                Visibility(
-                  visible: isShowVBButton,
-                  child: Positioned(
-                      right: 50,
-                      bottom: 5,
-                      width: 24,
-                      height: 24,
-                      child: InkWell(
-                          onTap: () {
-                            _handleVirtualBackgroubd();
-                          },
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black54,
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: [
-                                  Positioned(
-                                      width: 14,
-                                      height: 14,
-                                      child: Image.asset("assets/images/virtual_background.png",
-                                          package: 'tencent_calls_uikit', fit: BoxFit.fill))
-                                ],
-                              )))),
-                ),
+                // Visibility(
+                //   visible: isShowVBButton,
+                //   child: Positioned(
+                //       right: 50,
+                //       bottom: 5,
+                //       width: 24,
+                //       height: 24,
+                //       child: InkWell(
+                //           onTap: () {
+                //             _handleVirtualBackgroubd();
+                //           },
+                //           child: Container(
+                //               decoration: BoxDecoration(
+                //                 color: Colors.black54,
+                //                 shape: BoxShape.rectangle,
+                //                 borderRadius: BorderRadius.circular(12),
+                //               ),
+                //               child: Stack(
+                //                 alignment: AlignmentDirectional.center,
+                //                 children: [
+                //                   Positioned(
+                //                       width: 14,
+                //                       height: 14,
+                //                       child: Image.asset(
+                //                           "assets/images/virtual_background.png",
+                //                           package: 'tencent_calls_uikit',
+                //                           fit: BoxFit.fill))
+                //                 ],
+                //               )))),
+                // ),
                 Visibility(
                   visible: widget.user.networkQualityReminder,
                   child: Positioned(
-                      right: _getNetworkBadHintRightMargin(),
-                      bottom: 5,
-                      width: 24,
-                      height: 24,
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Image.asset(
-                            "assets/images/network_bad.png",
-                            package: 'tencent_calls_uikit',
-                          ))),
-                ),
-                Positioned(
-                  left: 5,
-                  bottom: 5,
-                  height: 24,
-                  child: Row(
-                    children: [
-                      Visibility(
-                        visible: GroupCallUserWidgetData.blockBigger[widget.index]!,
-                        child: Text(User.getUserDisplayName(widget.user),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
+                    right: _getNetworkBadHintRightMargin(),
+                    bottom: 5,
+                    width: 24,
+                    height: 24,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      Visibility(
-                        visible: GroupCallUserWidgetData.blockBigger[widget.index]!,
-                        child: const SizedBox(
-                          width: 10,
-                        ),
+                      child: Icon(
+                        Icons.wifi_off_rounded,
+                        size: 16,
+                        color: Colors.red[300]!,
                       ),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Visibility(
-                            visible: isShowSpeaking,
-                            child: Container(
-                                width: 24,
-                                height: 24,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Image.asset(
-                                  "assets/images/speaking.png",
-                                  package: 'tencent_calls_uikit',
-                                )),
-                          ),
-                          Visibility(
-                            visible: isShowLocalMute,
-                            child: Container(
-                                width: 24,
-                                height: 24,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Image.asset(
-                                  "assets/images/audio_unavailable.png",
-                                  package: 'tencent_calls_uikit',
-                                )),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],
@@ -253,7 +254,9 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
 
   double _getNetworkBadHintRightMargin() {
     return GroupCallUserWidgetData.blockBigger[widget.index]!
-        ? CallState.instance.isCameraOpen ? 90 : 10
+        ? CallState.instance.isCameraOpen
+            ? 90
+            : 10
         : 10;
   }
 
@@ -275,7 +278,8 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
     }
   }
 
-  Tuple<double, double> _getTopLeft(Map<int, bool> blockBigger, int index, int count) {
+  Tuple<double, double> _getTopLeft(
+      Map<int, bool> blockBigger, int index, int count) {
     bool has = _hasBigger(blockBigger);
     bool selfIsBigger = blockBigger[index]!;
 
@@ -288,12 +292,14 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
         int i = (index - 1) ~/ 3;
         int j = (index - 1) % 3;
         j = (j > 1) ? 1 : j;
-        return Tuple(
-            MediaQuery.of(context).size.width * i / 3, MediaQuery.of(context).size.width * j / 3);
+        return Tuple(MediaQuery.of(context).size.width * i / 3,
+            MediaQuery.of(context).size.width * j / 3);
       }
 
       for (int i = 0; i < GroupCallUserWidgetData.canPlaceSquare.length; i++) {
-        for (int j = 0; j < GroupCallUserWidgetData.canPlaceSquare[i].length; j++) {
+        for (int j = 0;
+            j < GroupCallUserWidgetData.canPlaceSquare[i].length;
+            j++) {
           if (GroupCallUserWidgetData.canPlaceSquare[i][j] == true) {
             GroupCallUserWidgetData.canPlaceSquare[i][j] = false;
             return Tuple(MediaQuery.of(context).size.width * i / 3,
@@ -307,7 +313,8 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
       if (index == 1) {
         return Tuple(MediaQuery.of(context).size.width / 3, 0);
       }
-      return Tuple(MediaQuery.of(context).size.width / 3, MediaQuery.of(context).size.width / 2);
+      return Tuple(MediaQuery.of(context).size.width / 3,
+          MediaQuery.of(context).size.width / 2);
     }
     if (count == 3) {
       if (index == 1) {
@@ -315,7 +322,8 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
       } else if (index == 2) {
         return Tuple(0, MediaQuery.of(context).size.width / 2);
       }
-      return Tuple(MediaQuery.of(context).size.width / 2, MediaQuery.of(context).size.width / 4);
+      return Tuple(MediaQuery.of(context).size.width / 2,
+          MediaQuery.of(context).size.width / 4);
     }
     if (count == 4) {
       if (index == 1) {
@@ -325,15 +333,18 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
       } else if (index == 3) {
         return Tuple(MediaQuery.of(context).size.width / 2, 0);
       }
-      return Tuple(MediaQuery.of(context).size.width / 2, MediaQuery.of(context).size.width / 2);
+      return Tuple(MediaQuery.of(context).size.width / 2,
+          MediaQuery.of(context).size.width / 2);
     }
 
     for (int i = 0; i < GroupCallUserWidgetData.canPlaceSquare.length; i++) {
-      for (int j = 0; j < GroupCallUserWidgetData.canPlaceSquare[i].length; j++) {
+      for (int j = 0;
+          j < GroupCallUserWidgetData.canPlaceSquare[i].length;
+          j++) {
         if (GroupCallUserWidgetData.canPlaceSquare[i][j] == true) {
           GroupCallUserWidgetData.canPlaceSquare[i][j] = false;
-          return Tuple(
-              MediaQuery.of(context).size.width * i / 3, MediaQuery.of(context).size.width * j / 3);
+          return Tuple(MediaQuery.of(context).size.width * i / 3,
+              MediaQuery.of(context).size.width * j / 3);
         }
       }
     }
@@ -351,7 +362,8 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
   }
 
   _onPlatformViewCreated(User user, int viewId) {
-    debugPrint("_onPlatformViewCreated: user.id = ${user.id}, viewId = $viewId");
+    debugPrint(
+        "_onPlatformViewCreated: user.id = ${user.id}, viewId = $viewId");
     if (user.id == CallState.instance.selfUser.id) {
       CallState.instance.selfUser.viewID = viewId;
       if (CallState.instance.isCameraOpen) {
@@ -374,6 +386,7 @@ class _GroupCallUserWidgetState extends State<GroupCallUserWidget> {
   }
 
   _handleVirtualBackgroubd() async {
-    CallManager.instance.setBlurBackground(!CallState.instance.enableBlurBackground);
+    CallManager.instance
+        .setBlurBackground(!CallState.instance.enableBlurBackground);
   }
 }

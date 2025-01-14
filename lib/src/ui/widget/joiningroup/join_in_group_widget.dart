@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
@@ -31,14 +30,6 @@ class _JoinInGroupWidgetState extends State<JoinInGroupWidget> {
   void initState() {
     super.initState();
     _updateUserAvatars();
-  }
-
-  @override
-  void didUpdateWidget(covariant JoinInGroupWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!listEquals(widget.userIDs, oldWidget.userIDs)) {
-      _updateUserAvatars();
-    }
   }
 
   @override
@@ -187,7 +178,6 @@ class _JoinInGroupWidgetState extends State<JoinInGroupWidget> {
   }
 
   _updateUserAvatars() async {
-    _userAvatars.clear();
     final result = await TencentImSDKPlugin.v2TIMManager.getUsersInfo(userIDList: widget.userIDs);
     for (var userinfo in result.data!) {
       _userAvatars.add(userinfo.faceUrl!);
