@@ -71,7 +71,9 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
     TUICore.instance.registerEvent(setStateEvent, setSateCallBack);
     if (TUICallStatus.waiting == CallState.instance.selfUser.callStatus) {
       if (TUICallRole.caller == CallState.instance.selfUser.callRole) {
-        _initialize();
+        if (Platform.isAndroid) {
+          _initialize();
+        }
       }
     }
   }
@@ -122,12 +124,8 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
                 : _buildFloatingWindowBtnWidget(),
             if (CallState.instance.mediaType == TUICallMediaType.video)
               _buildTimerWidget(),
-            _isOnlyShowBigVideoView
-                ? const SizedBox()
-                : _buildUserInfoWidget(),
-            _isOnlyShowBigVideoView
-                ? const SizedBox()
-                : _buildHintTextWidget(),
+            _isOnlyShowBigVideoView ? const SizedBox() : _buildUserInfoWidget(),
+            _isOnlyShowBigVideoView ? const SizedBox() : _buildHintTextWidget(),
             _isOnlyShowBigVideoView
                 ? const SizedBox()
                 : _buildFunctionButtonWidget(),

@@ -212,14 +212,14 @@ class TUICallKitManager {
     
     func openMicrophone(call: FlutterMethodCall, result: @escaping FlutterResult) {
         TUICallKitService.instance.voipDataSyncHandler.setVoIPMute(false)
-        TUICallKitService.instance.voipDataSyncHandler.setVoIPMuteForTUICallKitVoIPExtension(false)
+        // TUICallKitService.instance.voipDataSyncHandler.setVoIPMuteForTUICallKitVoIPExtension(false)
 
         result(NSNumber(value: 0))
     }
     
     func closeMicrophone(call: FlutterMethodCall, result: @escaping FlutterResult) {
         TUICallKitService.instance.voipDataSyncHandler.setVoIPMute(true)
-        TUICallKitService.instance.voipDataSyncHandler.setVoIPMuteForTUICallKitVoIPExtension(true)
+        // TUICallKitService.instance.voipDataSyncHandler.setVoIPMuteForTUICallKitVoIPExtension(true)
 
         result(NSNumber(value: 0))
     }
