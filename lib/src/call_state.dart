@@ -131,8 +131,13 @@ class CallState {
     if (Platform.isIOS) {
       TUICallKit.instance.enableFloatWindow(true);
     }
-    CallManager.instance
-        .selectAudioPlaybackDevice(CallState.instance.audioDevice);
+    if (CallState.instance.groupId.isEmpty) {
+      CallManager.instance
+          .selectAudioPlaybackDevice(TUIAudioPlaybackDevice.earpiece);
+    } else {
+      CallManager.instance
+          .selectAudioPlaybackDevice(CallState.instance.audioDevice);
+    }
     CallState.instance.startTimer();
     CallState.instance.isChangedBigSmallVideo = true;
     TUICore.instance.notifyEvent(setStateEvent);

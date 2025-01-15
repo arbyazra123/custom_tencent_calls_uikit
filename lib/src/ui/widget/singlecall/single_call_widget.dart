@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tencent_calls_engine/tencent_calls_engine.dart';
 import 'package:tencent_calls_uikit/src/I10n/l10n.dart';
 import 'package:tencent_calls_uikit/src/call_manager.dart';
@@ -34,6 +32,7 @@ class SingleCallWidget extends StatefulWidget {
 
 class _SingleCallWidgetState extends State<SingleCallWidget> {
   ITUINotificationCallback? setSateCallBack;
+  ITUINotificationCallback? setStateEventOnCallBeginCallback;
   bool _hadShowAcceptText = false;
   bool _isShowAcceptText = false;
   double _smallViewTop = 128;
@@ -68,27 +67,23 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
         setState(() {});
       }
     };
-    TUICore.instance.registerEvent(setStateEvent, setSateCallBack);
-    if (TUICallStatus.waiting == CallState.instance.selfUser.callStatus) {
-      if (TUICallRole.caller == CallState.instance.selfUser.callRole) {
-        if (Platform.isAndroid) {
-          _initialize();
-        }
+    setStateEventOnCallBeginCallback = (arg) {
+      _initialize();
+      if (mounted) {
+        setState(() {});
       }
-    }
+    };
+    TUICore.instance.registerEvent(setStateEvent, setSateCallBack);
+    TUICore.instance.registerEvent(
+        setStateEventOnCallBegin, setStateEventOnCallBeginCallback);
   }
 
   void _initialize() async {
+    debugPrint("setStateEventOnCallBegin._initialize called");
     Future.delayed(const Duration(milliseconds: 500)).then((value) async {
-      CallState.instance.isMicrophoneMute = true;
-      await CallManager.instance.closeMicrophone();
-
       CallState.instance.audioDevice = TUIAudioPlaybackDevice.earpiece;
-      await CallManager.instance.selectAudioPlaybackDevice(
-        CallState.instance.audioDevice,
-      );
-      CallState.instance.isMicrophoneMute = false;
-      await CallManager.instance.openMicrophone();
+      await CallManager.instance
+          .selectAudioPlaybackDevice(TUIAudioPlaybackDevice.earpiece);
     });
   }
 
@@ -96,10 +91,14 @@ class _SingleCallWidgetState extends State<SingleCallWidget> {
   dispose() {
     super.dispose();
     TUICore.instance.unregisterEvent(setStateEvent, setSateCallBack);
+    TUICore.instance.unregisterEvent(
+        setStateEventOnCallBegin, setStateEventOnCallBeginCallback);
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(
+        "CallState.instance.audioDevice.name ${CallState.instance.audioDevice}");
     return Scaffold(
       // backgroundColor: _getBackgroundColor(),
       appBar: AppBar(
