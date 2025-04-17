@@ -677,10 +677,7 @@ class CallManager {
   void handleAppEnterForeground() async {
     TRTCLogger.info('CallManager handleAppEnterForeground()');
     if (CallState.instance.selfUser.callStatus != TUICallStatus.none &&
-        TUICallKitNavigatorObserver.currentPage == CallPage.none &&
-        CallState.instance.isOpenFloatWindow == false &&
-        CallState.instance.isInNativeIncomingBanner == false &&
-        !(await CallManager.instance.isScreenLocked())) {
+        TUICallKitNavigatorObserver.currentPage == CallPage.none) {
       launchCallingPage();
     }
   }
